@@ -5,6 +5,7 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 
 export const themes: {id: string, name: string}[] = [
     {id: "dark", name: "Dark"},
+    {id: "compact", name: "Dark Compact"},
     {id: "classic", name: "Classic Dark"},
 ]
 

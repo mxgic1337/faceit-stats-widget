@@ -1,0 +1,59 @@
+@use "dark_theme" as dark_theme;
+
+.compact-theme {
+	@extend .dark-theme;
+
+	.widget {
+		padding: 8px 10px !important;
+
+		.level {
+			align-items: center;
+			flex: 1;
+
+			img {
+				$size: 35px;
+				width: $size !important;
+				height: $size !important;
+				margin-right: 12px;
+			}
+
+			.elo {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex: 1;
+
+				h2 {
+					margin-right: 6px;
+					margin-bottom: 1px;
+				}
+
+				h2, p {
+					font-size: 1em;
+				}
+			}
+		}
+
+		.matches {
+			small {
+				display: none;
+			}
+		}
+
+		.stat {
+			$size: 30px;
+			border-radius: 8px;
+
+			width: $size;
+			height: $size;
+
+			p {
+				font-weight: normal;
+				font-size: .8em;
+			}
+		}
+
+		border-radius: 12px;
+		background: dark_theme.$background;
+	}
+}
