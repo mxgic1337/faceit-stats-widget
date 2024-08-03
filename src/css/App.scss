@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import 'themes/dark_theme';
+@import 'themes/classic_theme';
+
+$border: #8d8d8d;
+
+.generator {
+	* {
+		padding: 0;
+		margin: 0;
+		font-family: 'DM Sans', sans-serif;
+		color: white;
+	}
+
+	#root {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 100vw;
+		height: 100vh;
+
+		padding: 16px;
+		box-sizing: border-box;
+	}
+
+	body {
+		background: #111;
+		overflow-x: hidden;
+	}
+
+	main {
+		display: flex;
+		padding: 12px;
+		border: 1px solid $border;
+		border-radius: 6px;
+
+		iframe {
+			border: 0;
+			width: 400px;
+		}
+
+		hr {
+			margin: 6px 12px;
+			border: none;
+			border-right: 1px solid $border;
+			border-bottom: 1px solid $border;
+		}
+
+		input, select {
+			border: 1px solid $border;
+			background: #121212;
+			padding: 6px;
+			border-radius: 6px;
+			outline: none;
+			transition: .2s;
+			width: 100%;
+			box-sizing: border-box;
+			margin: 6px 0;
+		}
+
+		input:focus, select:focus {
+			border: 1px solid white;
+		}
+	}
+
+	.preview {
+		min-width: 450px;
+	}
+
+	.separator {
+		display: flex;
+		align-items: center;
+		width: 100%;
+
+		font-weight: bold;
+
+		hr {
+			margin: 0 0 0 6px;
+			flex: 1;
+		}
+
+		margin-bottom: 6px;
+	}
+
+	.setting {
+		margin: 6px 0;
+	}
+
+	header, footer {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		text-align: center;
+		margin-bottom: 6px;
+	}
+}

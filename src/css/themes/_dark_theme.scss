@@ -1,0 +1,89 @@
+.dark-theme {
+	$background: #121212;
+	$border-1: #595959;
+	$border-2: #8d8d8d;
+	$border-rotation: 0deg;
+
+	* {
+		padding: 0;
+		margin: 0;
+		font-family: 'DM Sans', sans-serif;
+		color: white;
+	}
+
+	.wrapper {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		background: linear-gradient($border-rotation, $border-1, $border-2);
+		border-radius: 12px;
+		padding: 1px;
+
+		.widget {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 12px;
+
+			.level {
+				display: flex;
+				align-items: center;
+
+				img {
+					$size: 70px;
+					width: $size;
+					height: $size;
+					margin-right: 12px;
+				}
+
+				.elo {
+					p {
+						font-size: .85em;
+					}
+				}
+			}
+
+			.matches {
+				text-align: center;
+				small {
+					font-size: .6em;
+				}
+				.stats {
+					display: flex;
+				}
+			}
+
+			border-radius: 12px;
+			background: $background;
+		}
+
+		.stat {
+			display: flex;
+			flex-direction: column;
+			border: 1px solid #fff;
+			$size: 54px;
+			width: $size;
+			height: $size;
+			align-items: center;
+			justify-content: center;
+			font-size: calc($size - 37px);
+			border-radius: 12px;
+			margin-left: 6px;
+
+			p {
+				font-weight: bold;
+			}
+		}
+
+		.stat.green {
+			border: 1px solid #00ff5f;
+			background: #113118;
+		}
+
+		.stat.red {
+			border: 1px solid #ff2222;
+			background: #360e0e;
+			color: #ff2222;
+		}
+	}
+}
