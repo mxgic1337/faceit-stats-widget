@@ -7,9 +7,10 @@ export const themes: {id: string, name: string}[] = [
     {id: "dark", name: "Dark"},
     {id: "compact", name: "Dark Compact"},
     {id: "classic", name: "Classic Dark"},
+    {id: "custom", name: "Własny styl"},
 ]
 
-export const Widget = ({preview, overrideUsername}:{preview?: boolean, overrideUsername?: string}) => {
+export const Widget = ({preview, overrideUsername, overrideTheme, overrideCustomCSS}:{preview?: boolean, overrideUsername?: string, overrideTheme?: string, overrideCustomCSS?: string}) => {
     const [level, setLevel] = useState(1)
     const [diff, setDiff] = useState(0)
     const [elo, setELO] = useState(100)
@@ -57,23 +58,44 @@ export const Widget = ({preview, overrideUsername}:{preview?: boolean, overrideU
         }
     })
 
+    useEffect(() => {
+        if (!searchParams.get("theme") && !overrideTheme) return
+        if ((overrideTheme || searchParams.get("theme")) !== "custom") return
+
+        const cssPath = overrideCustomCSS || searchParams.get("css") || undefined
+        if (!cssPath) return;
+
+        const head = document.head;
+        const link = document.createElement("link");
+        link.type = "text/css";
+        link.rel = "stylesheet";
+        link.href = cssPath;
+
+        head.appendChild(link);
+        return () => { head.removeChild(link); }
+
+    }, [overrideCustomCSS, overrideTheme])
+
     return (
-        <div className={'wrapper'}>
-            <div className={'widget'}>
-                <div className={'level'}>
-                    <img src={`https://mxgic1337.xyz/fc/faceit${preview ? 10 : level}.svg`} alt={`Level ${preview ? 10 : level}`} />
-                    <div className={'elo'}>
-                        <h2>{searchParams.get("player") || overrideUsername || "Player"}</h2>
-                        <p>{preview ? 2001 : elo} ELO ({0 > diff ? diff : `+${diff}`})</p>
+        <>
+            <div className={'wrapper'}>
+                <div className={'widget'}>
+                    <div className={'level'}>
+                        <img src={`https://mxgic1337.xyz/fc/faceit${preview ? 10 : level}.svg`}
+                             alt={`Level ${preview ? 10 : level}`}/>
+                        <div className={'elo'}>
+                            <h2>{searchParams.get("player") || overrideUsername || "Player"}</h2>
+                            <p>{preview ? 2001 : elo} ELO ({0 > diff ? diff : `+${diff}`})</p>
+                        </div>
                     </div>
-                </div>
-                <div className={'matches'}>
-                    <div className={'stats'}>
-                        <Statistic color={'green'} value={String(wins)} text={'winy'} />
-                        <Statistic color={'red'} value={String(losses)} text={'lossy'}/>
+                    <div className={'matches'}>
+                        <div className={'stats'}>
+                            <Statistic color={'green'} value={String(wins)} text={'winy'}/>
+                            <Statistic color={'red'} value={String(losses)} text={'lossy'}/>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
