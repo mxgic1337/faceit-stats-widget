@@ -5,8 +5,8 @@ import {Generator} from "./pages/Generator.tsx";
 export const App = () => {
     return <>
         <Routes>
-            <Route path="/widget/generator" element={<Generator />} />
-            <Route path="/widget/" element={<Widget />} />
+            <Route path="/widget/generator" element={<Generator/>}/>
+            <Route path="/widget/" element={<Widget/>}/>
         </Routes>
     </>
 }

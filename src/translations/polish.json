@@ -1,0 +1,16 @@
+{
+  "widget.wins": "winy",
+  "widget.losses": "lossy",
+  "widget.elo": "{{0}} ELO ({{1}})",
+
+  "generator.settings.title": "Ustawienia",
+  "generator.settings.faceit_name": "Nick FACEIT",
+  "generator.settings.language": "Język",
+  "generator.theme.title": "Styl",
+  "generator.theme.custom-css.title": "URL własnego motywu (CSS)",
+  "generator.theme.custom-css.apply": "Kliknij Enter by zastosować.",
+  "generator.generate.title": "Wygeneruj widżet",
+  "generator.generate.info.0": "Skopiuj ten link i wklej go do przeglądarki w OBS Studio.",
+  "generator.generate.info.1": "Zalecane jest ustawienie szerokości przeglądarki na ok. 500px.",
+  "generator.preview.title": "Podgląd widżetu"
+}

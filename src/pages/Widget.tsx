@@ -2,16 +2,20 @@ import '../css/App.scss'
 import {Statistic} from "../components/Statistic.tsx";
 import {useEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
+import {Language, languages, tl} from "../translations/translations.ts";
 
 export const themes: {id: string, name: string}[] = [
     {id: "dark", name: "Dark"},
     {id: "compact", name: "Dark Compact"},
     {id: "classic", name: "Classic Dark"},
-    {id: "custom", name: "Własny styl"},
+    {id: "custom", name: "Custom CSS"},
 ]
 
-export const Widget = ({preview, overrideUsername, overrideTheme, overrideCustomCSS}:{preview?: boolean, overrideUsername?: string, overrideTheme?: string, overrideCustomCSS?: string}) => {
+
+
+export const Widget = ({preview, overrideUsername, overrideTheme, overrideCustomCSS, overrideLanguage}:{preview?: boolean, overrideUsername?: string, overrideTheme?: string, overrideCustomCSS?: string, overrideLanguage?: string}) => {
     const [level, setLevel] = useState(1)
+    const [language, setLanguage] = useState<Language>(languages[0])
     const [diff, setDiff] = useState(0)
     const [elo, setELO] = useState(100)
     const [wins, setWins] = useState(0)
@@ -19,6 +23,11 @@ export const Widget = ({preview, overrideUsername, overrideTheme, overrideCustom
 
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const language = languages.find(language => language.id === searchParams.get("lang"));
+        if (language) setLanguage(language);
+    }, [overrideLanguage, searchParams]);
 
     useEffect(()=>{
         if (preview) return;
@@ -85,13 +94,13 @@ export const Widget = ({preview, overrideUsername, overrideTheme, overrideCustom
                              alt={`Level ${preview ? 10 : level}`}/>
                         <div className={'elo'}>
                             <h2>{searchParams.get("player") || overrideUsername || "Player"}</h2>
-                            <p>{preview ? 2001 : elo} ELO ({0 > diff ? diff : `+${diff}`})</p>
+                            <p>{tl(language, 'widget.elo', [preview ? `2001` : `${elo}`, 0 > diff ? `${diff}` : `+${diff}`])}</p>
                         </div>
                     </div>
                     <div className={'matches'}>
                         <div className={'stats'}>
-                            <Statistic color={'green'} value={String(wins)} text={'winy'}/>
-                            <Statistic color={'red'} value={String(losses)} text={'lossy'}/>
+                            <Statistic color={'green'} value={String(wins)} text={tl(language, 'widget.wins')}/>
+                            <Statistic color={'red'} value={String(losses)} text={tl(language, 'widget.losses')}/>
                         </div>
                     </div>
                 </div>

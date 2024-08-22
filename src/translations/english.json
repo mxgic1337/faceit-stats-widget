@@ -1,0 +1,16 @@
+{
+  "widget.wins": "wins",
+  "widget.losses": "losses",
+  "widget.elo": "{{0}} ELO ({{1}})",
+
+  "generator.settings.title": "Settings",
+  "generator.settings.faceit_name": "FACEIT Username",
+  "generator.settings.language": "Language",
+  "generator.theme.title": "Style",
+  "generator.theme.custom-css.title": "Custom CSS URL",
+  "generator.theme.custom-css.apply": "Press Enter to apply.",
+  "generator.generate.title": "Generate",
+  "generator.generate.info.0": "Copy this link and paste it into a browser source in OBS Studio.",
+  "generator.generate.info.1": "It is recommended to set browser's width to 500px.",
+  "generator.preview.title": "Widget preview"
+}
