@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import {themes, Widget} from "./Widget.tsx";
 import {Separator} from "../components/Separator.tsx";
 import {Language, languages, tl} from "../translations/translations.ts";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 
 export const Generator = () => {
     const [customCSS, setCustomCSS] = useState<string>("https://example.com")
@@ -11,6 +11,7 @@ export const Generator = () => {
     const [language, setLanguage] = useState<Language>(languages.find(language => language.id === localStorage.fcw_lang) || languages[0])
 
     const customCSSInputRef = useRef<HTMLInputElement>(null);
+    const [searchParams] = useSearchParams()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -18,6 +19,10 @@ export const Generator = () => {
         return () => {
             document.getElementsByTagName("html")[0].classList.remove(`generator`)
         }
+    }, []);
+
+    useEffect(() => {
+        if (!searchParams.get("lang")) navigate(`?lang=${language.id}`)
     }, []);
 
     return <>
@@ -37,9 +42,10 @@ export const Generator = () => {
                 </div>
                 <div className={'setting'}>
                     <p>{tl(language, 'generator.settings.language')}</p>
-                    <select onChange={event => {
+                    <select value={language.id} onChange={event => {
                         const language = languages.find(language => language.id === event.target.value) || languages[0]
                         setLanguage(language);
+                        localStorage.setItem("fcw_lang", language.id)
                         navigate(`?lang=${language.id}`)
                     }}>
                         {languages.map(language => {
