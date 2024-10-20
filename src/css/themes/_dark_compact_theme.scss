@@ -1,6 +1,6 @@
 @use "dark_theme" as dark_theme;
 
-.compact-theme {
+.compact-theme, .compact-custom-theme {
 	@extend .dark-theme;
 
 	.widget {
@@ -29,7 +29,7 @@
 				}
 
 				h2, p {
-					font-size: 1em;
+					font-size: .85em;
 				}
 			}
 		}
@@ -40,16 +40,37 @@
 			}
 		}
 
-		.stat {
-			$size: 30px;
-			border-radius: 8px;
+		.player-stats {
+			.stat {
+				$size: 30px;
+				border-radius: 8px;
 
-			width: $size;
-			height: $size;
+				width: $size;
+				height: $size;
 
-			p {
-				font-weight: normal;
-				font-size: .8em;
+				p {
+					font-weight: normal;
+					font-size: .8em;
+				}
+			}
+		}
+
+		.average .stat {
+			margin-top: 3px;
+			padding: 0 5px;
+			font-size: .85em;
+		}
+
+		.progress-bar {
+			margin: 6px auto auto auto;
+			width: 100%;
+			border-radius: 5px;
+			background: $background;
+
+			.progress {
+				border-radius: 5px;
+				height: 1px;
+				transition: 1s;
 			}
 		}
 

@@ -3,13 +3,13 @@ $border-1: #595959;
 $border-2: #8d8d8d;
 $border-rotation: 0deg;
 
-.dark-theme {
+.dark-theme, .normal-custom-theme {
 
 	* {
 		padding: 0;
 		margin: 0;
 		font-family: 'DM Sans', sans-serif;
-		color: white;
+		color: #fff !important;
 	}
 
 	.wrapper {
@@ -20,10 +20,27 @@ $border-rotation: 0deg;
 		border-radius: 12px;
 		padding: 1px;
 
-		.widget {
+		.player-stats {
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
+		}
+
+		.progress-bar {
+			margin: 6px auto auto auto;
+			width: 98%;
+			border-radius: 5px;
+			background: $background;
+			border: 1px solid #1F1F22;
+
+			.progress {
+				border-radius: 5px;
+				height: 5px;
+				transition: .5s;
+			}
+		}
+
+		.widget {
 			padding: 12px;
 
 			.level {
@@ -58,33 +75,48 @@ $border-rotation: 0deg;
 			background: $background;
 		}
 
-		.stat {
-			display: flex;
-			flex-direction: column;
-			border: 1px solid #fff;
-			$size: 54px;
-			width: $size;
-			height: $size;
-			align-items: center;
-			justify-content: center;
-			font-size: calc($size - 37px);
-			border-radius: 12px;
-			margin-left: 6px;
+		.player-stats {
+			.stat {
+				display: flex;
+				flex-direction: column;
+				border: 1px solid #fff;
+				$size: 54px;
+				width: $size;
+				height: $size;
+				align-items: center;
+				justify-content: center;
+				font-size: calc($size - 37px);
+				border-radius: 12px;
+				margin-left: 6px;
 
-			p {
-				font-weight: bold;
+				p {
+					font-weight: bold;
+				}
+			}
+
+			.stat.green {
+				border: 1px solid #00ff5f;
+				background: rgba(0, 255, 95, 0.11);
+			}
+
+			.stat.red {
+				border: 1px solid #ff2222;
+				background: rgba(255, 34, 34, 0.13);
 			}
 		}
 
-		.stat.green {
-			border: 1px solid #00ff5f;
-			background: #113118;
-		}
-
-		.stat.red {
-			border: 1px solid #ff2222;
-			background: #360e0e;
-			color: #ff2222;
+		.average {
+			display: flex;
+			.stat {
+				flex: 1;
+				justify-content: space-between;
+				padding: 1px 8px;
+				border-right: 1px solid $border-1;
+				display: flex;
+			}
+			.stat:last-child {
+				border-right: none;
+			}
 		}
 	}
 }

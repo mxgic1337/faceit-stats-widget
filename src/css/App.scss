@@ -94,4 +94,56 @@ $border: #8d8d8d;
 		text-align: center;
 		margin-bottom: 6px;
 	}
+
+	section {
+		padding: 8px;
+	}
+
+	section.preview {
+		margin-left: 16px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	.checkbox {
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+		user-select: none;
+
+		.check {
+			$size: 16px;
+			width: $size;
+			height: $size;
+			border: 1px solid $border;
+			border-radius: 6px;
+			margin-right: 4px;
+			transition: .1s;
+		}
+
+		.check.checked {background: #113118; border: 1px solid #00FF5F;}
+	}
+
+	.color-picker {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		input {
+			width: 45px;
+			height: 15px;
+			padding: 0;
+			border: 1px solid #8d8d8d;
+			outline: none;
+			margin: 1px 0;
+		}
+
+		input::-webkit-color-swatch-wrapper {
+			padding: 0;
+		}
+
+		input::-webkit-color-swatch {
+			border: none;
+		}
+	}
 }
