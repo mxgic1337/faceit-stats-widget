@@ -102,9 +102,9 @@ export const Generator = () => {
                     </>}
                 </div>
                 <Separator text={tl(language, 'generator.generate.title')}/>
-                <div className={'setting'}>
+                <div className={'setting generate'}>
                     <p>{tl(language, 'generator.generate.info.0')}</p>
-                    <p>{tl(language, 'generator.generate.info.1')}</p>
+                    <p style={{fontWeight: 'bold'}}>{tl(language, 'generator.generate.info.1')}</p>
                     <input
                         value={`${window.location.protocol}//${window.location.host}/widget/?player=${username}&lang=${language.id}&eloBar=${showEloProgressBar}&avg=${showAverage}&suffix=${showEloSuffix}&diff=${showEloDiff}&theme=${theme}${customCSS && theme === "custom" ? `&css=${customCSS}` : ''}${['normal-custom', 'compact-custom'].includes(theme) ? `&color=${customTextColor.substring(1)}&bg-color=${customBackgroundColor.substring(1)}&border1=${customBorderColor1.substring(1)}&border2=${customBorderColor2.substring(1)}` : ''}`}
                         readOnly={true}/>

@@ -114,6 +114,9 @@ $border-rotation: 0deg;
 				border-right: 1px solid $border-1;
 				display: flex;
 			}
+			.stat p:first-child {
+				margin-right: 8px;
+			}
 			.stat:last-child {
 				border-right: none;
 			}

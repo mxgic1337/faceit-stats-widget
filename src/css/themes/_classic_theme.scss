@@ -103,6 +103,9 @@
 				border-right: 2px solid $border-1;
 				display: flex;
 			}
+			.stat p:first-child {
+				margin-right: 8px;
+			}
 			.stat:last-child {
 				border-right: none;
 			}

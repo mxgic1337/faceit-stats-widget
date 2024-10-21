@@ -1,5 +1,6 @@
 import englishTranslation from '../translations/english.json'
 import polishTranslation from '../translations/polish.json'
+import germanTranslation from '../translations/german.json'
 
 export interface Language {
     id: string,
@@ -7,11 +8,11 @@ export interface Language {
     translations: { [key: string]: string }
 }
 
-export const languages: Language[] = [{id: 'en', name: 'English', translations: englishTranslation}, {
-    id: 'pl',
-    name: 'Polski',
-    translations: polishTranslation
-}]
+export const languages: Language[] = [
+    {id: 'en', name: 'English', translations: englishTranslation},
+    {id: 'pl', name: 'Polski', translations: polishTranslation},
+    {id: 'de', name: 'Deutsch', translations: germanTranslation},
+]
 
 export function tl(language: Language, text: string, params?: string[]) {
     if (!params) params = []
