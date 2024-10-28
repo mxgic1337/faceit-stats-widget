@@ -5,9 +5,11 @@ import {Language, languages, tl} from "../translations/translations.ts";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {Checkbox} from "../components/Checkbox.tsx";
 import {ColorPicker} from "../components/ColorPicker.tsx";
+import {getPlayerID} from "../utils/faceit_util.ts";
 
 export const Generator = () => {
     const [customCSS, setCustomCSS] = useState<string>("https://example.com")
+    const [generatedURL, setGeneratedURL] = useState<string>()
     const [username, setUsername] = useState<string>("Player")
     const [showEloDiff, setShowEloDiff] = useState<boolean>(true)
     const [showEloSuffix, setShowEloSuffix] = useState<boolean>(true)
@@ -35,6 +37,16 @@ export const Generator = () => {
     useEffect(() => {
         if (!searchParams.get("lang")) navigate(`?lang=${language.id}`)
     }, []);
+
+    function generateLink() {
+        getPlayerID(username).then(id => {
+            if (!id) {
+                alert(tl(language, 'generator.alert.player_not_found', [username]));
+                return
+            }
+            setGeneratedURL(`${window.location.protocol}//${window.location.host}/widget/?player_id=${id}&lang=${language.id}&eloBar=${showEloProgressBar}&avg=${showAverage}&suffix=${showEloSuffix}&diff=${showEloDiff}&theme=${theme}${customCSS && theme === "custom" ? `&css=${customCSS}` : ''}${['normal-custom', 'compact-custom'].includes(theme) ? `&color=${customTextColor.substring(1)}&bg-color=${customBackgroundColor.substring(1)}&border1=${customBorderColor1.substring(1)}&border2=${customBorderColor2.substring(1)}` : ''}`)
+        }).catch()
+    }
 
     return <>
         <main>
@@ -71,7 +83,8 @@ export const Generator = () => {
                               setState={setShowEloDiff}/>
                     <Checkbox text={tl(language, 'generator.settings.show_elo_progress_bar')} state={showEloProgressBar}
                               setState={setShowEloProgressBar}/>
-                    <Checkbox text={tl(language, 'generator.settings.show_kd')} state={showAverage} setState={setShowAverage}/>
+                    <Checkbox text={tl(language, 'generator.settings.show_kd')} state={showAverage}
+                              setState={setShowAverage}/>
                 </div>
                 <Separator text={tl(language, 'generator.theme.title')}/>
                 <div className={'setting'}>
@@ -105,9 +118,17 @@ export const Generator = () => {
                 <div className={'setting generate'}>
                     <p>{tl(language, 'generator.generate.info.0')}</p>
                     <p style={{fontWeight: 'bold'}}>{tl(language, 'generator.generate.info.1')}</p>
-                    <input
-                        value={`${window.location.protocol}//${window.location.host}/widget/?player=${username}&lang=${language.id}&eloBar=${showEloProgressBar}&avg=${showAverage}&suffix=${showEloSuffix}&diff=${showEloDiff}&theme=${theme}${customCSS && theme === "custom" ? `&css=${customCSS}` : ''}${['normal-custom', 'compact-custom'].includes(theme) ? `&color=${customTextColor.substring(1)}&bg-color=${customBackgroundColor.substring(1)}&border1=${customBorderColor1.substring(1)}&border2=${customBorderColor2.substring(1)}` : ''}`}
-                        readOnly={true}/>
+                    {generatedURL && <input
+                        value={generatedURL}
+                        readOnly={true}/>}
+                    <div className={'buttons'}>
+                        <button onClick={() => {
+                            generateLink()
+                        }}>{tl(language, 'generator.generate.button')}</button>
+                        <button disabled={!generatedURL} onClick={() => {
+                            window.open(generatedURL, '_blank')
+                        }}>{tl(language, 'generator.generate.open_in_browser.button')}</button>
+                    </div>
                 </div>
                 <br/>
                 <footer>
@@ -119,11 +140,13 @@ export const Generator = () => {
             <section className={'preview'}>
                 <Separator text={tl(language, 'generator.preview.title')}/>
                 <div className={`${theme}-theme preview`}>
-                    <Widget preview={true} overrideShowEloDiff={showEloDiff} overrideShowEloSuffix={showEloSuffix} overrideShowAverage={showAverage}
+                    <Widget preview={true} overrideShowEloDiff={showEloDiff} overrideShowEloSuffix={showEloSuffix}
+                            overrideShowAverage={showAverage}
                             overrideShowEloProgressBar={showEloProgressBar}
                             overrideUsername={username.length > 0 ? username : "Player"}
                             overrideCustomCSS={customCSS} overrideTheme={theme} overrideLanguage={language.id}
-                            overrideBorder1={customBorderColor1} overrideBorder2={customBorderColor2} overrideTextColor={customTextColor} overrideBackground={customBackgroundColor}
+                            overrideBorder1={customBorderColor1} overrideBorder2={customBorderColor2}
+                            overrideTextColor={customTextColor} overrideBackground={customBackgroundColor}
                     />
                 </div>
             </section>

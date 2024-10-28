@@ -64,9 +64,9 @@ const HEADERS = {
     'Authorization': `Bearer ${API_KEY}`
 };
 
-export function findPlayerByUsername(username: string, startDate: Date): Promise<FaceitPlayer | undefined> {
+export function getPlayerStats(id: string, startDate: Date): Promise<FaceitPlayer | undefined> {
     return new Promise<FaceitPlayer | undefined>((resolve) => {
-        fetch('https://open.faceit.com/data/v4/players?nickname=' + username, {
+        fetch('https://open.faceit.com/data/v4/players/' + id, {
             headers: HEADERS
         }).then(async response => {
             if (!response.ok) { console.error(await response.text()); resolve(undefined); return }
@@ -123,6 +123,18 @@ export function findPlayerByUsername(username: string, startDate: Date): Promise
                 })
 
             })
+        })
+    })
+}
+
+export function getPlayerID(username: string): Promise<string | undefined> {
+    return new Promise<string | undefined>((resolve) => {
+        fetch('https://open.faceit.com/data/v4/players?nickname=' + username, {
+            headers: HEADERS
+        }).then(async response => {
+            if (!response.ok) { console.error(await response.text()); resolve(undefined); return }
+            const v4PlayersResponse = (await response.json() as V4PlayersResponse);
+            resolve(v4PlayersResponse.player_id)
         })
     })
 }

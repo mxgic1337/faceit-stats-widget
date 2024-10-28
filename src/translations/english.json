@@ -9,6 +9,7 @@
   "widget.kd": "K/D",
   "widget.deaths": "Deaths",
 
+  "generator.alert.player_not_found": "Player {{0}} was not found.",
   "generator.settings.title": "Settings",
   "generator.settings.faceit_name": "FACEIT Username",
   "generator.settings.language": "Language",
@@ -24,6 +25,8 @@
   "generator.theme.text-color": "Text color",
   "generator.theme.background-color": "Background color",
   "generator.generate.title": "Generate",
+  "generator.generate.button": "Generate",
+  "generator.generate.open_in_browser.button": "Open in Browser",
   "generator.generate.info.0": "Copy this link and paste it into a browser source in OBS Studio.",
   "generator.generate.info.1": "It is recommended to set browser's width to 500px.",
   "generator.preview.title": "Widget preview"

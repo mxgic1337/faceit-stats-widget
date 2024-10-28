@@ -24,6 +24,7 @@
   "generator.theme.text-color": "Textfarbe",
   "generator.theme.background-color": "Hintergrundfarbe",
   "generator.generate.title": "Erzeugen",
+  "generator.generate.button": "Erzeugen",
   "generator.generate.info.0": "Kopieren Sie diesen Link und fügen Sie ihn in eine Browserquelle in OBS Studio ein.",
   "generator.generate.info.1": "Es wird empfohlen, die Breite des Browsers auf 500px einzustellen.",
   "generator.preview.title": "Widget Vorschau"

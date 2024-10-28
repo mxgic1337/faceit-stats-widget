@@ -16,7 +16,7 @@ export const languages: Language[] = [
 
 export function tl(language: Language, text: string, params?: string[]) {
     if (!params) params = []
-    text = language.translations[text] || text
+    text = language.translations[text] || languages.find(language => language.id === 'en')?.translations[text] || text
     params.forEach((param, index) => {
         text = text.replace(`{{${index}}}`, param)
     })

@@ -9,8 +9,9 @@
   "widget.kd": "K/D",
   "widget.deaths": "Śmierci",
 
+  "generator.alert.player_not_found": "Nie znaleziono gracza {{0}}.",
   "generator.settings.title": "Ustawienia",
-  "generator.settings.faceit_name": "Nick FACEIT",
+  "generator.settings.faceit_name": "Nazwa użytkownika FACEIT",
   "generator.settings.language": "Język",
   "generator.settings.show_elo_suffix": "Pokaż sufiks ELO",
   "generator.settings.show_elo_diff": "Pokaż różnicę ELO (wzrost/spadek)",
@@ -24,6 +25,8 @@
   "generator.theme.text-color": "Kolor tekstu",
   "generator.theme.background-color": "Kolor tła",
   "generator.generate.title": "Wygeneruj widżet",
+  "generator.generate.button": "Wygeneruj",
+  "generator.generate.open_in_browser.button": "Otwórz w przeglądarce",
   "generator.generate.info.0": "Skopiuj ten link i wklej go do przeglądarki w OBS Studio.",
   "generator.generate.info.1": "Zalecane jest ustawienie szerokości przeglądarki na ok. 500px.",
   "generator.preview.title": "Podgląd widżetu"

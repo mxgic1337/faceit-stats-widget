@@ -3,7 +3,7 @@ import {Statistic} from "../components/Statistic.tsx";
 import {useEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {Language, languages, tl} from "../translations/translations.ts";
-import {findPlayerByUsername} from "../utils/faceit_util.ts";
+import {getPlayerID, getPlayerStats} from "../utils/faceit_util.ts";
 
 export const themes: { id: string, name: string }[] = [
     {id: "dark", name: "Dark"},
@@ -41,6 +41,7 @@ export const Widget = ({preview, overrideUsername, overrideTheme, overrideBorder
     const [avgMatches, setAvgMatches] = useState(0)
     const [wins, setWins] = useState(0)
     const [losses, setLosses] = useState(0)
+    const [username, setUsername] = useState<string>()
 
     const [customColorScheme, setCustomColorScheme] = useState<boolean>()
     const [customColor, setCustomColor] = useState<string>()
@@ -84,17 +85,24 @@ export const Widget = ({preview, overrideUsername, overrideTheme, overrideBorder
             theme = "dark"
         }
 
-        if (searchParams.get("player") === null) {
-            navigate('?player=donk666')
+        const playerId = searchParams.get("player_id")
+        if (playerId === null) {
+            const username = searchParams.get("player");
+            if (username !== null) {
+                getPlayerID(username).then((id)=>{
+                    window.open(`${window.location}&player_id=${id}`, '_self');
+                })
+                return
+            }
+            navigate('?player_id=24180323-d946-4bb7-a334-be3e96fcac05')
             return
         }
 
-        let playerName = searchParams.get("player");
-        if (playerName === null) playerName = 'donk666';
-
         const getStats = (firstTime?: boolean) => {
-            findPlayerByUsername(playerName, startDate).then((player) => {
+            getPlayerStats(playerId, startDate).then((player) => {
                 if (!player) return;
+                setUsername(player.username)
+
                 if (!player || !player.elo || !player.level) return;
                 if (firstTime) setStartingElo(player.elo)
 
@@ -177,7 +185,7 @@ export const Widget = ({preview, overrideUsername, overrideTheme, overrideBorder
                             <img src={`https://mxgic1337.xyz/fc/faceit${preview ? 10 : level}.svg`}
                                  alt={`Level ${preview ? 10 : level}`}/>
                             <div className={'elo'}>
-                                <h2>{searchParams.get("player") || overrideUsername || "Player"}</h2>
+                                <h2>{username || searchParams.get("player") || overrideUsername || "?"}</h2>
                                 <p>{tl(language, `widget.elo${(preview && overrideShowEloSuffix) || (!preview && (searchParams.get('suffix') === null || searchParams.get('suffix') === 'true')) ? '' : '_no_suffix'}`, [preview ? `2001` : `${elo}`])
                                     + ((preview && overrideShowEloDiff) || (!preview && (searchParams.get('diff') === 'true' || searchParams.get('diff') === null)) ? tl(language, 'widget.elo_diff', [0 > elo - startingElo ? `${elo - startingElo}` : `+${elo - startingElo}`]) : "")}</p>
                             </div>

@@ -3,7 +3,7 @@
 @import 'themes/dark_compact_theme';
 @import 'themes/classic_theme';
 
-$border: #8d8d8d;
+$border: #2c2c2c;
 
 .generator {
 	* {
@@ -47,9 +47,9 @@ $border: #8d8d8d;
 			border-bottom: 1px solid $border;
 		}
 
-		input, select {
+		input, select, button {
 			border: 1px solid $border;
-			background: #121212;
+			background: #1c1c1c;
 			padding: 6px;
 			border-radius: 6px;
 			outline: none;
@@ -59,8 +59,31 @@ $border: #8d8d8d;
 			margin: 6px 0;
 		}
 
-		input:focus, select:focus {
-			border: 1px solid white;
+		input {
+			padding: 6px 9px;
+		}
+		
+		button {
+			cursor: pointer;
+		}
+
+		.buttons {
+			display: flex;
+			button {
+				flex: 1;
+				margin-right: 6px;
+			}
+			button:last-child {margin-right: 0}
+		}
+
+		input:focus, select:focus, button:hover {
+			border: 1px solid #5d5d5d;
+		}
+
+		button:disabled {
+			color: #575757;
+			border: 1px solid $border;
+			cursor: not-allowed;
 		}
 	}
 
@@ -149,5 +172,9 @@ $border: #8d8d8d;
 
 	.setting.generate {
 		max-width: 500px;
+	}
+
+	.width-100 {
+		width: 100%;
 	}
 }
