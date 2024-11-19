@@ -1,11 +1,11 @@
 {
-  "border-1": "#cba6f7",
-  "border-2": "#f5c2e7",
+  "border-1": "cba6f7",
+  "border-2": "cba6f7",
   "border-rotation": 0,
 
-  "text-color": "#cdd6f4",
-  "background": "#1e1e2e",
+  "text-color": "cdd6f4",
+  "background": "1e1e2e",
  
-  "wins": "#a6e3a1",
-  "losses": "#f38ba8"
+  "wins": "a6e3a1",
+  "losses": "f38ba8"
 }

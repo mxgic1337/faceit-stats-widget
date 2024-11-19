@@ -1,7 +1,5 @@
-@use "dark_theme" as dark_theme;
-
 .compact-style {
-  @extend .dark-theme;
+  @extend .normal-style;
 
   .widget {
     padding: 8px 10px !important;

@@ -5,18 +5,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Language, languages, tl } from "../translations/translations.ts";
 import { getPlayerID, getPlayerStats } from "../utils/faceit_util.ts";
 
-export const themes: { id: string; name: string }[] = [
-  { id: "dark", name: "Dark" },
-  { id: "compact", name: "Dark Compact" },
-  { id: "classic", name: "Classic Dark" },
-  { id: "normal-custom", name: "Custom" },
-  { id: "compact-custom", name: "Custom Compact" },
-  { id: "custom", name: "Custom CSS" },
-];
-
 export const styles: { id: string; name: string }[] = [
   { id: "normal", name: "Normal" },
   { id: "compact", name: "Compact" },
+  { id: "classic", name: "Classic" },
 ];
 
 interface Props {
@@ -81,32 +73,6 @@ export const Widget = ({
   const [customWinsColor, setCustomWinsColor] = useState<string>();
   const [customLossesColor, setCustomLossesColor] = useState<string>();
 
-  useEffect(() => {
-    if (
-      ["normal-custom", "compact-custom"].includes(
-        overrideTheme || searchParams.get("theme") || "dark",
-      )
-    ) {
-      if (preview) {
-        setCustomColor(overrideTextColor);
-        setCustomBackgroundColor(overrideBackground);
-        setCustomBorderColor(overrideBorder1);
-        setCustomBorderColor2(overrideBorder2);
-      } else {
-        setCustomColor(`#${searchParams.get("color")}`);
-        setCustomBackgroundColor(`#${searchParams.get("bg-color")}`);
-        setCustomBorderColor(`#${searchParams.get("border1")}`);
-        setCustomBorderColor2(`#${searchParams.get("border2")}`);
-      }
-    }
-  }, [
-    overrideTheme,
-    overrideTextColor,
-    overrideBackground,
-    overrideBorder1,
-    overrideBorder2,
-  ]);
-
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -118,9 +84,9 @@ export const Widget = ({
   }, [overrideLanguage, searchParams]);
 
   useEffect(() => {
-    fetch(
-      `/themes/${overrideTheme || searchParams.get("theme") || "dark"}.json`,
-    ).then(async (res) => {
+    let theme = overrideTheme || searchParams.get("theme") || "dark";
+    if (theme === "custom-color-scheme") theme = "dark";
+    fetch(`/themes/${theme}.json`).then(async (res) => {
       if (res.ok) {
         const theme = (await res.json()) as Theme;
         setCustomColor(theme["text-color"]);
@@ -131,9 +97,38 @@ export const Widget = ({
 
         setCustomWinsColor(theme["wins"]);
         setCustomLossesColor(theme["losses"]);
+
+        if (preview && overrideTheme === "custom-color-scheme") {
+          setCustomColor(overrideTextColor);
+          setCustomBackgroundColor(overrideBackground);
+          setCustomBorderColor(overrideBorder1);
+          setCustomBorderColor2(overrideBorder2);
+        }
+
+        if (!preview && searchParams.get("theme") === "custom-color-scheme") {
+          setCustomColor(searchParams.get("color") || "fff");
+          setCustomBackgroundColor(searchParams.get("bg-color") || "fff");
+          setCustomBorderColor(searchParams.get("border1") || "fff");
+          setCustomBorderColor2(searchParams.get("border2") || "fff");
+        }
       }
     });
   }, [overrideTheme]);
+
+  useEffect(() => {
+    if (preview && overrideTheme === "custom-color-scheme") {
+      setCustomColor(overrideTextColor);
+      setCustomBackgroundColor(overrideBackground);
+      setCustomBorderColor(overrideBorder1);
+      setCustomBorderColor2(overrideBorder2);
+    }
+  }, [
+    overrideTheme,
+    overrideTextColor,
+    overrideBackground,
+    overrideBorder1,
+    overrideBorder2,
+  ]);
 
   useEffect(() => {
     if (preview) return;
@@ -143,6 +138,8 @@ export const Widget = ({
     if (!themes.find((theme1) => theme1.id === theme)) {
       theme = "dark";
     }
+
+    const style = searchParams.get("style") || "normal";
 
     const playerId = searchParams.get("player_id");
     if (playerId === null) {
@@ -180,7 +177,7 @@ export const Widget = ({
     getStats(true);
     const interval = setInterval(getStats, 1000 * 60);
     document.getElementsByTagName("html")[0].classList.add(`${theme}-theme`);
-    document.getElementsByTagName("html")[0].classList.add(`normal-style`);
+    document.getElementsByTagName("html")[0].classList.add(`${style}-style`);
     document.getElementsByTagName("html")[0].classList.add(`widget-wrapper`);
 
     return () => {
@@ -191,7 +188,7 @@ export const Widget = ({
       document
         .getElementsByTagName("html")[0]
         .classList.remove(`widget-wrapper`);
-      document.getElementsByTagName("html")[0].classList.remove(`normal-style`);
+      document.getElementsByTagName("html")[0].classList.remove(`${style}-style`);
     };
   }, []);
 
@@ -229,16 +226,16 @@ export const Widget = ({
 
   return (
     <>
-      <style>{`.widget {
-	--text-color: ${customColor};
-	--background-color: ${customBackgroundColor};
-	--border-color-1: ${customBorderColor};
-	--border-color-2: ${customBorderColor2};
-	--border-rotation: ${customBorderRotation};
-	--wins-color: ${customWinsColor};
-	--wins-color-bg: ${customWinsColor}1A;
-	--losses-color: ${customLossesColor};
-	--losses-color-bg: ${customLossesColor}1A;
+      <style>{`.widget-wrapper {
+	--text-color: #${customColor};
+	--background-color: #${customBackgroundColor};
+	--border-color-1: #${customBorderColor};
+	--border-color-2: #${customBorderColor2};
+	--border-rotation: ${customBorderRotation}deg;
+	--wins-color: #${customWinsColor};
+	--wins-color-bg: #${customWinsColor}1A;
+	--losses-color: #${customLossesColor};
+	--losses-color-bg: #${customLossesColor}1A;
       }`}</style>
       <div className={"wrapper"}>
         <div className={"widget"}>
