@@ -1,0 +1,11 @@
+{
+  "border-1": "#595959",
+  "border-2": "#8d8d8d",
+  "border-rotation": 0,
+
+  "text-color": "#fff",
+  "background": "#121212",
+ 
+  "wins": "#00ff5f",
+  "losses": "#ff2222"
+}

@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from "react";
-import {themes, Widget} from "./Widget.tsx";
+import {styles, themes, Widget} from "./Widget.tsx";
 import {Separator} from "../components/Separator.tsx";
 import {Language, languages, tl} from "../translations/translations.ts";
 import {useNavigate, useSearchParams} from "react-router-dom";
@@ -88,11 +88,19 @@ export const Generator = () => {
                 </div>
                 <Separator text={tl(language, 'generator.theme.title')}/>
                 <div className={'setting'}>
+                    <p>{tl(language, 'generator.theme.theme')}</p>
                     <select onChange={(e) => setTheme(e.target.value)}>
                         {themes.map(theme => {
                             return <option key={theme.id} value={theme.id}>{theme.name}</option>
                         })}
                     </select>
+		    <p>{tl(language, 'generator.theme.title')}</p>
+                    <select onChange={(e) => setTheme(e.target.value)}>
+                        {styles.map(theme => {
+                            return <option key={theme.id} value={theme.id}>{theme.name}</option>
+                        })}
+                    </select>
+
 
                     {(theme === 'normal-custom' || theme === 'compact-custom') && <>
                         <ColorPicker text={tl(language, 'generator.theme.border-color-1')} color={customBorderColor1}
@@ -139,7 +147,7 @@ export const Generator = () => {
             </section>
             <section className={'preview'}>
                 <Separator text={tl(language, 'generator.preview.title')}/>
-                <div className={`${theme}-theme preview`}>
+                <div className={`${theme}-theme normal-style preview`}>
                     <Widget preview={true} overrideShowEloDiff={showEloDiff} overrideShowEloSuffix={showEloSuffix}
                             overrideShowAverage={showAverage}
                             overrideShowEloProgressBar={showEloProgressBar}
