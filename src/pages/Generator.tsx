@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {themes, Widget} from "./Widget.tsx";
 import {Separator} from "../components/Separator.tsx";
 import {Language, languages, tl} from "../translations/translations.ts";
@@ -11,6 +11,8 @@ export const Generator = () => {
     const [customCSS, setCustomCSS] = useState<string>("https://example.com")
     const [generatedURL, setGeneratedURL] = useState<string>()
     const [username, setUsername] = useState<string>("Player")
+    const [showRanking, setShowRanking] = useState<boolean>(true)
+    const [showRankingOnlyWhenChallenger, setShowRankingOnlyWhenChallenger] = useState<boolean>(false)
     const [showEloDiff, setShowEloDiff] = useState<boolean>(true)
     const [showEloSuffix, setShowEloSuffix] = useState<boolean>(true)
     const [showAverage, setShowAverage] = useState<boolean>(true)
@@ -38,15 +40,50 @@ export const Generator = () => {
         if (!searchParams.get("lang")) navigate(`?lang=${language.id}`)
     }, []);
 
-    function generateLink() {
+    const generateLink = useCallback(() => {
         getPlayerID(username).then(id => {
             if (!id) {
                 alert(tl(language, 'generator.alert.player_not_found', [username]));
                 return
             }
-            setGeneratedURL(`${window.location.protocol}//${window.location.host}/widget/?player_id=${id}&lang=${language.id}&eloBar=${showEloProgressBar}&avg=${showAverage}&suffix=${showEloSuffix}&diff=${showEloDiff}&theme=${theme}${customCSS && theme === "custom" ? `&css=${customCSS}` : ''}${['normal-custom', 'compact-custom'].includes(theme) ? `&color=${customTextColor.substring(1)}&bg-color=${customBackgroundColor.substring(1)}&border1=${customBorderColor1.substring(1)}&border2=${customBorderColor2.substring(1)}` : ''}`)
+
+            let params: {[key: string]: string | number | boolean} = {
+                "player_id": id,
+                "lang": language.id,
+                "eloBar": showEloProgressBar,
+                "avg": showAverage,
+                "suffix": showEloSuffix,
+                "diff": showEloDiff,
+                "theme": theme,
+                "ranking": showRanking ? showRankingOnlyWhenChallenger ? 2 : 1 : 0,
+            }
+
+            if (theme === "custom") {
+                params = {
+                    ...params,
+                    "css": customCSS,
+                }
+            }
+
+            if (['normal-custom', 'compact-custom'].includes(theme)) {
+                params = {
+                    ...params,
+                    "color": customTextColor.substring(1),
+                    "bg-color": customBackgroundColor.substring(1),
+                    "border1": customBorderColor1.substring(1),
+                    "border2": customBorderColor2.substring(1),
+                }
+            }
+
+            setGeneratedURL(`${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`)
         }).catch()
-    }
+    }, [customBackgroundColor, customBorderColor1, customBorderColor2, customCSS, customTextColor, language, showAverage, showEloDiff, showEloProgressBar, showEloSuffix, showRanking, showRankingOnlyWhenChallenger, theme, username])
+
+    const jsonToQuery = useCallback((params: {[key: string]: string | number | boolean}) => {
+        return `?${Object.entries(params).map((param) => {
+            return `${param[0]}=${param[1]}`
+        }).join('&')}`
+    }, [])
 
     return <>
         <main>
@@ -85,6 +122,10 @@ export const Generator = () => {
                               setState={setShowEloProgressBar}/>
                     <Checkbox text={tl(language, 'generator.settings.show_kd')} state={showAverage}
                               setState={setShowAverage}/>
+                    <Checkbox text={tl(language, 'generator.settings.show_ranking')} state={showRanking}
+                              setState={setShowRanking}/>
+                    {showRanking && <Checkbox text={tl(language, 'generator.settings.show_ranking_only_when_challenger')} state={showRankingOnlyWhenChallenger}
+                                              setState={setShowRankingOnlyWhenChallenger}/>}
                 </div>
                 <Separator text={tl(language, 'generator.theme.title')}/>
                 <div className={'setting'}>
@@ -141,6 +182,7 @@ export const Generator = () => {
                 <Separator text={tl(language, 'generator.preview.title')}/>
                 <div className={`${theme}-theme preview`}>
                     <Widget preview={true} overrideShowEloDiff={showEloDiff} overrideShowEloSuffix={showEloSuffix}
+                            overrideRankingState={showRanking}
                             overrideShowAverage={showAverage}
                             overrideShowEloProgressBar={showEloProgressBar}
                             overrideUsername={username.length > 0 ? username : "Player"}

@@ -17,6 +17,8 @@
   "generator.settings.show_elo_diff": "Show ELO diff (gain/loss)",
   "generator.settings.show_elo_progress_bar": "Show ELO progress bar",
   "generator.settings.show_kd": "Show average statistics from last 20 matches",
+  "generator.settings.show_ranking": "Show ranking",
+  "generator.settings.show_ranking_only_when_challenger": "Show ranking only when Challenger",
   "generator.theme.title": "Style",
   "generator.theme.custom-css.title": "Custom CSS URL",
   "generator.theme.custom-css.apply": "Press Enter to apply.",

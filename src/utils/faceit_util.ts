@@ -8,6 +8,7 @@ interface V4PlayersResponse {
         cs2?: {
             faceit_elo: number,
             skill_level: number,
+            region: string,
         }
     }
 }
@@ -41,6 +42,13 @@ interface V4StatsResponse {
     }[]
 }
 
+/** Topka graczy zwracane przez API v4 */
+interface V4RankingResponse {
+    items: {
+        position: number,
+    }[]
+}
+
 /**
  * Profil gracza FACEIT oraz jego statystyki.
  */
@@ -50,6 +58,7 @@ interface FaceitPlayer {
     level?: number;
     elo?: number;
     wins: number;
+    ranking: number;
     losses: number;
     avg: {
         kills: number;
@@ -71,6 +80,7 @@ export function getPlayerStats(id: string, startDate: Date): Promise<FaceitPlaye
         }).then(async response => {
             if (!response.ok) { console.error(await response.text()); resolve(undefined); return }
             const v4PlayersResponse = (await response.json() as V4PlayersResponse);
+            if (!v4PlayersResponse.games.cs2) { console.error("This player never played CS2 on FACEIT."); resolve(undefined); return }
             fetch(`https://open.faceit.com/data/v4/players/${v4PlayersResponse.player_id}/history?game=cs2`, {
                 headers: HEADERS
             }).then(async response => {
@@ -109,17 +119,26 @@ export function getPlayerStats(id: string, startDate: Date): Promise<FaceitPlaye
                         hspercent += parseFloat(match.stats['Headshots %']);
                     }
 
-                    resolve({
-                        id: v4PlayersResponse.player_id,
-                        username: v4PlayersResponse.nickname,
-                        level: v4PlayersResponse.games.cs2?.skill_level,
-                        elo: v4PlayersResponse.games.cs2?.faceit_elo,
-                        wins,
-                        losses,
-                        avg: {
-                            kills, hspercent, deaths, matches: v4StatsResponse.items.length
-                        }
-                    });
+                    fetch(`https://open.faceit.com/data/v4/rankings/games/cs2/regions/${v4PlayersResponse.games.cs2?.region}/players/${v4PlayersResponse.player_id}`, {
+                        headers: HEADERS
+                    }).then(async response => {
+                        if (!response.ok) { console.error(await response.text()); resolve(undefined); return }
+                        const v4RankingResponse = (await response.json() as V4RankingResponse);
+                        const ranking = v4RankingResponse.items[0] ? v4RankingResponse.items[0].position : undefined;
+
+                        resolve({
+                            id: v4PlayersResponse.player_id,
+                            username: v4PlayersResponse.nickname,
+                            level: v4PlayersResponse.games.cs2?.skill_level,
+                            elo: v4PlayersResponse.games.cs2?.faceit_elo,
+                            ranking: ranking || 999999,
+                            wins,
+                            losses,
+                            avg: {
+                                kills, hspercent, deaths, matches: v4StatsResponse.items.length
+                            }
+                        });
+                    })
                 })
 
             })

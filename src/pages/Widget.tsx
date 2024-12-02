@@ -1,9 +1,24 @@
 import '../css/App.scss'
 import {Statistic} from "../components/Statistic.tsx";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {Language, languages, tl} from "../translations/translations.ts";
 import {getPlayerID, getPlayerStats} from "../utils/faceit_util.ts";
+
+import fc1 from '../assets/levels/faceit1.svg'
+import fc2 from '../assets/levels/faceit2.svg'
+import fc3 from '../assets/levels/faceit3.svg'
+import fc4 from '../assets/levels/faceit4.svg'
+import fc5 from '../assets/levels/faceit5.svg'
+import fc6 from '../assets/levels/faceit6.svg'
+import fc7 from '../assets/levels/faceit7.svg'
+import fc8 from '../assets/levels/faceit8.svg'
+import fc9 from '../assets/levels/faceit9.svg'
+import fc10 from '../assets/levels/faceit10.svg'
+import fcChallenger from '../assets/levels/challenger.svg'
+import fcChallenger1 from '../assets/levels/challenger_1.svg'
+import fcChallenger2 from '../assets/levels/challenger_2.svg'
+import fcChallenger3 from '../assets/levels/challenger_3.svg'
 
 export const themes: { id: string, name: string }[] = [
     {id: "dark", name: "Dark"},
@@ -17,6 +32,7 @@ export const themes: { id: string, name: string }[] = [
 interface Props {
     preview?: boolean,
     overrideUsername?: string,
+    overrideRankingState?: boolean,
     overrideTheme?: string,
     overrideBorder1?: string,
     overrideBorder2?: string,
@@ -30,11 +46,55 @@ interface Props {
     overrideShowEloProgressBar?: boolean,
 }
 
-export const Widget = ({preview, overrideUsername, overrideTheme, overrideBorder1, overrideBorder2, overrideTextColor, overrideBackground, overrideCustomCSS, overrideLanguage, overrideShowAverage, overrideShowEloDiff, overrideShowEloSuffix, overrideShowEloProgressBar}: Props) => {
+const levelIcons = [
+    fc1, fc2, fc3, fc4, fc5, fc6, fc7, fc8, fc9, fc10,
+    fcChallenger, fcChallenger1, fcChallenger2, fcChallenger3, /* Challenger (Top 1000, Top 1, Top 2, Top 3) */
+]
+
+const eloDistribution = [
+    ['#eee', 100, 500],
+    ['#1CE400', 501, 750],
+    ['#1CE400', 751, 900],
+    ['#FFC800', 901, 1050],
+    ['#FFC800', 1051, 1200],
+    ['#FFC800', 1201, 1350],
+    ['#FFC800', 1351, 1530],
+    ['#FF6309', 1531, 1750],
+    ['#FF6309', 1750, 2000],
+    ['#FE1F00', 2001],
+    ['#e80128', 2001], /* Challenger: 4-1000 */
+    ['#d9a441', 2001], /* Challenger: 1 */
+    ['#c7d0d5', 2001], /* Challenger: 2 */
+    ['#bf7145', 2001], /* Challenger: 3 */
+]
+
+enum RankingState {
+    DISABLED = 0,
+    SHOW = 1,
+    ONLY_WHEN_CHALLENGER = 2,
+}
+
+export const Widget = ({
+                           preview,
+                           overrideUsername,
+                           overrideRankingState,
+                           overrideTheme,
+                           overrideBorder1,
+                           overrideBorder2,
+                           overrideTextColor,
+                           overrideBackground,
+                           overrideCustomCSS,
+                           overrideLanguage,
+                           overrideShowAverage,
+                           overrideShowEloDiff,
+                           overrideShowEloSuffix,
+                           overrideShowEloProgressBar
+                       }: Props) => {
     const [level, setLevel] = useState(1)
     const [language, setLanguage] = useState<Language>(languages[0])
     const [startingElo, setStartingElo] = useState<number>(100)
     const [elo, setElo] = useState(100)
+    const [ranking, setRanking] = useState(999)
     const [kills, setKills] = useState(0)
     const [deaths, setDeaths] = useState(0)
     const [hsPercent, setHSPercent] = useState(0)
@@ -42,6 +102,8 @@ export const Widget = ({preview, overrideUsername, overrideTheme, overrideBorder
     const [wins, setWins] = useState(0)
     const [losses, setLosses] = useState(0)
     const [username, setUsername] = useState<string>()
+    const [currentEloDistribution, setCurrentEloDistribution] = useState<(string | number)[]>(eloDistribution[0])
+    const [rankingState, setRankingState] = useState<RankingState>(0)
 
     const [customColorScheme, setCustomColorScheme] = useState<boolean>()
     const [customColor, setCustomColor] = useState<string>()
@@ -57,13 +119,13 @@ export const Widget = ({preview, overrideUsername, overrideTheme, overrideBorder
                 setCustomBackgroundColor(overrideBackground)
                 setCustomBorderColor(overrideBorder1)
                 setCustomBorderColor2(overrideBorder2)
-            }else{
+            } else {
                 setCustomColor(`#${searchParams.get('color')}`)
                 setCustomBackgroundColor(`#${searchParams.get('bg-color')}`)
                 setCustomBorderColor(`#${searchParams.get('border1')}`)
                 setCustomBorderColor2(`#${searchParams.get('border2')}`)
             }
-        }else{
+        } else {
             setCustomColorScheme(false)
         }
     }, [overrideTheme, overrideTextColor, overrideBackground, overrideBorder1, overrideBorder2]);
@@ -71,13 +133,40 @@ export const Widget = ({preview, overrideUsername, overrideTheme, overrideBorder
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
 
+    const getIcon = useCallback(() => {
+        if (preview) return levelIcons[10]
+        if (level === 10 && ranking <= 1000) {
+            if (ranking === 1) return levelIcons[11]
+            else if (ranking === 2) return levelIcons[12]
+            else if (ranking === 3) return levelIcons[13]
+            return levelIcons[10] /* Challenger */
+        }
+        return levelIcons[level - 1]
+    }, [level, ranking, preview])
+
+    const getEloDistribution = useCallback((level: number, ranking: number) => {
+        if (preview) return eloDistribution[10]
+        if (level === 10 && ranking <= 1000) {
+            if (ranking === 1) return eloDistribution[11]
+            else if (ranking === 2) return eloDistribution[12]
+            else if (ranking === 3) return eloDistribution[13]
+            return eloDistribution[10] /* Challenger */
+        }
+        return eloDistribution[level - 1]
+    }, [preview])
+
     useEffect(() => {
         const language = languages.find(language => language.id === searchParams.get("lang"));
         if (language) setLanguage(language);
     }, [overrideLanguage, searchParams]);
 
     useEffect(() => {
-        if (preview) return;
+        if (preview) {setCurrentEloDistribution(eloDistribution[10]); return;}
+        let rankingParam = parseInt(searchParams.get('ranking') || "2");
+        console.log(searchParams.get('ranking'), rankingParam)
+        if (isNaN(rankingParam)) rankingParam = RankingState.ONLY_WHEN_CHALLENGER
+        setRankingState(rankingParam)
+
         const startDate = new Date();
 
         let theme = searchParams.get("theme") || "dark";
@@ -89,7 +178,7 @@ export const Widget = ({preview, overrideUsername, overrideTheme, overrideBorder
         if (playerId === null) {
             const username = searchParams.get("player");
             if (username !== null) {
-                getPlayerID(username).then((id)=>{
+                getPlayerID(username).then((id) => {
                     window.open(`${window.location}&player_id=${id}`, '_self');
                 })
                 return
@@ -116,6 +205,9 @@ export const Widget = ({preview, overrideUsername, overrideTheme, overrideBorder
                 setDeaths(player.avg.deaths)
                 setHSPercent(player.avg.hspercent)
                 setAvgMatches(player.avg.matches)
+
+                setRanking(player.ranking)
+                setCurrentEloDistribution(getEloDistribution(player.level, player.ranking))
             })
         }
         getStats(true)
@@ -149,19 +241,6 @@ export const Widget = ({preview, overrideUsername, overrideTheme, overrideBorder
 
     }, [overrideCustomCSS, overrideTheme])
 
-    const eloDistribution = [
-        ['#eee', 100, 500],
-        ['#1CE400', 501, 750],
-        ['#1CE400', 751, 900],
-        ['#FFC800', 901, 1050],
-        ['#FFC800', 1051, 1200],
-        ['#FFC800', 1201, 1350],
-        ['#FFC800', 1351, 1530],
-        ['#FF6309', 1531, 1750],
-        ['#FF6309', 1750, 2000],
-        ['#FE1F00', 2001],
-    ]
-
     return (
         <>
             {customColorScheme && <style>{`
@@ -182,11 +261,11 @@ export const Widget = ({preview, overrideUsername, overrideTheme, overrideBorder
                 <div className={'widget'}>
                     <div className={'player-stats'}>
                         <div className={'level'}>
-                            <img src={`https://mxgic1337.xyz/fc/faceit${preview ? 10 : level}.svg`}
+                            <img src={getIcon()}
                                  alt={`Level ${preview ? 10 : level}`}/>
                             <div className={'elo'}>
                                 <h2>{username || searchParams.get("player") || overrideUsername || "?"}</h2>
-                                <p>{tl(language, `widget.elo${(preview && overrideShowEloSuffix) || (!preview && (searchParams.get('suffix') === null || searchParams.get('suffix') === 'true')) ? '' : '_no_suffix'}`, [preview ? `2001` : `${elo}`])
+                                <p>{(overrideRankingState || (rankingState === RankingState.ONLY_WHEN_CHALLENGER && ranking <= 1000) || rankingState === RankingState.SHOW) && <>#{ranking} </>}{tl(language, `widget.elo${(preview && overrideShowEloSuffix) || (!preview && (searchParams.get('suffix') === null || searchParams.get('suffix') === 'true')) ? '' : '_no_suffix'}`, [preview ? `2001` : `${elo}`])
                                     + ((preview && overrideShowEloDiff) || (!preview && (searchParams.get('diff') === 'true' || searchParams.get('diff') === null)) ? tl(language, 'widget.elo_diff', [0 > elo - startingElo ? `${elo - startingElo}` : `+${elo - startingElo}`]) : "")}</p>
                             </div>
                         </div>
@@ -219,8 +298,8 @@ export const Widget = ({preview, overrideUsername, overrideTheme, overrideBorder
                     {((preview && overrideShowEloProgressBar) || (!preview && searchParams.get('eloBar') === 'true')) &&
                         <div className={'progress-bar'}>
                             <div className={'progress'} style={{
-                                width: preview || level === 10 ? '100%' : `${((elo - (eloDistribution[level - 1][1] as number)) / ((eloDistribution[level - 1][2] as number) - (eloDistribution[level - 1][1] as number))) * 100}%`,
-                                background: eloDistribution[preview ? 9 : level - 1][0]
+                                width: preview || level === 10 ? '100%' : `${((elo - (currentEloDistribution[1] as number)) / ((currentEloDistribution[2] as number) - (currentEloDistribution[1] as number))) * 100}%`,
+                                background: currentEloDistribution[0]
                             }}></div>
                         </div>}
                 </div>
