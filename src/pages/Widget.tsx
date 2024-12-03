@@ -212,7 +212,7 @@ export const Widget = ({
         }
         getStats(true)
         const interval =
-            setInterval(getStats, 1000 * 60)
+            setInterval(getStats, 1000 * 30)
         document.getElementsByTagName("html")[0].classList.add(`${theme}-theme`)
 
         return () => {

@@ -45,6 +45,7 @@ interface V4StatsResponse {
 /** Topka graczy zwracane przez API v4 */
 interface V4RankingResponse {
     items: {
+        player_id: string,
         position: number,
     }[]
 }
@@ -124,7 +125,8 @@ export function getPlayerStats(id: string, startDate: Date): Promise<FaceitPlaye
                     }).then(async response => {
                         if (!response.ok) { console.error(await response.text()); resolve(undefined); return }
                         const v4RankingResponse = (await response.json() as V4RankingResponse);
-                        const ranking = v4RankingResponse.items[0] ? v4RankingResponse.items[0].position : undefined;
+                        const rankingItem = v4RankingResponse.items.find(item => item.player_id === v4PlayersResponse.player_id);
+                        const ranking = rankingItem ? rankingItem.position : undefined;
 
                         resolve({
                             id: v4PlayersResponse.player_id,
