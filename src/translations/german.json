@@ -9,6 +9,7 @@
   "widget.kd": "K/D",
   "widget.deaths": "Todesfälle",
 
+  "generator.alert.player_not_found": "Player {{0}} wurde nicht gefunden.",
   "generator.settings.title": "Einstellungen",
   "generator.settings.faceit_name": "FACEIT Benutzername",
   "generator.settings.language": "Sprache",
@@ -16,6 +17,8 @@
   "generator.settings.show_elo_diff": "ELO Differenz anzeigen (gewinn/verlust)",
   "generator.settings.show_elo_progress_bar": "ELO Fortschrittsbalken anzeigen",
   "generator.settings.show_kd": "Durchschnittsstatistiken der letzten 20 Spiele anzeigen",
+  "generator.settings.show_ranking": "Ranking anzeigen",
+  "generator.settings.show_ranking_only_when_challenger": "Rangliste nur anzeigen, wenn Challenger",
   "generator.theme.title": "Stil",
   "generator.theme.custom-css.title": "Benutzerdefinierte CSS-URL",
   "generator.theme.custom-css.apply": "Drücken Sie zur Bestätigung die Eingabetaste.",
@@ -25,6 +28,7 @@
   "generator.theme.background-color": "Hintergrundfarbe",
   "generator.generate.title": "Erzeugen",
   "generator.generate.button": "Erzeugen",
+  "generator.generate.open_in_browser.button": "Öffnen im Browser",
   "generator.generate.info.0": "Kopieren Sie diesen Link und fügen Sie ihn in eine Browserquelle in OBS Studio ein.",
   "generator.generate.info.1": "Es wird empfohlen, die Breite des Browsers auf 500px einzustellen.",
   "generator.preview.title": "Widget Vorschau"
