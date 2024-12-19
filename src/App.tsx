@@ -1,6 +1,6 @@
 import {Route, Routes} from "react-router-dom";
-import {Widget} from "./pages/Widget.tsx";
-import {Generator} from "./pages/Generator.tsx";
+import {Widget} from "./widget/Widget.tsx";
+import {Generator} from "./generator/Generator.tsx";
 
 export const App = () => {
     return <>

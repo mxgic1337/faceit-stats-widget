@@ -1,13 +1,15 @@
-import {useCallback, useEffect, useRef, useState} from "react";
-import {themes, Widget} from "./Widget.tsx";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import {themes, Widget} from "../widget/Widget.tsx";
 import {Separator} from "../components/Separator.tsx";
 import {Language, languages, tl} from "../translations/translations.ts";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import {Checkbox} from "../components/Checkbox.tsx";
 import {ColorPicker} from "../components/ColorPicker.tsx";
 import {getPlayerID} from "../utils/faceit_util.ts";
+import {MainTab} from "./tabs/MainTab.tsx";
+import {StyleTab} from "./tabs/StyleTab.tsx";
 
 export const Generator = () => {
+
     const [customCSS, setCustomCSS] = useState<string>("https://example.com")
     const [generatedURL, setGeneratedURL] = useState<string>()
     const [username, setUsername] = useState<string>("Player")
@@ -25,7 +27,6 @@ export const Generator = () => {
     const [customTextColor, setCustomTextColor] = useState<string>('#ffffff')
     const [customBackgroundColor, setCustomBackgroundColor] = useState<string>('#121212')
 
-    const customCSSInputRef = useRef<HTMLInputElement>(null);
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
 
@@ -47,7 +48,7 @@ export const Generator = () => {
                 return
             }
 
-            let params: {[key: string]: string | number | boolean} = {
+            let params: { [key: string]: string | number | boolean } = {
                 "player_id": id,
                 "lang": language.id,
                 "eloBar": showEloProgressBar,
@@ -79,11 +80,26 @@ export const Generator = () => {
         }).catch()
     }, [customBackgroundColor, customBorderColor1, customBorderColor2, customCSS, customTextColor, language, showAverage, showEloDiff, showEloProgressBar, showEloSuffix, showRanking, showRankingOnlyWhenChallenger, theme, username])
 
-    const jsonToQuery = useCallback((params: {[key: string]: string | number | boolean}) => {
+    const jsonToQuery = useCallback((params: { [key: string]: string | number | boolean }) => {
         return `?${Object.entries(params).map((param) => {
             return `${param[0]}=${param[1]}`
         }).join('&')}`
     }, [])
+
+    const tabs = useMemo(() => [
+        {name: tl(language, 'generator.settings.title'), component: <MainTab username={username} setUsername={setUsername} language={language} setLanguage={setLanguage}
+                                       showEloSuffix={showEloSuffix} setShowEloSuffix={setShowEloSuffix} showAverage={showAverage}
+                                       setShowAverage={setShowAverage}
+                                       showRanking={showRanking} setShowRanking={setShowRanking} showEloProgressBar={showEloProgressBar}
+                                       setShowEloProgressBar={setShowEloProgressBar}
+                                       showEloDiff={showEloDiff} setShowEloDiff={setShowEloDiff}
+                                       showRankingOnlyWhenChallenger={showRankingOnlyWhenChallenger} setShowRankingOnlyWhenChallenger={setShowRankingOnlyWhenChallenger}
+            />},
+        {name: tl(language, 'generator.theme.title'), component: <StyleTab language={language} customBorderColor1={customBorderColor1} customBorderColor2={customBorderColor2}
+            setCustomBorderColor1={setCustomBorderColor1} customBorderColor2={customBorderColor2} customBackgroundColor={customBackgroundColor} />}
+    ], [language])
+
+    const [selectedTabIndex, setSelectedTabIndex] = useState(0)
 
     return <>
         <main>
@@ -91,70 +107,16 @@ export const Generator = () => {
                 <header>
                     <h2>FACEIT Widget Generator</h2>
                 </header>
-                <Separator text={tl(language, 'generator.settings.title')}/>
-                <div className={'setting'}>
+                <div className={'tabs'}>
+                    {tabs.map((tab, index) => {
+                        return <button onClick={()=>{
+                            setSelectedTabIndex(index)
+                        }}>{tab.name}</button>
+                    })}
+                </div>
+                {tabs[selectedTabIndex].component}
 
-                    <p>{tl(language, 'generator.settings.faceit_name')}</p>
-                    <input value={username} max={12} onChange={(e) => {
-                        if (e.target.value.length > 12) return
-                        setUsername(e.target.value)
-                    }}/>
-                </div>
-                <div className={'setting'}>
-                    <p>{tl(language, 'generator.settings.language')}</p>
-                    <select value={language.id} onChange={event => {
-                        const language = languages.find(language => language.id === event.target.value) || languages[0]
-                        setLanguage(language);
-                        localStorage.setItem("fcw_lang", language.id)
-                        navigate(`?lang=${language.id}`)
-                    }}>
-                        {languages.map(language => {
-                            return <option key={language.id} value={language.id}>{language.name}</option>
-                        })}
-                    </select>
-                </div>
-                <div className={'setting'}>
-                    <Checkbox text={tl(language, 'generator.settings.show_elo_suffix')} state={showEloSuffix}
-                              setState={setShowEloSuffix}/>
-                    <Checkbox text={tl(language, 'generator.settings.show_elo_diff')} state={showEloDiff}
-                              setState={setShowEloDiff}/>
-                    <Checkbox text={tl(language, 'generator.settings.show_elo_progress_bar')} state={showEloProgressBar}
-                              setState={setShowEloProgressBar}/>
-                    <Checkbox text={tl(language, 'generator.settings.show_kd')} state={showAverage}
-                              setState={setShowAverage}/>
-                    <Checkbox text={tl(language, 'generator.settings.show_ranking')} state={showRanking}
-                              setState={setShowRanking}/>
-                    {showRanking && <Checkbox text={tl(language, 'generator.settings.show_ranking_only_when_challenger')} state={showRankingOnlyWhenChallenger}
-                                              setState={setShowRankingOnlyWhenChallenger}/>}
-                </div>
                 <Separator text={tl(language, 'generator.theme.title')}/>
-                <div className={'setting'}>
-                    <select onChange={(e) => setTheme(e.target.value)}>
-                        {themes.map(theme => {
-                            return <option key={theme.id} value={theme.id}>{theme.name}</option>
-                        })}
-                    </select>
-
-                    {(theme === 'normal-custom' || theme === 'compact-custom') && <>
-                        <ColorPicker text={tl(language, 'generator.theme.border-color-1')} color={customBorderColor1}
-                                     setColor={setCustomBorderColor1}/>
-                        <ColorPicker text={tl(language, 'generator.theme.border-color-2')} color={customBorderColor2}
-                                     setColor={setCustomBorderColor2}/>
-                        <ColorPicker text={tl(language, 'generator.theme.text-color')}
-                                     color={customTextColor} setColor={setCustomTextColor}/>
-                        <ColorPicker text={tl(language, 'generator.theme.background-color')}
-                                     color={customBackgroundColor} setColor={setCustomBackgroundColor}/>
-                    </>}
-
-                    {theme === 'custom' && <>
-                        <p>{tl(language, 'generator.theme.custom-css.title')}</p>
-                        <input defaultValue={customCSS} ref={customCSSInputRef} onKeyDown={(e) => {
-                            if (e.code !== "Enter") return
-                            setCustomCSS(customCSSInputRef.current?.value as string)
-                        }}/>
-                        <small>{tl(language, 'generator.theme.custom-css.apply')}</small>
-                    </>}
-                </div>
                 <Separator text={tl(language, 'generator.generate.title')}/>
                 <div className={'setting generate'}>
                     <p>{tl(language, 'generator.generate.info.0')}</p>
