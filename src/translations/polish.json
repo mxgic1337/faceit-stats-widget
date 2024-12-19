@@ -8,7 +8,6 @@
   "widget.hs%": "HS%",
   "widget.kd": "K/D",
   "widget.deaths": "Śmierci",
-
   "generator.alert.player_not_found": "Nie znaleziono gracza {{0}}.",
   "generator.settings.title": "Ustawienia",
   "generator.settings.faceit_name": "Nazwa użytkownika FACEIT",
