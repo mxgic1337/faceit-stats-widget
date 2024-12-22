@@ -1,5 +1,5 @@
 import {Language, languages, tl} from "../../translations/translations.ts";
-import {Checkbox} from "../../components/Checkbox.tsx";
+import {Checkbox} from "../../components/generator/Checkbox.tsx";
 import {Dispatch} from "react";
 import {useNavigate} from "react-router-dom";
 

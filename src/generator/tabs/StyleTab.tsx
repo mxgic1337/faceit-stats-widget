@@ -1,9 +1,9 @@
 import {colorSchemes, themes} from "../../widget/Widget.tsx";
-import {ColorPicker} from "../../components/ColorPicker.tsx";
+import {ColorPicker} from "../../components/generator/ColorPicker.tsx";
 import {Language, tl} from "../../translations/translations.ts";
 import {Dispatch, useRef} from "react";
-import {Checkbox} from "../../components/Checkbox.tsx";
-import {InfoBox} from "../../components/InfoBox.tsx";
+import {Checkbox} from "../../components/generator/Checkbox.tsx";
+import {InfoBox} from "../../components/generator/InfoBox.tsx";
 
 type Props = {
   theme: string;

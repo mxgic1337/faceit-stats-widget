@@ -68,6 +68,7 @@ interface FaceitPlayer {
     kills: number;
     hspercent: number;
     deaths: number;
+    wins: number;
     matches: number;
   };
 }
@@ -108,7 +109,7 @@ export function getPlayerStats(id: string, startDate: Date): Promise<FaceitPlaye
 
         for (const match of v4HistoryResponse.items) {
           if (match.finished_at < startDate.getTime() / 1000) continue;
-          /* Nazwa drużyny do której należy gracz */
+          /* Player's team name */
           let playerTeam: string | undefined = undefined;
           for (const team of Object.entries(match.teams)) {
             console.log(team[0], team[1])
@@ -131,16 +132,22 @@ export function getPlayerStats(id: string, startDate: Date): Promise<FaceitPlaye
             resolve(undefined);
             return
           }
+          /* Average stats from last 20 matches */
+
           const v4StatsResponse = (await response.json() as V4StatsResponse);
 
           let kills = 0;
           let deaths = 0;
           let hspercent = 0;
+          let wrWins = 0;
 
           for (const match of v4StatsResponse.items) {
             kills += parseInt(match.stats['Kills']);
             deaths += parseInt(match.stats['Deaths']);
             hspercent += parseFloat(match.stats['Headshots %']);
+            if (match.stats['Result'] === "1") {
+              wrWins++
+            }
           }
 
           fetch(`https://open.faceit.com/data/v4/rankings/games/cs2/regions/${v4PlayersResponse.games.cs2?.region}/players/${v4PlayersResponse.player_id}`, {
@@ -165,7 +172,7 @@ export function getPlayerStats(id: string, startDate: Date): Promise<FaceitPlaye
               wins,
               losses,
               avg: {
-                kills, hspercent, deaths, matches: v4StatsResponse.items.length
+                kills, hspercent, deaths, wins: wrWins, matches: v4StatsResponse.items.length
               }
             });
           })

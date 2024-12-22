@@ -1,5 +1,5 @@
 import '../css/app.less'
-import {Statistic} from "../components/Statistic.tsx";
+import {Statistic} from "../components/widget/Statistic.tsx";
 import {useCallback, useEffect, useLayoutEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {Language, languages, tl} from "../translations/translations.ts";
@@ -21,6 +21,7 @@ import fcChallenger2 from '../assets/levels/challenger_2.svg'
 import fcChallenger3 from '../assets/levels/challenger_3.svg'
 
 import sampleBanner from '../assets/sample_banner.png'
+import {StatisticType} from "../generator/tabs/StatisticsTab.tsx";
 
 export const themes: { id: string, name: string, hidden?: boolean }[] = [
   {id: "normal", name: "Normal"},
@@ -41,6 +42,7 @@ export const colorSchemes: { id: string, name: string }[] = [
 
 interface Props {
   overrideBackground?: string,
+  overrideStatistics?: StatisticType[],
   overrideBorder1?: string,
   overrideBorder2?: string,
   overrideCustomCSS?: string,
@@ -87,6 +89,7 @@ enum RankingState {
 
 export const Widget = ({
                          preview,
+                         overrideStatistics,
                          overrideUsername,
                          overrideRankingState,
                          overrideCustomScheme,
@@ -110,6 +113,8 @@ export const Widget = ({
   const [kills, setKills] = useState(0)
   const [deaths, setDeaths] = useState(0)
   const [hsPercent, setHSPercent] = useState(0)
+  const [winsPercent, setWinsPercent] = useState(0)
+  const [stats, setStats] = useState<StatisticType[]>([StatisticType.KILLS, StatisticType.KD, StatisticType.WINRATIO, StatisticType.HSPERCENT])
   const [avgMatches, setAvgMatches] = useState(0)
   const [wins, setWins] = useState(0)
   const [losses, setLosses] = useState(0)
@@ -129,6 +134,12 @@ export const Widget = ({
     if (preview) return;
     const theme = searchParams.get('theme');
     const scheme = searchParams.get('scheme');
+    const stats = searchParams.get('stats');
+
+    if (stats) {
+      setStats(stats.split(",") as StatisticType[])
+    }
+
     setUseBannerAsBackground(searchParams.get('banner') === "true")
     if (theme === 'dark' || theme === 'normal-custom') {
       searchParams.set('theme', 'normal');
@@ -249,6 +260,7 @@ export const Widget = ({
         setKills(player.avg.kills)
         setDeaths(player.avg.deaths)
         setHSPercent(player.avg.hspercent)
+        setWinsPercent(Math.round(player.avg.wins / player.avg.matches * 100))
         setAvgMatches(player.avg.matches)
 
         setRanking(player.ranking)
@@ -286,6 +298,25 @@ export const Widget = ({
     }
 
   }, [overrideCustomCSS, overrideCustomScheme])
+
+  const getStat = useCallback((stat: StatisticType) => {
+    switch (stat) {
+      case StatisticType.KILLS:
+        return `${preview ? 20 : Math.round(kills / avgMatches)}`;
+      case StatisticType.DEATHS:
+        return `${preview ? 10 : Math.round(deaths / avgMatches)}`;
+      case StatisticType.HSPERCENT:
+        return `${preview ? '50' : Math.round(hsPercent / avgMatches)}%`;
+      case StatisticType.KD:
+        return `${preview ? '2' : Math.round((kills / deaths) * 100) / 100}`;
+      case StatisticType.WINRATIO:
+        return `${preview ? '50' : winsPercent}%`;
+      case StatisticType.RANKING:
+        return `#${preview ? 999 : ranking}`;
+      default:
+        return `???`
+    }
+  }, [kills, deaths, winsPercent, hsPercent, ranking, avgMatches])
 
   return (
     <>
@@ -325,22 +356,12 @@ export const Widget = ({
           </div>
           {((preview && overrideShowAverage) || (!preview && searchParams.get('avg') === 'true')) &&
             <div className={'average'}>
-              <div className={'stat'}>
-                <p>{tl(language, 'widget.kills')}</p>
-                <p>{preview ? 20 : Math.round(kills / avgMatches)}</p>
-              </div>
-              <div className={'stat'}>
-                <p>{tl(language, 'widget.deaths')}</p>
-                <p>{preview ? 10 : Math.round(deaths / avgMatches)}</p>
-              </div>
-              <div className={'stat'}>
-                <p>{tl(language, 'widget.kd')}</p>
-                <p>{preview ? 2 : Math.round((kills / deaths) * 100) / 100}</p>
-              </div>
-              <div className={'stat'}>
-                <p>{tl(language, 'widget.hs%')}</p>
-                <p>{preview ? 50 : Math.round(hsPercent / avgMatches)}%</p>
-              </div>
+              {(overrideStatistics || stats).map(stat => {
+                return <div className={'stat'} key={stat}>
+                  <p>{tl(language, `widget.${stat.toLowerCase()}`)}</p>
+                  <p>{getStat(stat)}</p>
+                </div>
+              })}
             </div>}
           {((preview && overrideShowEloProgressBar) || (!preview && searchParams.get('eloBar') === 'true')) &&
             <div className={'progress-bar'}>

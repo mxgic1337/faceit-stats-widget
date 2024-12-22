@@ -5,7 +5,9 @@
   "widget.elo_diff": " ({{0}})",
   "widget.elo_no_suffix": "{{0}}",
   "widget.kills": "Kills",
-  "widget.hs%": "HS%",
+  "widget.hspercent": "HS %",
+  "widget.winratio": "Wins %",
+  "widget.ranking": "Ranking",
   "widget.kd": "K/D",
   "widget.deaths": "Deaths",
   "generator.alert.player_not_found": "Player {{0}} was not found.",
@@ -38,5 +40,11 @@
   "generator.theme.banner_as_background.warning": "The preview shows an example banner. Correct banner will show after generating the widget.",
   "modals.generated.title": "Widget generated",
   "modals.buttons.copy": "Copy",
-  "modals.buttons.close": "Close"
+  "modals.buttons.close": "Close",
+  "stat.kills": "Average kills",
+  "stat.deaths": "Average deaths",
+  "stat.winratio": "Wins %",
+  "stat.hspercent": "Headshots %",
+  "stat.kd": "K/D Ratio",
+  "stat.ranking": "Ranking"
 }

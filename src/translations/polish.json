@@ -5,7 +5,8 @@
   "widget.elo_diff": " ({{0}})",
   "widget.elo_no_suffix": "{{0}}",
   "widget.kills": "Zabójstwa",
-  "widget.hs%": "HS%",
+  "widget.winratio": "Winy %",
+  "widget.ranking": "Ranking",
   "widget.kd": "K/D",
   "widget.deaths": "Śmierci",
   "generator.alert.player_not_found": "Nie znaleziono gracza {{0}}.",
@@ -38,5 +39,11 @@
   "generator.theme.banner_as_background.warning": "Podgląd pokazuje przykładowy baner. Poprawny baner wyświetli się dopiero po wygenerowaniu widżetu.",
   "modals.generated.title": "Wygenerowano widżet",
   "modals.buttons.copy": "Kopiuj",
-  "modals.buttons.close": "Zamknij"
+  "modals.buttons.close": "Zamknij",
+  "stat.kills": "Średnie zabójstwa",
+  "stat.deaths": "Średnie śmierci",
+  "stat.winratio": "% wygranych",
+  "stat.hspercent": "% zabójstw w głowę",
+  "stat.kd": "Średnie K/D",
+  "stat.ranking": "Ranking"
 }

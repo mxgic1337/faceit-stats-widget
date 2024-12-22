@@ -1,13 +1,13 @@
 import {useCallback, useEffect, useState} from "react";
 import {Widget} from "../widget/Widget.tsx";
-import {Separator} from "../components/Separator.tsx";
+import {Separator} from "../components/generator/Separator.tsx";
 import {Language, languages, tl} from "../translations/translations.ts";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {getPlayerID} from "../utils/faceit_util.ts";
 import {MainTab} from "./tabs/MainTab.tsx";
 import {StyleTab} from "./tabs/StyleTab.tsx";
-import {AverageTab} from "./tabs/AverageTab.tsx";
-import {GeneratedWidgetModal} from "../components/GeneratedWidgetModal.tsx";
+import {StatisticsTab, StatisticType} from "./tabs/StatisticsTab.tsx";
+import {GeneratedWidgetModal} from "../components/generator/GeneratedWidgetModal.tsx";
 
 export const Generator = () => {
 
@@ -15,10 +15,10 @@ export const Generator = () => {
   const [generatedURL, setGeneratedURL] = useState<string | undefined>()
   const [username, setUsername] = useState<string>("Player")
   const [showRanking, setShowRanking] = useState<boolean>(true)
-  const [showRankingOnlyWhenChallenger, setShowRankingOnlyWhenChallenger] = useState<boolean>(false)
+  const [showRankingOnlyWhenChallenger, setShowRankingOnlyWhenChallenger] = useState<boolean>(true)
   const [showEloDiff, setShowEloDiff] = useState<boolean>(true)
   const [showEloSuffix, setShowEloSuffix] = useState<boolean>(true)
-  const [showAverage, setShowAverage] = useState<boolean>(true)
+  const [showStatistics, setShowStatistics] = useState<boolean>(true)
   const [showEloProgressBar, setShowEloProgressBar] = useState<boolean>(true)
   const [useBannerAsBackground, setUseBannerAsBackground] = useState<boolean>(false)
   const [colorScheme, setColorScheme] = useState<string>("dark")
@@ -29,6 +29,11 @@ export const Generator = () => {
   const [customBorderColor2, setCustomBorderColor2] = useState<string>('#8d8d8d')
   const [customTextColor, setCustomTextColor] = useState<string>('#ffffff')
   const [customBackgroundColor, setCustomBackgroundColor] = useState<string>('#121212')
+
+  const [statSlot1, setStatSlot1] = useState<StatisticType>(StatisticType.KILLS)
+  const [statSlot2, setStatSlot2] = useState<StatisticType>(StatisticType.KD)
+  const [statSlot3, setStatSlot3] = useState<StatisticType>(StatisticType.HSPERCENT)
+  const [statSlot4, setStatSlot4] = useState<StatisticType>(StatisticType.WINRATIO)
 
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
@@ -51,17 +56,23 @@ export const Generator = () => {
         return
       }
 
-      let params: { [key: string]: string | number | boolean } = {
+      let params: { [key: string]: string | number | boolean | string[] } = {
         "player_id": id,
         "lang": language.id,
         "eloBar": showEloProgressBar,
-        "avg": showAverage,
+        "avg": showStatistics,
         "suffix": showEloSuffix,
         "diff": showEloDiff,
         "scheme": colorScheme,
         "theme": theme,
         "ranking": showRanking ? showRankingOnlyWhenChallenger ? 2 : 1 : 0,
         "banner": useBannerAsBackground,
+        "stats": [
+          statSlot1,
+          statSlot2,
+          statSlot3,
+          statSlot4,
+        ],
       }
 
       if (theme === "custom") {
@@ -83,9 +94,9 @@ export const Generator = () => {
 
       setGeneratedURL(`${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`)
     }).catch()
-  }, [customBackgroundColor, customBorderColor1, customBorderColor2, customCSS, customTextColor, language, showAverage, showEloDiff, showEloProgressBar, showEloSuffix, showRanking, showRankingOnlyWhenChallenger, theme, username, colorScheme, useBannerAsBackground])
+  }, [customBackgroundColor, customBorderColor1, customBorderColor2, customCSS, customTextColor, language, showStatistics, showEloDiff, showEloProgressBar, showEloSuffix, showRanking, showRankingOnlyWhenChallenger, theme, username, colorScheme, useBannerAsBackground, statSlot1, statSlot2, statSlot3, statSlot4])
 
-  const jsonToQuery = useCallback((params: { [key: string]: string | number | boolean }) => {
+  const jsonToQuery = useCallback((params: { [key: string]: string | number | boolean | string[] }) => {
     return `?${Object.entries(params).map((param) => {
       return `${param[0]}=${param[1]}`
     }).join('&')}`
@@ -94,11 +105,11 @@ export const Generator = () => {
   const tabs = [
     {
       name: tl(language, 'generator.settings.title'),
-      component: <MainTab username={username} setUsername={setUsername} language={language}
+      component: <MainTab key={'main'} username={username} setUsername={setUsername} language={language}
                           setLanguage={setLanguage}
                           showEloSuffix={showEloSuffix} setShowEloSuffix={setShowEloSuffix}
-                          showAverage={showAverage}
-                          setShowAverage={setShowAverage}
+                          showAverage={showStatistics}
+                          setShowAverage={setShowStatistics}
                           showRanking={showRanking} setShowRanking={setShowRanking}
                           showEloProgressBar={showEloProgressBar}
                           setShowEloProgressBar={setShowEloProgressBar}
@@ -109,7 +120,7 @@ export const Generator = () => {
     },
     {
       name: tl(language, 'generator.theme.title'),
-      component: <StyleTab language={language} customBorderColor1={customBorderColor1}
+      component: <StyleTab key={'style'} language={language} customBorderColor1={customBorderColor1}
                            customBorderColor2={customBorderColor2}
                            setCustomBorderColor1={setCustomBorderColor1}
                            setCustomBorderColor2={setCustomBorderColor2}
@@ -125,7 +136,12 @@ export const Generator = () => {
     },
     {
       name: tl(language, 'generator.stats.title'),
-      component: <AverageTab language={language}/>
+      component: <StatisticsTab key={'stats'} language={language} showStatistics={showStatistics}
+                                statSlot1={statSlot1} setStatSlot1={setStatSlot1}
+                                statSlot2={statSlot2} setStatSlot2={setStatSlot2}
+                                statSlot3={statSlot3} setStatSlot3={setStatSlot3}
+                                statSlot4={statSlot4} setStatSlot4={setStatSlot4}
+      />
     }
   ]
 
@@ -140,7 +156,7 @@ export const Generator = () => {
         </header>
         <div className={'tabs'}>
           {tabs.map((tab, index) => {
-            return <button onClick={() => {
+            return <button key={tab.name} onClick={() => {
               setSelectedTabIndex(index)
             }} className={index === selectedTabIndex ? "active" : ""}>{tab.name}</button>
           })}
@@ -148,10 +164,17 @@ export const Generator = () => {
         {tabs[selectedTabIndex].component}
         <br/>
         <footer>
-          <small>This project is not affiliated with <a href={'https://faceit.com'}>FACEIT</a>.</small>
-          <small>Copyright &copy; <a href={'https://github.com/mxgic1337'}>mxgic1337_</a> 2024 &bull; <a
-            href={'https://github.com/mxgic1337/faceit-stats-widget/blob/master/LICENSE'}>MIT License</a> &bull; <a
-            href={'https://github.com/mxgic1337/faceit-stats-widget'}>GitHub</a></small>
+          <small>This project is not affiliated with <a href={'https://faceit.com'}
+                                                        target={'_blank'}>FACEIT</a>.</small>
+          <small>Copyright &copy; <a href={'https://github.com/mxgic1337'} target={'_blank'}>mxgic1337_</a> 2024 &bull;
+            <a
+              href={'https://github.com/mxgic1337/faceit-stats-widget/blob/master/LICENSE'} target={'_blank'}>MIT
+              License</a>
+          </small>
+          <small><a
+            href={'https://github.com/mxgic1337/faceit-stats-widget'} target={'_blank'}>GitHub</a> &bull; <a
+            href={'https://github.com/mxgic1337/faceit-stats-widget/issues/new'} target={'_blank'}>Report an issue</a>
+          </small>
         </footer>
       </section>
       <section className={'preview'}>
@@ -159,13 +182,15 @@ export const Generator = () => {
         <div className={`${theme}-theme ${colorScheme}-scheme preview`}>
           <Widget preview={true} overrideShowEloDiff={showEloDiff} overrideShowEloSuffix={showEloSuffix}
                   overrideRankingState={showRanking}
-                  overrideShowAverage={showAverage}
+                  overrideShowAverage={showStatistics}
                   overrideShowEloProgressBar={showEloProgressBar}
                   overrideUsername={username.length > 0 ? username : "Player"}
-                  overrideCustomCSS={customCSS} overrideCustomScheme={colorScheme === "custom"} overrideLanguage={language.id}
+                  overrideCustomCSS={customCSS} overrideCustomScheme={colorScheme === "custom"}
+                  overrideLanguage={language.id}
                   overrideBorder1={customBorderColor1} overrideBorder2={customBorderColor2}
                   overrideTextColor={customTextColor} overrideBackground={customBackgroundColor}
                   overrideUseBannerAsBackground={useBannerAsBackground}
+                  overrideStatistics={[statSlot1, statSlot2, statSlot3, statSlot4]}
           />
         </div>
         <button onClick={() => {
