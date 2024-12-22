@@ -1,0 +1,102 @@
+@import 'normal';
+
+.classic-theme:extend(.normal-theme all) {
+  * {
+    padding: 0;
+    margin: 0;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+  }
+
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(-45deg, var(--border-1), var(--border-2));
+    border-radius: 12px;
+    padding: 6px;
+
+    .player-stats {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .widget {
+      padding: 12px;
+
+      .level {
+        display: flex;
+        align-items: center;
+
+        img {
+          @size: 85px;
+          width: @size;
+          height: @size;
+          margin-right: 12px;
+        }
+      }
+
+      .matches {
+        text-align: center;
+
+        small {
+          font-size: .75em;
+        }
+
+        .stats {
+          display: flex;
+        }
+      }
+
+      border-radius: 12px;
+      background: var(--background);
+    }
+
+    .progress-bar {
+      margin: 10px auto auto auto;
+      width: 100%;
+      border-radius: 5px;
+      background: var(--background);
+      border: 1px solid var(--border-1);
+
+      .progress {
+        border-radius: 5px;
+        height: 5px;
+        transition: 1s;
+      }
+    }
+
+    .player-stats {
+      .stat.green {
+        border: 1px solid var(--wins);
+        background: linear-gradient(0deg, #0000, var(--background-wins));
+      }
+
+      .stat.red {
+        border: 1px solid var(--losses);
+        background: linear-gradient(0deg, #0000, var(--background-losses));
+      }
+    }
+
+    .average {
+      display: flex;
+
+      .stat {
+        flex: 1;
+        justify-content: space-between;
+        padding: 1px 8px;
+        border-right: 2px solid var(--border-1);
+        display: flex;
+      }
+
+      .stat p:first-child {
+        margin-right: 8px;
+      }
+
+      .stat:last-child {
+        border-right: none;
+      }
+    }
+  }
+}
