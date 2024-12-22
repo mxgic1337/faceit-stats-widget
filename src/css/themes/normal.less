@@ -12,6 +12,7 @@
   }
 
   .wrapper {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -30,7 +31,6 @@
       width: 98%;
       border-radius: 5px;
       background: var(--background);
-      border: 1px solid var(--border-1);
 
       .progress {
         border-radius: 5px;
@@ -40,7 +40,9 @@
     }
 
     .widget {
+      position: relative;
       padding: 12px;
+      z-index: 2;
 
       .level {
         display: flex;
@@ -74,6 +76,22 @@
 
       border-radius: 12px;
       background: var(--background);
+
+      &.banner:before {
+        content: '';
+        position: absolute;
+        z-index: -1;
+        border-radius: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: var(--background-url);
+        background-size: cover;
+        background-position: center;
+        filter: blur(2px);
+        opacity: var(--background-opacity, .1);
+      }
     }
 
     .player-stats {

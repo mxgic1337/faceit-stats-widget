@@ -6,11 +6,13 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import {getPlayerID} from "../utils/faceit_util.ts";
 import {MainTab} from "./tabs/MainTab.tsx";
 import {StyleTab} from "./tabs/StyleTab.tsx";
+import {AverageTab} from "./tabs/AverageTab.tsx";
+import {GeneratedWidgetModal} from "../components/GeneratedWidgetModal.tsx";
 
 export const Generator = () => {
 
   const [customCSS, setCustomCSS] = useState<string>("https://example.com")
-  const [generatedURL, setGeneratedURL] = useState<string>()
+  const [generatedURL, setGeneratedURL] = useState<string | undefined>()
   const [username, setUsername] = useState<string>("Player")
   const [showRanking, setShowRanking] = useState<boolean>(true)
   const [showRankingOnlyWhenChallenger, setShowRankingOnlyWhenChallenger] = useState<boolean>(false)
@@ -18,6 +20,7 @@ export const Generator = () => {
   const [showEloSuffix, setShowEloSuffix] = useState<boolean>(true)
   const [showAverage, setShowAverage] = useState<boolean>(true)
   const [showEloProgressBar, setShowEloProgressBar] = useState<boolean>(true)
+  const [useBannerAsBackground, setUseBannerAsBackground] = useState<boolean>(false)
   const [colorScheme, setColorScheme] = useState<string>("dark")
   const [theme, setTheme] = useState<string>("normal")
   const [language, setLanguage] = useState<Language>(languages.find(language => language.id === localStorage.fcw_lang) || languages[0])
@@ -58,6 +61,7 @@ export const Generator = () => {
         "scheme": colorScheme,
         "theme": theme,
         "ranking": showRanking ? showRankingOnlyWhenChallenger ? 2 : 1 : 0,
+        "banner": useBannerAsBackground,
       }
 
       if (theme === "custom") {
@@ -79,7 +83,7 @@ export const Generator = () => {
 
       setGeneratedURL(`${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`)
     }).catch()
-  }, [customBackgroundColor, customBorderColor1, customBorderColor2, customCSS, customTextColor, language, showAverage, showEloDiff, showEloProgressBar, showEloSuffix, showRanking, showRankingOnlyWhenChallenger, theme, username, colorScheme])
+  }, [customBackgroundColor, customBorderColor1, customBorderColor2, customCSS, customTextColor, language, showAverage, showEloDiff, showEloProgressBar, showEloSuffix, showRanking, showRankingOnlyWhenChallenger, theme, username, colorScheme, useBannerAsBackground])
 
   const jsonToQuery = useCallback((params: { [key: string]: string | number | boolean }) => {
     return `?${Object.entries(params).map((param) => {
@@ -114,13 +118,21 @@ export const Generator = () => {
                            customTextColor={customTextColor} setCustomTextColor={setCustomTextColor}
                            customCSS={customCSS} setCustomCSS={setCustomCSS}
                            theme={theme} setTheme={setTheme} colorScheme={colorScheme}
+                           useBannerAsBackground={useBannerAsBackground}
+                           setUseBannerAsBackground={setUseBannerAsBackground}
+
                            setColorScheme={setColorScheme}/>
+    },
+    {
+      name: tl(language, 'generator.stats.title'),
+      component: <AverageTab language={language}/>
     }
   ]
 
   const [selectedTabIndex, setSelectedTabIndex] = useState(0)
 
   return <>
+    <GeneratedWidgetModal language={language} url={generatedURL} setURL={setGeneratedURL}/>
     <main>
       <section className={'fixed-width'}>
         <header>
@@ -137,7 +149,8 @@ export const Generator = () => {
         <br/>
         <footer>
           <small>This project is not affiliated with <a href={'https://faceit.com'}>FACEIT</a>.</small>
-          <small>Created by <a href={'https://github.com/mxgic1337'}>mxgic1337_</a> &bull; <a
+          <small>Copyright &copy; <a href={'https://github.com/mxgic1337'}>mxgic1337_</a> 2024 &bull; <a
+            href={'https://github.com/mxgic1337/faceit-stats-widget/blob/master/LICENSE'}>MIT License</a> &bull; <a
             href={'https://github.com/mxgic1337/faceit-stats-widget'}>GitHub</a></small>
         </footer>
       </section>
@@ -152,12 +165,9 @@ export const Generator = () => {
                   overrideCustomCSS={customCSS} overrideCustomScheme={colorScheme === "custom"} overrideLanguage={language.id}
                   overrideBorder1={customBorderColor1} overrideBorder2={customBorderColor2}
                   overrideTextColor={customTextColor} overrideBackground={customBackgroundColor}
+                  overrideUseBannerAsBackground={useBannerAsBackground}
           />
         </div>
-        {/* TODO: Add modal */}
-        {generatedURL && <input
-          value={generatedURL}
-          readOnly={true}/>}
         <button onClick={() => {
           generateLink()
         }}>{tl(language, 'generator.generate.button')}</button>

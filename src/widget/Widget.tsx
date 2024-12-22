@@ -1,6 +1,6 @@
 import '../css/app.less'
 import {Statistic} from "../components/Statistic.tsx";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useEffect, useLayoutEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {Language, languages, tl} from "../translations/translations.ts";
 import {getPlayerID, getPlayerStats} from "../utils/faceit_util.ts";
@@ -20,6 +20,8 @@ import fcChallenger1 from '../assets/levels/challenger_1.svg'
 import fcChallenger2 from '../assets/levels/challenger_2.svg'
 import fcChallenger3 from '../assets/levels/challenger_3.svg'
 
+import sampleBanner from '../assets/sample_banner.png'
+
 export const themes: { id: string, name: string, hidden?: boolean }[] = [
   {id: "normal", name: "Normal"},
   {id: "compact", name: "Compact"},
@@ -38,20 +40,21 @@ export const colorSchemes: { id: string, name: string }[] = [
 ]
 
 interface Props {
-  preview?: boolean,
-  overrideUsername?: string,
-  overrideRankingState?: boolean,
-  overrideCustomScheme?: boolean,
+  overrideBackground?: string,
   overrideBorder1?: string,
   overrideBorder2?: string,
-  overrideTextColor?: string,
-  overrideBackground?: string,
   overrideCustomCSS?: string,
+  overrideCustomScheme?: boolean,
   overrideLanguage?: string,
+  overrideRankingState?: boolean,
   overrideShowAverage?: boolean,
   overrideShowEloDiff?: boolean,
-  overrideShowEloSuffix?: boolean,
   overrideShowEloProgressBar?: boolean,
+  overrideShowEloSuffix?: boolean,
+  overrideTextColor?: string,
+  overrideUseBannerAsBackground?: boolean,
+  overrideUsername?: string,
+  preview?: boolean,
 }
 
 const levelIcons = [
@@ -93,6 +96,7 @@ export const Widget = ({
                          overrideBackground,
                          overrideCustomCSS,
                          overrideLanguage,
+                         overrideUseBannerAsBackground,
                          overrideShowAverage,
                          overrideShowEloDiff,
                          overrideShowEloSuffix,
@@ -110,6 +114,8 @@ export const Widget = ({
   const [wins, setWins] = useState(0)
   const [losses, setLosses] = useState(0)
   const [username, setUsername] = useState<string>()
+  const [banner, setBanner] = useState<string>()
+  const [useBannerAsBackground, setUseBannerAsBackground] = useState<boolean>(false)
   const [currentEloDistribution, setCurrentEloDistribution] = useState<(string | number)[]>(eloDistribution[0])
   const [rankingState, setRankingState] = useState<RankingState>(0)
 
@@ -119,18 +125,25 @@ export const Widget = ({
   const [customBorderColor, setCustomBorderColor] = useState<string>()
   const [customBorderColor2, setCustomBorderColor2] = useState<string>()
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (preview) return;
     const theme = searchParams.get('theme');
     const scheme = searchParams.get('scheme');
+    setUseBannerAsBackground(searchParams.get('banner') === "true")
     if (theme === 'dark' || theme === 'normal-custom') {
-      window.open(`${window.location.href.replace("&theme=dark", "&theme=normal")}&scheme=dark`, '_self')
+      searchParams.set('theme', 'normal');
+      searchParams.set('scheme', 'dark');
     }
     else if ((theme === 'compact' && !scheme) || theme === 'compact-custom') {
-      window.open(`${window.location.href.replace("&theme=compact-custom", "&theme=compact")}}&scheme=${theme === 'compact-custom' ? 'custom' : 'dark'}`, '_self')
+      searchParams.set('theme', 'compact');
+      if (theme === 'compact-custom') {
+        searchParams.set('scheme', 'custom');
+      } else {
+        searchParams.set('scheme', 'dark');
+      }
     }
     else if (theme === 'classic' && !scheme) {
-      window.open(`${window.location.href}&scheme=faceit`, '_self')
+      searchParams.set('scheme', 'faceit');
     }
   }, []);
 
@@ -205,6 +218,7 @@ export const Widget = ({
     }
 
     const playerId = searchParams.get("player_id")
+    const samplePlayerId = '24180323-d946-4bb7-a334-be3e96fcac05'
     if (playerId === null) {
       const username = searchParams.get("player");
       if (username !== null) {
@@ -213,7 +227,7 @@ export const Widget = ({
         })
         return
       }
-      navigate('?player_id=24180323-d946-4bb7-a334-be3e96fcac05')
+      navigate(`?player_id=${samplePlayerId}`)
       return
     }
 
@@ -221,6 +235,7 @@ export const Widget = ({
       getPlayerStats(playerId, startDate).then((player) => {
         if (!player) return;
         setUsername(player.username)
+        setBanner(player.banner)
 
         if (!player || !player.elo || !player.level) return;
         if (firstTime) setStartingElo(player.elo)
@@ -284,8 +299,13 @@ export const Widget = ({
                     --background: ${customBackgroundColor} !important;
                 }
             `}</style>}
+      {(overrideUseBannerAsBackground || useBannerAsBackground) && <style>{`
+                .wrapper {
+                    --background-url: url("${overrideUseBannerAsBackground ? sampleBanner : banner}") !important;
+                }
+            `}</style>}
       <div className={'wrapper'}>
-        <div className={'widget'}>
+        <div className={`widget ${overrideUseBannerAsBackground || useBannerAsBackground ? 'banner' : ''}`}>
           <div className={'player-stats'}>
             <div className={'level'}>
               <img src={getIcon()}

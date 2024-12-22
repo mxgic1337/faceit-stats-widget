@@ -1,8 +1,9 @@
 export const API_KEY = import.meta.env.VITE_FACEIT_API_KEY;
 
-/** Informacje o graczu zwracane przez API v4 */
+/** Info about player returned by API v4 */
 interface V4PlayersResponse {
   player_id: string,
+  cover_image: string,
   nickname: string,
   games: {
     cs2?: {
@@ -13,7 +14,7 @@ interface V4PlayersResponse {
   }
 }
 
-/** Historia meczów zwracana przez API v4 */
+/** Player match history returned by API v4 */
 interface V4HistoryResponse {
   items: {
     competition_id: string,
@@ -34,7 +35,7 @@ interface V4HistoryResponse {
   }[]
 }
 
-/** Statystyki zwracane przez API v4 */
+/** Stats returned by API v4 */
 interface V4StatsResponse {
   items: {
     stats: {
@@ -43,7 +44,7 @@ interface V4StatsResponse {
   }[]
 }
 
-/** Topka graczy zwracane przez API v4 */
+/** Player ranking returned by API v4 */
 interface V4RankingResponse {
   items: {
     player_id: string,
@@ -52,11 +53,12 @@ interface V4RankingResponse {
 }
 
 /**
- * Profil gracza FACEIT oraz jego statystyki.
+ * FACEIT player profile.
  */
 interface FaceitPlayer {
   id: string;
   username: string;
+  banner?: string;
   level?: number;
   elo?: number;
   wins: number;
@@ -155,6 +157,7 @@ export function getPlayerStats(id: string, startDate: Date): Promise<FaceitPlaye
 
             resolve({
               id: v4PlayersResponse.player_id,
+              banner: v4PlayersResponse.cover_image,
               username: v4PlayersResponse.nickname,
               level: v4PlayersResponse.games.cs2?.skill_level,
               elo: v4PlayersResponse.games.cs2?.faceit_elo,
