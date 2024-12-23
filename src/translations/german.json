@@ -32,7 +32,7 @@
   "generator.generate.open_in_browser.button": "Öffnen im Browser",
   "generator.generate.info.0": "Kopieren Sie diesen Link und fügen Sie ihn in eine Browserquelle in OBS Studio ein.",
   "generator.generate.info.1": "Es wird empfohlen, die Breite des Browsers auf 500px einzustellen.",
-  "generator.preview.title": "Widget Vorschau"
+  "generator.preview.title": "Widget Vorschau",
   "generator.stats.title": "Statistik",
   "generator.stats.slot": "Schlitz {{0}}",
   "generator.stats.disabled": "Statistiken sind deaktiviert. Sie können ermöglichen sie in der \"Einstellungen\" registerkarte.",
