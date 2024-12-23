@@ -159,6 +159,11 @@ export const Widget = ({
   }, []);
 
   useEffect(() => {
+    if (!preview) return;
+    setStats(overrideStatistics as StatisticType[])
+  }, [overrideStatistics]);
+
+  useEffect(() => {
     if (searchParams.get('scheme') === 'custom') {
       setCustomColorScheme(true)
       setCustomColor(`#${searchParams.get('color')}`)
@@ -356,8 +361,8 @@ export const Widget = ({
           </div>
           {((preview && overrideShowAverage) || (!preview && searchParams.get('avg') === 'true')) &&
             <div className={'average'}>
-              {(overrideStatistics || stats).map(stat => {
-                return <div className={'stat'} key={stat}>
+              {stats.map(stat => {
+                return <div className={'stat'}>
                   <p>{tl(language, `widget.${stat.toLowerCase()}`)}</p>
                   <p>{getStat(stat)}</p>
                 </div>
