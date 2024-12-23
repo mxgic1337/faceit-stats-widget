@@ -19,4 +19,7 @@ browser source in OBS Studio and paste your generated link.
 > [!NOTE]  
 > It is recommended to set the Browser Source width to around 500px.
 
+## 🎉 Thanks to:
+- **Keekw/Horrorowo** - Translating to German
+
 This project is not affiliated with [FACEIT](https://faceit.com).
