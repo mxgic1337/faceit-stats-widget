@@ -5,6 +5,9 @@
   "widget.elo_diff": " ({{0}})",
   "widget.elo_no_suffix": "{{0}}",
   "widget.kills": "Tötungen",
+  "widget.hspercent": "HS %",
+  "widget.winratio": "Gewinnt %",
+  "widget.ranking": "Rangfolge",
   "widget.kd": "K/D",
   "widget.deaths": "Todesfälle",
   "generator.alert.player_not_found": "Player {{0}} wurde nicht gefunden.",
@@ -30,4 +33,18 @@
   "generator.generate.info.0": "Kopieren Sie diesen Link und fügen Sie ihn in eine Browserquelle in OBS Studio ein.",
   "generator.generate.info.1": "Es wird empfohlen, die Breite des Browsers auf 500px einzustellen.",
   "generator.preview.title": "Widget Vorschau"
+  "generator.stats.title": "Statistik",
+  "generator.stats.slot": "Schlitz {{0}}",
+  "generator.stats.disabled": "Statistiken sind deaktiviert. Sie können ermöglichen sie in der \"Einstellungen\" registerkarte.",
+  "generator.theme.banner_as_background": "Profilbanner als Hintergrund benutzen",
+  "generator.theme.banner_as_background.warning": "Die Vorschau zeigt ein Beispielbanner. Korrektes Banner wird zeigen nach der Generierung das Widget.",
+  "modals.generated.title": "Widget generiert",
+  "modals.buttons.copy": "Kopie",
+  "modals.buttons.close": "Schließen",
+  "stat.kills": "Durchschnittliche Tötungen",
+  "stat.deaths": "Durchschnittliche Todesfälle",
+  "stat.winratio": "Gewinnt %",
+  "stat.hspercent": "Kopfschüsse %",
+  "stat.kd": "K/D Ratio",
+  "stat.ranking": "Rangfolge"
 }
