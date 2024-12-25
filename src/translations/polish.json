@@ -9,6 +9,7 @@
   "widget.ranking": "Ranking",
   "widget.kd": "K/D",
   "widget.deaths": "Śmierci",
+  "generator.testing": "Używasz wersji beta. Ta wersja nie jest skończona i może zawierać błędy.",
   "generator.alert.player_not_found": "Nie znaleziono gracza {{0}}.",
   "generator.settings.title": "Ustawienia",
   "generator.settings.faceit_name": "Nazwa użytkownika FACEIT",

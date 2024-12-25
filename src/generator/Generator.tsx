@@ -8,6 +8,7 @@ import {MainTab} from "./tabs/MainTab.tsx";
 import {StyleTab} from "./tabs/StyleTab.tsx";
 import {StatisticsTab, StatisticType} from "./tabs/StatisticsTab.tsx";
 import {GeneratedWidgetModal} from "../components/generator/GeneratedWidgetModal.tsx";
+import {InfoBox} from "../components/generator/InfoBox.tsx";
 
 export const Generator = () => {
 
@@ -161,6 +162,7 @@ export const Generator = () => {
             }} className={index === selectedTabIndex ? "active" : ""}>{tab.name}</button>
           })}
         </div>
+        {import.meta.env.VITE_IS_TESTING && <InfoBox content={tl(language, 'generator.testing')} style={'info'}/>}
         {tabs[selectedTabIndex].component}
         <br/>
         <footer>
