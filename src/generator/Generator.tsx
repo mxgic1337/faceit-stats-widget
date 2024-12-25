@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from "react";
-import {Widget} from "../widget/Widget.tsx";
+import {Widget} from "../../widget/src/widget/Widget.tsx";
 import {Separator} from "../components/generator/Separator.tsx";
 import {Language, languages, tl} from "../translations/translations.ts";
 import {useNavigate, useSearchParams} from "react-router-dom";
@@ -166,12 +166,10 @@ export const Generator = () => {
         <footer>
           <small>This project is not affiliated with <a href={'https://faceit.com'}
                                                         target={'_blank'}>FACEIT</a>.</small>
-          <small>Copyright &copy; <a href={'https://github.com/mxgic1337'} target={'_blank'}>mxgic1337_</a> 2024 &bull;
-            <a
-              href={'https://github.com/mxgic1337/faceit-stats-widget/blob/master/LICENSE'} target={'_blank'}>MIT
-              License</a>
-          </small>
-          <small><a
+          <small>Copyright &copy; <a href={'https://github.com/mxgic1337'} target={'_blank'}>mxgic1337_</a> 2024</small>
+          <small>
+            <a href={'https://github.com/mxgic1337/faceit-stats-widget/blob/master/LICENSE'} target={'_blank'}>MIT
+              License</a> &bull; <a
             href={'https://github.com/mxgic1337/faceit-stats-widget'} target={'_blank'}>GitHub</a> &bull; <a
             href={'https://github.com/mxgic1337/faceit-stats-widget/issues/new'} target={'_blank'}>Report an issue</a>
           </small>

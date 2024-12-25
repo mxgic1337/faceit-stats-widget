@@ -1,4 +1,4 @@
-import {colorSchemes, themes} from "../../widget/Widget.tsx";
+import {colorSchemes, themes} from "../../../widget/src/widget/Widget.tsx";
 import {ColorPicker} from "../../components/generator/ColorPicker.tsx";
 import {Language, tl} from "../../translations/translations.ts";
 import {Dispatch, useRef} from "react";
