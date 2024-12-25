@@ -3,7 +3,7 @@ import {Widget} from "../../widget/src/widget/Widget.tsx";
 import {Separator} from "../components/generator/Separator.tsx";
 import {Language, languages, tl} from "../translations/translations.ts";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import {getPlayerID} from "../utils/faceit_util.ts";
+import {getPlayerID} from "../../widget/src/utils/faceit_util.ts";
 import {MainTab} from "./tabs/MainTab.tsx";
 import {StyleTab} from "./tabs/StyleTab.tsx";
 import {StatisticsTab, StatisticType} from "./tabs/StatisticsTab.tsx";

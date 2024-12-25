@@ -2,7 +2,7 @@ import {Statistic} from "../../../src/components/widget/Statistic.tsx";
 import {useCallback, useEffect, useLayoutEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {Language, languages, tl} from "../../../src/translations/translations.ts";
-import {getPlayerID, getPlayerStats} from "../../../src/utils/faceit_util.ts";
+import {getPlayerID, getPlayerStats} from "../utils/faceit_util.ts";
 
 import fc1 from '../../../src/assets/levels/faceit1.svg'
 import fc2 from '../../../src/assets/levels/faceit2.svg'
