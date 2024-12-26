@@ -298,7 +298,7 @@ export const Widget = ({
 
     const head = document.head;
     const link = document.createElement("link");
-    link.type = "text/styles";
+    link.type = "text/css";
     link.rel = "stylesheet";
     link.href = cssPath;
 
