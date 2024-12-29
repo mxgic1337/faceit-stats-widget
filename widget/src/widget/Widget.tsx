@@ -1,27 +1,32 @@
-import '../css/app.less'
-import {Statistic} from "../components/widget/Statistic.tsx";
+import {Statistic} from "../../../src/components/widget/Statistic.tsx";
 import {useCallback, useEffect, useLayoutEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import {Language, languages, tl} from "../translations/translations.ts";
+import {Language, languages, tl} from "../../../src/translations/translations.ts";
 import {getPlayerID, getPlayerStats} from "../utils/faceit_util.ts";
 
-import fc1 from '../assets/levels/faceit1.svg'
-import fc2 from '../assets/levels/faceit2.svg'
-import fc3 from '../assets/levels/faceit3.svg'
-import fc4 from '../assets/levels/faceit4.svg'
-import fc5 from '../assets/levels/faceit5.svg'
-import fc6 from '../assets/levels/faceit6.svg'
-import fc7 from '../assets/levels/faceit7.svg'
-import fc8 from '../assets/levels/faceit8.svg'
-import fc9 from '../assets/levels/faceit9.svg'
-import fc10 from '../assets/levels/faceit10.svg'
-import fcChallenger from '../assets/levels/challenger.svg'
-import fcChallenger1 from '../assets/levels/challenger_1.svg'
-import fcChallenger2 from '../assets/levels/challenger_2.svg'
-import fcChallenger3 from '../assets/levels/challenger_3.svg'
+import fc1 from '../../../src/assets/levels/faceit1.svg'
+import fc2 from '../../../src/assets/levels/faceit2.svg'
+import fc3 from '../../../src/assets/levels/faceit3.svg'
+import fc4 from '../../../src/assets/levels/faceit4.svg'
+import fc5 from '../../../src/assets/levels/faceit5.svg'
+import fc6 from '../../../src/assets/levels/faceit6.svg'
+import fc7 from '../../../src/assets/levels/faceit7.svg'
+import fc8 from '../../../src/assets/levels/faceit8.svg'
+import fc9 from '../../../src/assets/levels/faceit9.svg'
+import fc10 from '../../../src/assets/levels/faceit10.svg'
+import fcChallenger from '../../../src/assets/levels/challenger.svg'
+import fcChallenger1 from '../../../src/assets/levels/challenger_1.svg'
+import fcChallenger2 from '../../../src/assets/levels/challenger_2.svg'
+import fcChallenger3 from '../../../src/assets/levels/challenger_3.svg'
 
-import sampleBanner from '../assets/sample_banner.png'
-import {StatisticType} from "../generator/tabs/StatisticsTab.tsx";
+import sampleBanner from '../../../src/assets/sample_banner.png'
+import {StatisticType} from "../../../src/generator/tabs/StatisticsTab.tsx";
+
+import '../styles/themes/normal.less'
+import '../styles/themes/compact.less'
+import '../styles/themes/classic.less'
+
+import '../styles/color_schemes.less'
 
 export const themes: { id: string, name: string, hidden?: boolean }[] = [
   {id: "normal", name: "Normal"},

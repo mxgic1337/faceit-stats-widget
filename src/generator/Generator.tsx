@@ -1,13 +1,14 @@
 import {useCallback, useEffect, useState} from "react";
-import {Widget} from "../widget/Widget.tsx";
+import {Widget} from "../../widget/src/widget/Widget.tsx";
 import {Separator} from "../components/generator/Separator.tsx";
 import {Language, languages, tl} from "../translations/translations.ts";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import {getPlayerID} from "../utils/faceit_util.ts";
+import {getPlayerID} from "../../widget/src/utils/faceit_util.ts";
 import {MainTab} from "./tabs/MainTab.tsx";
 import {StyleTab} from "./tabs/StyleTab.tsx";
 import {StatisticsTab, StatisticType} from "./tabs/StatisticsTab.tsx";
 import {GeneratedWidgetModal} from "../components/generator/GeneratedWidgetModal.tsx";
+import {InfoBox} from "../components/generator/InfoBox.tsx";
 
 export const Generator = () => {
 
@@ -161,17 +162,16 @@ export const Generator = () => {
             }} className={index === selectedTabIndex ? "active" : ""}>{tab.name}</button>
           })}
         </div>
+        {import.meta.env.VITE_IS_TESTING && <InfoBox content={tl(language, 'generator.testing')} style={'info'}/>}
         {tabs[selectedTabIndex].component}
         <br/>
         <footer>
           <small>This project is not affiliated with <a href={'https://faceit.com'}
                                                         target={'_blank'}>FACEIT</a>.</small>
-          <small>Copyright &copy; <a href={'https://github.com/mxgic1337'} target={'_blank'}>mxgic1337_</a> 2024 &bull;
-            <a
-              href={'https://github.com/mxgic1337/faceit-stats-widget/blob/master/LICENSE'} target={'_blank'}>MIT
-              License</a>
-          </small>
-          <small><a
+          <small>Copyright &copy; <a href={'https://github.com/mxgic1337'} target={'_blank'}>mxgic1337_</a> 2024</small>
+          <small>
+            <a href={'https://github.com/mxgic1337/faceit-stats-widget/blob/master/LICENSE'} target={'_blank'}>MIT
+              License</a> &bull; <a
             href={'https://github.com/mxgic1337/faceit-stats-widget'} target={'_blank'}>GitHub</a> &bull; <a
             href={'https://github.com/mxgic1337/faceit-stats-widget/issues/new'} target={'_blank'}>Report an issue</a>
           </small>

@@ -5,7 +5,7 @@
 Widget for **[OBS Studio](https://obsproject.com/)** that displays **[FACEIT](https://faceit.com)** stats. (ELO, level,
 ELO gain/loss, average stats)
 
-### 🔗 [Generator](https://fc.mxgic1337.xyz/widget/generator)
+### 🔗 [Generator](https://widget.mxgic1337.xyz/)
 
 ## 🖼️ Preview:
 
@@ -13,7 +13,7 @@ ELO gain/loss, average stats)
 
 ## 🔧 Getting started:
 
-To get started, generate your widget link at [this website](https://fc.mxgic1337.xyz/widget/generator). Then, add a new
+To get started, generate your widget link at [this website](https://widget.mxgic1337.xyz/). Then, add a new
 browser source in OBS Studio and paste your generated link.
 
 > [!NOTE]  

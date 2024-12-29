@@ -38,7 +38,7 @@ export const GeneratedWidgetModal = ({language, url, setURL}: {
       </div>
     </div>
     <div>
-      <iframe src={url} className={'generated-preview'}></iframe>
+      <iframe src={url} className={'generated-preview'} title={'Generated widget preview'}></iframe>
     </div>
   </dialog>
 }
