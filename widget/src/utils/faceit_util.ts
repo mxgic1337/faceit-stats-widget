@@ -94,7 +94,7 @@ export function getPlayerStats(id: string, startDate: Date): Promise<FaceitPlaye
         resolve(undefined);
         return
       }
-      fetch(`https://open.faceit.com/data/v4/players/${v4PlayersResponse.player_id}/history?game=cs2`, {
+      fetch(`https://open.faceit.com/data/v4/players/${v4PlayersResponse.player_id}/history?game=cs2&limit=100`, {
         headers: HEADERS
       }).then(async response => {
         if (!response.ok) {
