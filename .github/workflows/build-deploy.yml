@@ -1,12 +1,8 @@
-name: Build check
+name: Build & Deploy
 on:
   push:
     branches:
-      - '*'
-      - '*/*'
-      - '**'
-      - '!master'
-  pull_request:
+      - 'master'
 
 jobs:
   build:
@@ -28,3 +24,13 @@ jobs:
         run: pnpm install
       - name: Build
         run: pnpm run build
+      - name: Deploy
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }} 
+          ARGS: "-rlgoDzvc -i --delete"
+          SOURCE: "dist/"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: ${{ secrets.REMOTE_TARGET }}
+          EXCLUDE: "/dist/, /node_modules/"
