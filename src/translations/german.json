@@ -28,6 +28,8 @@
   "generator.theme.border_color_2": "Farbe der Umrandung 2",
   "generator.theme.text_color": "Textfarbe",
   "generator.theme.background_color": "Hintergrundfarbe",
+  "generator.theme.color_scheme": "Widget Thema",
+  "generator.theme.style": "Widget Stil",
   "generator.generate.title": "Erzeugen",
   "generator.generate.button": "Erzeugen",
   "generator.generate.open_in_browser.button": "Öffnen im Browser",
