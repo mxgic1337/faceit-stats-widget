@@ -152,7 +152,8 @@ export const Generator = () => {
   return <>
     <GeneratedWidgetModal language={language} url={generatedURL} setURL={setGeneratedURL}/>
     <header>
-      {import.meta.env.VITE_IS_TESTING && <InfoBox content={<p>{tl(language, 'generator.testing')}</p>} style={'info'}/>}
+      {import.meta.env.VITE_IS_TESTING &&
+        <InfoBox content={<p>{tl(language, 'generator.testing')}</p>} style={'info'}/>}
       <div className={'tabs'}>
         {tabs.map((tab, index) => {
           return <button key={tab.name} onClick={() => {
@@ -180,12 +181,12 @@ export const Generator = () => {
             <small>Copyright &copy; <a href={'https://github.com/mxgic1337'}
                                        target={'_blank'}>mxgic1337_</a> 2024</small>
             <small>v{packageJSON.version}</small>
-        </div>
-      </footer>
-    </section>
-    <section className={'preview'}>
-      <Separator text={tl(language, 'generator.preview.title')}/>
-      <div className={`${theme}-theme ${colorScheme}-scheme preview`}>
+          </div>
+        </footer>
+      </section>
+      <section className={'preview'}>
+        <Separator text={tl(language, 'generator.preview.title')}/>
+        <div className={`${theme}-theme ${colorScheme}-scheme preview`}>
           <Widget preview={true} overrideShowEloDiff={showEloDiff} overrideShowEloSuffix={showEloSuffix}
                   overrideRankingState={showRanking}
                   overrideShowAverage={showStatistics}
