@@ -9,6 +9,7 @@ import {StyleTab} from "./tabs/StyleTab.tsx";
 import {StatisticsTab, StatisticType} from "./tabs/StatisticsTab.tsx";
 import {GeneratedWidgetModal} from "../components/generator/GeneratedWidgetModal.tsx";
 import {InfoBox} from "../components/generator/InfoBox.tsx";
+import packageJSON from '../../package.json'
 
 export const Generator = () => {
 
@@ -150,31 +151,37 @@ export const Generator = () => {
 
   return <>
     <GeneratedWidgetModal language={language} url={generatedURL} setURL={setGeneratedURL}/>
+    <header>
+      {import.meta.env.VITE_IS_TESTING &&
+        <InfoBox content={<p>{tl(language, 'generator.testing')}</p>} style={'info'}/>}
+      <div className={'tabs'}>
+        {tabs.map((tab, index) => {
+          return <button key={tab.name} onClick={() => {
+            setSelectedTabIndex(index)
+          }} className={index === selectedTabIndex ? "active" : ""}>{tab.name}</button>
+        })}
+      </div>
+    </header>
     <main>
       <section className={'fixed-width'}>
-        <header>
-          <h2>FACEIT Widget Generator</h2>
-        </header>
-        <div className={'tabs'}>
-          {tabs.map((tab, index) => {
-            return <button key={tab.name} onClick={() => {
-              setSelectedTabIndex(index)
-            }} className={index === selectedTabIndex ? "active" : ""}>{tab.name}</button>
-          })}
-        </div>
-        {import.meta.env.VITE_IS_TESTING && <InfoBox content={tl(language, 'generator.testing')} style={'info'}/>}
         {tabs[selectedTabIndex].component}
         <br/>
         <footer>
-          <small>This project is not affiliated with <a href={'https://faceit.com'}
-                                                        target={'_blank'}>FACEIT</a>.</small>
-          <small>Copyright &copy; <a href={'https://github.com/mxgic1337'} target={'_blank'}>mxgic1337_</a> 2024</small>
-          <small>
-            <a href={'https://github.com/mxgic1337/faceit-stats-widget/blob/master/LICENSE'} target={'_blank'}>MIT
-              License</a> &bull; <a
-            href={'https://github.com/mxgic1337/faceit-stats-widget'} target={'_blank'}>GitHub</a> &bull; <a
-            href={'https://github.com/mxgic1337/faceit-stats-widget/issues/new'} target={'_blank'}>Report an issue</a>
-          </small>
+          <div>
+            <small>This project is not affiliated with <a href={'https://faceit.com'}
+                                                          target={'_blank'}>FACEIT</a>.</small>
+            <small>
+              <a href={'https://github.com/mxgic1337/faceit-stats-widget/blob/master/LICENSE'} target={'_blank'}>MIT
+                License</a> &bull; <a
+              href={'https://github.com/mxgic1337/faceit-stats-widget'} target={'_blank'}>GitHub</a> &bull; <a
+              href={'https://github.com/mxgic1337/faceit-stats-widget/issues/new'} target={'_blank'}>Report an issue</a>
+            </small>
+          </div>
+          <div>
+            <small>Copyright &copy; <a href={'https://github.com/mxgic1337'}
+                                       target={'_blank'}>mxgic1337_</a> 2024</small>
+            <small>v{packageJSON.version}</small>
+          </div>
         </footer>
       </section>
       <section className={'preview'}>
