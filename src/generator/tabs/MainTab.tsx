@@ -2,6 +2,7 @@ import {Language, languages, tl} from "../../translations/translations.ts";
 import {Checkbox} from "../../components/generator/Checkbox.tsx";
 import {Dispatch} from "react";
 import {useNavigate} from "react-router-dom";
+import {Separator} from "../../components/generator/Separator.tsx";
 
 type Props = {
   language: Language;
@@ -36,6 +37,7 @@ export const MainTab = ({
   const navigate = useNavigate();
 
   return <>
+    <Separator text={tl(language, 'generator.settings.title')}/>
     <div className={'setting'}>
       <p>{tl(language, 'generator.settings.faceit_name')}</p>
       <input value={username} max={12} onChange={(e) => {

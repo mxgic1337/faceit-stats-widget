@@ -9,6 +9,10 @@
 @hover: #b3b3b3;
 @active: #fafafa;
 
+@text: #fafafa;
+@subtext: #bebebe;
+@accent: #cba6f7;
+
 @info: #5ba6e5;
 @warn: #d7a141;
 
@@ -16,7 +20,7 @@
   padding: 0;
   margin: 0;
   font-family: 'DM Sans', sans-serif;
-  color: white;
+  color: @text;
 }
 
 #root {
@@ -26,7 +30,7 @@
   width: 100vw;
   height: 100vh;
 
-  padding: 16px;
+  padding: 6px;
   box-sizing: border-box;
 }
 
@@ -125,12 +129,48 @@ main {
   margin: 6px 0;
 }
 
+header {
+  padding: 6px;
+  width: 70%;
+  box-sizing: border-box;
+}
+
 header, footer {
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
+}
+
+footer {
+  flex-direction: row;
+  justify-content: space-between;
+  border-top: 1px solid @border;
+  padding: 12px;
   margin-bottom: 6px;
+
+  & > div {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+
+    &:last-child {
+      text-align: right;
+    }
+
+    small {
+      color: @subtext;
+    }
+  }
+}
+
+a {
+  color: @text;
+  text-decoration: none;
+
+  &:hover {
+    color: darken(@text, 10%);
+  }
 }
 
 section {
@@ -285,5 +325,26 @@ dialog {
       padding-left: 12px;
       margin: 6px 0;
     }
+  }
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 6px;
+}
+
+.flex {
+  display: flex;
+  & > * {
+    margin-right: 6px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  & > div {
+    flex: 1;
   }
 }

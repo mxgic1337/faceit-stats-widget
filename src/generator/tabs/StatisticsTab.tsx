@@ -2,6 +2,7 @@ import {Language, tl} from "../../translations/translations.ts";
 import {InfoBox} from "../../components/generator/InfoBox.tsx";
 import {Dispatch} from "react";
 import {Statistic} from "../../components/generator/Statistic.tsx";
+import {Separator} from "../../components/generator/Separator.tsx";
 
 export enum StatisticType {
   KILLS = "KILLS",
@@ -38,7 +39,8 @@ export const StatisticsTab = ({
                                 setStatSlot4
                               }: Props) => {
   return <>
-    <div className={'setting'}>
+    <Separator text={tl(language, 'generator.stats.title')}/>
+    <div className={'setting stats'}>
       {!showStatistics && <InfoBox content={<p>{tl(language, 'generator.stats.disabled')}</p>} style={'warn'}/>}
       <Statistic slot={"1"} language={language} statSlot={statSlot1} setStatSlot={setStatSlot1}/>
       <Statistic slot={"2"} language={language} statSlot={statSlot2} setStatSlot={setStatSlot2}/>
