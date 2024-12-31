@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Build
-        run: pnpm run build
+        run: VITE_FACEIT_API_KEY=${{ secrets.VITE_FACEIT_API_KEY }} pnpm run build
       - name: Deploy
         uses: easingthemes/ssh-deploy@main
         with:
