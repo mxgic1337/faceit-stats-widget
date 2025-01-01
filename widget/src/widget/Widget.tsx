@@ -60,6 +60,7 @@ interface Props {
   overrideShowEloSuffix?: boolean,
   overrideTextColor?: string,
   overrideUseBannerAsBackground?: boolean,
+  overrideBackgroundOpacity?: number,
   overrideUsername?: string,
   preview?: boolean,
 }
@@ -102,6 +103,7 @@ export const Widget = ({
                          overrideBorder2,
                          overrideTextColor,
                          overrideBackground,
+                         overrideBackgroundOpacity,
                          overrideCustomCSS,
                          overrideLanguage,
                          overrideUseBannerAsBackground,
@@ -126,6 +128,7 @@ export const Widget = ({
   const [username, setUsername] = useState<string>()
   const [banner, setBanner] = useState<string>()
   const [useBannerAsBackground, setUseBannerAsBackground] = useState<boolean>(false)
+  const [backgroundOpacity, setBackgroundOpacity] = useState<number>()
   const [currentEloDistribution, setCurrentEloDistribution] = useState<(string | number)[]>(eloDistribution[0])
   const [rankingState, setRankingState] = useState<RankingState>(0)
 
@@ -149,16 +152,14 @@ export const Widget = ({
     if (theme === 'dark' || theme === 'normal-custom') {
       searchParams.set('theme', 'normal');
       searchParams.set('scheme', 'dark');
-    }
-    else if ((theme === 'compact' && !scheme) || theme === 'compact-custom') {
+    } else if ((theme === 'compact' && !scheme) || theme === 'compact-custom') {
       searchParams.set('theme', 'compact');
       if (theme === 'compact-custom') {
         searchParams.set('scheme', 'custom');
       } else {
         searchParams.set('scheme', 'dark');
       }
-    }
-    else if (theme === 'classic' && !scheme) {
+    } else if (theme === 'classic' && !scheme) {
       searchParams.set('scheme', 'faceit');
     }
   }, []);
@@ -231,11 +232,16 @@ export const Widget = ({
 
     let theme = searchParams.get("theme") || "normal";
     let scheme = searchParams.get("scheme") || "dark";
+    const backgroundOpacity = searchParams.get("banner_opacity");
     if (!themes.find(theme1 => theme1.id === theme)) {
       theme = "normal"
     }
     if (!colorSchemes.find(scheme1 => scheme1.id === scheme)) {
       scheme = "dark"
+    }
+
+    if (backgroundOpacity) {
+      setBackgroundOpacity(parseFloat(backgroundOpacity));
     }
 
     const playerId = searchParams.get("player_id")
@@ -343,6 +349,7 @@ export const Widget = ({
       {(overrideUseBannerAsBackground || useBannerAsBackground) && <style>{`
                 .wrapper {
                     --background-url: url("${overrideUseBannerAsBackground ? sampleBanner : banner}") !important;
+                    ${overrideBackgroundOpacity || backgroundOpacity ? `--background-opacity: ${overrideBackgroundOpacity || backgroundOpacity} !important;` : ""}
                 }
             `}</style>}
       <div className={'wrapper'}>

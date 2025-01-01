@@ -16,6 +16,8 @@ type Props = {
   customCSS: string;
   colorScheme: string;
   useBannerAsBackground: boolean;
+  adjustBackgroundOpacity: boolean;
+  backgroundOpacity: number;
 
   setTheme: Dispatch<string>;
   setCustomBorderColor1: Dispatch<string>;
@@ -25,6 +27,8 @@ type Props = {
   setCustomCSS: Dispatch<string>;
   setColorScheme: Dispatch<string>;
   setUseBannerAsBackground: Dispatch<boolean>;
+  setAdjustBackgroundOpacity: Dispatch<boolean>;
+  setBackgroundOpacity: Dispatch<number>;
 }
 
 export const StyleTab = ({
@@ -36,6 +40,8 @@ export const StyleTab = ({
                            customTextColor, setCustomTextColor,
                            customBackgroundColor, setCustomBackgroundColor,
                            useBannerAsBackground, setUseBannerAsBackground,
+                           adjustBackgroundOpacity, setAdjustBackgroundOpacity,
+                           backgroundOpacity, setBackgroundOpacity,
                            customCSS, setCustomCSS,
                          }: Props) => {
   const customCSSInputRef = useRef<HTMLInputElement>(null);
@@ -65,7 +71,19 @@ export const StyleTab = ({
       <Checkbox text={tl(language, 'generator.theme.banner_as_background')} state={useBannerAsBackground}
                 setState={setUseBannerAsBackground}/>
       {useBannerAsBackground &&
-        <InfoBox style={'info'} content={<p>{tl(language, 'generator.theme.banner_as_background.warning')}</p>}/>}
+        <>
+          <Checkbox text={tl(language, 'generator.theme.banner_as_background.adjust_opacity')}
+                    state={adjustBackgroundOpacity}
+                    setState={setAdjustBackgroundOpacity}/>
+          <div className={'flex'} style={{alignItems: 'center'}}>
+            <input type={'range'} value={backgroundOpacity} min={0.01} max={1} step={0.01}
+                   disabled={!adjustBackgroundOpacity} onChange={(event) => {
+              setBackgroundOpacity(parseFloat(event.currentTarget.value))
+            }}/>
+            <p style={{width: '50px', textAlign: 'right'}}>{Math.round(backgroundOpacity * 100)}%</p>
+          </div>
+          <InfoBox style={'info'} content={<p>{tl(language, 'generator.theme.banner_as_background.warning')}</p>}/>
+        </>}
     </div>
 
     {colorScheme === 'custom' && <div className={'setting'}>

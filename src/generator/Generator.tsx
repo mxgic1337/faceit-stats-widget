@@ -23,6 +23,8 @@ export const Generator = () => {
   const [showStatistics, setShowStatistics] = useState<boolean>(true)
   const [showEloProgressBar, setShowEloProgressBar] = useState<boolean>(true)
   const [useBannerAsBackground, setUseBannerAsBackground] = useState<boolean>(false)
+  const [adjustBackgroundOpacity, setAdjustBackgroundOpacity] = useState<boolean>(false)
+  const [backgroundOpacity, setBackgroundOpacity] = useState<number>(0.15)
   const [colorScheme, setColorScheme] = useState<string>("dark")
   const [theme, setTheme] = useState<string>("normal")
   const [language, setLanguage] = useState<Language>(languages.find(language => language.id === localStorage.fcw_lang) || languages[0])
@@ -77,6 +79,13 @@ export const Generator = () => {
         ],
       }
 
+      if (useBannerAsBackground && adjustBackgroundOpacity) {
+        params = {
+          ...params,
+          "banner_opacity": backgroundOpacity,
+        }
+      }
+
       if (theme === "custom") {
         params = {
           ...params,
@@ -96,7 +105,7 @@ export const Generator = () => {
 
       setGeneratedURL(`${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`)
     }).catch()
-  }, [customBackgroundColor, customBorderColor1, customBorderColor2, customCSS, customTextColor, language, showStatistics, showEloDiff, showEloProgressBar, showEloSuffix, showRanking, showRankingOnlyWhenChallenger, theme, username, colorScheme, useBannerAsBackground, statSlot1, statSlot2, statSlot3, statSlot4])
+  }, [customBackgroundColor, customBorderColor1, customBorderColor2, customCSS, customTextColor, language, showStatistics, showEloDiff, showEloProgressBar, showEloSuffix, showRanking, showRankingOnlyWhenChallenger, theme, username, colorScheme, useBannerAsBackground, adjustBackgroundOpacity, backgroundOpacity, statSlot1, statSlot2, statSlot3, statSlot4])
 
   const jsonToQuery = useCallback((params: { [key: string]: string | number | boolean | string[] }) => {
     return `?${Object.entries(params).map((param) => {
@@ -133,6 +142,10 @@ export const Generator = () => {
                            theme={theme} setTheme={setTheme} colorScheme={colorScheme}
                            useBannerAsBackground={useBannerAsBackground}
                            setUseBannerAsBackground={setUseBannerAsBackground}
+                           adjustBackgroundOpacity={adjustBackgroundOpacity}
+                           setAdjustBackgroundOpacity={setAdjustBackgroundOpacity}
+                           backgroundOpacity={backgroundOpacity}
+                           setBackgroundOpacity={setBackgroundOpacity}
 
                            setColorScheme={setColorScheme}/>
     },
@@ -198,6 +211,7 @@ export const Generator = () => {
                   overrideTextColor={customTextColor} overrideBackground={customBackgroundColor}
                   overrideUseBannerAsBackground={useBannerAsBackground}
                   overrideStatistics={[statSlot1, statSlot2, statSlot3, statSlot4]}
+                  overrideBackgroundOpacity={useBannerAsBackground && adjustBackgroundOpacity ? backgroundOpacity : undefined}
           />
         </div>
         <button onClick={() => {
