@@ -11,6 +11,8 @@ import {GeneratedWidgetModal} from "../components/generator/GeneratedWidgetModal
 import {InfoBox} from "../components/generator/InfoBox.tsx";
 import packageJSON from '../../package.json'
 
+export type SavedConfigurations = {[key: string]: string | number | undefined}[]
+
 export const Generator = () => {
 
   const [customCSS, setCustomCSS] = useState<string>("https://example.com")
@@ -112,6 +114,40 @@ export const Generator = () => {
       return `${param[0]}=${param[1]}`
     }).join('&')}`
   }, [])
+
+  function saveSettings() {
+    const savedConfigurations = localStorage.getItem("fcw_settings")
+    let configurations: SavedConfigurations = []
+    if (savedConfigurations) {
+      configurations = JSON.parse(savedConfigurations)
+    }
+
+    const newConfiguration = {
+      _createdAt: Date.now(),
+      theme,
+      username,
+      showRanking,
+      showRankingOnlyWhenChallenger,
+      showEloDiff,
+      showEloSuffix,
+      showStatistics,
+      showEloProgressBar,
+      useBannerAsBackground,
+      adjustBackgroundOpacity,
+      backgroundOpacity,
+      colorScheme,
+      customBorderColor1,
+      customBorderColor2,
+      customTextColor,
+      customBackgroundColor,
+      statSlot1,
+      statSlot2,
+      statSlot3,
+      statSlot4,
+    }
+
+    localStorage.setItem("fcw_settings", JSON.stringify([newConfiguration, ...configurations]))
+  }
 
   const tabs = [
     {
@@ -217,6 +253,9 @@ export const Generator = () => {
         <button onClick={() => {
           generateLink()
         }}>{tl(language, 'generator.generate.button')}</button>
+        <button onClick={() => {
+          saveSettings()
+        }}>{tl(language, 'generator.save_current_configuration')}</button>
       </section>
     </main>
   </>
