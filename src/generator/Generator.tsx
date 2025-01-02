@@ -80,6 +80,7 @@ export const Generator = () => {
         "refresh": refreshInterval,
         "name": showUsername,
         "auto_width": autoWidth,
+        "only_official": onlyOfficialMatchesCount,
         "stats": [
           statSlot1,
           statSlot2,
@@ -114,7 +115,7 @@ export const Generator = () => {
 
       setGeneratedURL(`${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`)
     }).catch()
-  }, [customBackgroundColor, customBorderColor1, customBorderColor2, customCSS, customTextColor, language, showStatistics, showEloDiff, showEloProgressBar, showEloSuffix, showRanking, showRankingOnlyWhenChallenger, theme, username, colorScheme, useBannerAsBackground, adjustBackgroundOpacity, backgroundOpacity, refreshInterval, showUsername, autoWidth, statSlot1, statSlot2, statSlot3, statSlot4])
+  }, [customBackgroundColor, customBorderColor1, customBorderColor2, customCSS, customTextColor, language, showStatistics, showEloDiff, showEloProgressBar, showEloSuffix, showRanking, showRankingOnlyWhenChallenger, theme, username, colorScheme, useBannerAsBackground, adjustBackgroundOpacity, backgroundOpacity, refreshInterval, showUsername, autoWidth, onlyOfficialMatchesCount, statSlot1, statSlot2, statSlot3, statSlot4])
 
   const jsonToQuery = useCallback((params: { [key: string]: string | number | boolean | string[] }) => {
     return `?${Object.entries(params).map((param) => {
