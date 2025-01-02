@@ -123,44 +123,6 @@ export const Generator = () => {
     }).join('&')}`
   }, [])
 
-  function saveSettings() {
-    const savedConfigurations = localStorage.getItem("fcw_settings")
-    let configurations: SavedConfigurations = []
-    if (savedConfigurations) {
-      configurations = JSON.parse(savedConfigurations)
-    }
-
-    const newConfiguration = {
-      _createdAt: Date.now(),
-      theme,
-      username,
-      showRanking,
-      showRankingOnlyWhenChallenger,
-      onlyOfficialMatchesCount,
-      showEloDiff,
-      showEloSuffix,
-      showStatistics,
-      showEloProgressBar,
-      useBannerAsBackground,
-      adjustBackgroundOpacity,
-      backgroundOpacity,
-      colorScheme,
-      customBorderColor1,
-      customBorderColor2,
-      customTextColor,
-      customBackgroundColor,
-      statSlot1,
-      statSlot2,
-      statSlot3,
-      statSlot4,
-      autoWidth,
-      showUsername,
-      refreshInterval
-    }
-
-    localStorage.setItem("fcw_settings", JSON.stringify([newConfiguration, ...configurations]))
-  }
-
   const tabs = [
     {
       name: tl(language, 'generator.settings.title'),
@@ -271,9 +233,6 @@ export const Generator = () => {
           <button onClick={() => {
             generateWidgetURL()
           }}>{tl(language, 'generator.generate.button')}</button>
-          <button onClick={() => {
-            saveSettings()
-          }}>{tl(language, 'generator.save_current_configuration')}</button>
         </div>
       </section>
     </main>

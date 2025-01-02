@@ -182,7 +182,6 @@ export function getPlayerStats(id: string, startDate: Date, onlyOfficial: boolea
             });
           })
         })
-
       })
     })
   })

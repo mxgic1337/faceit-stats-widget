@@ -3,7 +3,6 @@ import {Checkbox} from "../../components/generator/Checkbox.tsx";
 import {Dispatch} from "react";
 import {useNavigate} from "react-router-dom";
 import {Separator} from "../../components/generator/Separator.tsx";
-import {SavedConfigurations} from "../Generator.tsx";
 
 type Props = {
   language: Language;
@@ -103,22 +102,5 @@ export const MainTab = ({
       <Checkbox text={tl(language, 'generator.settings.only_official_matches')} state={onlyOfficialMatchesCount}
                 setState={setOnlyOfficialMatchesCount}/>
     </div>
-    {localStorage.getItem("fcw_settings") && <>
-      <Separator text={tl(language, 'generator.settings.load_saved_configuration')}/>
-      <div className={'setting'}>
-        <select>
-          {(JSON.parse(localStorage.getItem("fcw_settings") as string) as SavedConfigurations).map((configuration) => {
-            const createdAt = new Date(configuration._createdAt as number);
-            return <option key={configuration._createdAt} value={configuration._createdAt}>
-              {configuration.username} | {tl(language, `scheme.${configuration.colorScheme}`)} | {tl(language, `theme.${configuration.theme}`)} | {createdAt.getDate()}.{createdAt.getMonth() + 1}.{createdAt.getFullYear()}
-            </option>
-          })}
-        </select>
-        <div className={'flex'}>
-          <button>{tl(language, 'generator.settings.load_saved_configuration.apply')}</button>
-          <button>{tl(language, 'generator.settings.load_saved_configuration.delete')}</button>
-        </div>
-      </div>
-    </>}
   </>
 }
