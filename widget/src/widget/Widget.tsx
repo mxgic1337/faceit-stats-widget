@@ -284,8 +284,19 @@ export const Widget = ({
       })
     }
     getStats(true)
+
+    let refreshAfter = 30;
+    const refreshParam = searchParams.get('refresh');
+    if (refreshParam) {
+      refreshAfter = parseInt(refreshParam)
+    }
+
+    if (refreshAfter < 10) {
+      refreshAfter = 10
+    }
+
     const interval =
-      setInterval(getStats, 1000 * 30)
+      setInterval(getStats, 1000 * refreshAfter)
     document.getElementsByTagName("html")[0].classList.add(`${theme}-theme`)
     document.getElementsByTagName("html")[0].classList.add(`${scheme}-scheme`)
 

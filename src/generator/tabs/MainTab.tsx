@@ -14,6 +14,7 @@ type Props = {
   showAverage: boolean;
   showRanking: boolean;
   showRankingOnlyWhenChallenger: boolean;
+  refreshDelay: number;
 
   setLanguage: Dispatch<Language>;
   setUsername: Dispatch<string>;
@@ -23,6 +24,7 @@ type Props = {
   setShowAverage: Dispatch<boolean>;
   setShowRanking: Dispatch<boolean>;
   setShowRankingOnlyWhenChallenger: Dispatch<boolean>;
+  setRefreshDelay: Dispatch<number>;
 }
 
 export const MainTab = ({
@@ -34,6 +36,7 @@ export const MainTab = ({
                           showAverage, setShowAverage,
                           showRanking, setShowRanking,
                           showRankingOnlyWhenChallenger, setShowRankingOnlyWhenChallenger,
+                          refreshDelay, setRefreshDelay,
                         }: Props) => {
   const navigate = useNavigate();
 
@@ -60,6 +63,16 @@ export const MainTab = ({
       </select>
     </div>
     <div className={'setting'}>
+      <p>{tl(language, 'generator.settings.refresh_delay')}</p>
+      <select value={refreshDelay} onChange={event => {
+        setRefreshDelay(parseInt(event.currentTarget.value))
+      }}>
+        <option value={10}>{tl(language, 'generator.settings.refresh_delay.quick', ["10"])}</option>
+        <option value={30}>{tl(language, 'generator.settings.refresh_delay.normal', ["30"])}</option>
+        <option value={60}>{tl(language, 'generator.settings.refresh_delay.slow', ["60"])}</option>
+      </select>
+    </div>
+    <div className={'setting'}>
       <Checkbox text={tl(language, 'generator.settings.show_elo_suffix')} state={showEloSuffix}
                 setState={setShowEloSuffix}/>
       <Checkbox text={tl(language, 'generator.settings.show_elo_diff')} state={showEloDiff}
@@ -76,13 +89,13 @@ export const MainTab = ({
                   setState={setShowRankingOnlyWhenChallenger}/>}
     </div>
     {localStorage.getItem("fcw_settings") && <>
-      <Separator text={tl(language, 'generator.settings.load_saved_configuration')} />
+      <Separator text={tl(language, 'generator.settings.load_saved_configuration')}/>
       <div className={'setting'}>
         <select>
-          {(JSON.parse(localStorage.getItem("fcw_settings") as string) as SavedConfigurations).map((configuration)=>{
+          {(JSON.parse(localStorage.getItem("fcw_settings") as string) as SavedConfigurations).map((configuration) => {
             const createdAt = new Date(configuration._createdAt as number);
             return <option key={configuration._createdAt} value={configuration._createdAt}>
-              {configuration.username} | {configuration.theme} | {configuration.colorScheme} | {createdAt.getDate()}.{createdAt.getMonth()+1}.{createdAt.getFullYear()}
+              {configuration.username} | {configuration.theme} | {configuration.colorScheme} | {createdAt.getDate()}.{createdAt.getMonth() + 1}.{createdAt.getFullYear()}
             </option>
           })}
         </select>
