@@ -54,7 +54,7 @@ export const StyleTab = ({
           <p>{tl(language, 'generator.theme.color_scheme')}</p>
           <select value={colorScheme} onChange={(e) => setColorScheme(e.target.value)}>
             {colorSchemes.map(scheme => {
-              return <option key={scheme.id} value={scheme.id}>{scheme.name}</option>
+              return <option key={scheme} value={scheme}>{tl(language, `scheme.${scheme}`)}</option>
             })}
           </select>
         </div>
@@ -63,7 +63,7 @@ export const StyleTab = ({
           <select value={theme} onChange={(e) => setTheme(e.target.value)}>
             {themes.map(theme => {
               if (theme.hidden) return;
-              return <option key={theme.id} value={theme.id}>{theme.name}</option>
+              return <option key={theme.id} value={theme.id}>{tl(language, `theme.${theme.id}`)}</option>
             })}
           </select>
         </div>

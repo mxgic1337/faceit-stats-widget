@@ -57,5 +57,12 @@
   "stat.winratio": "% wygranych",
   "stat.hspercent": "% zabójstw w głowę",
   "stat.kd": "Średnie K/D",
-  "stat.ranking": "Ranking"
+  "stat.ranking": "Ranking",
+  "scheme.dark": "Ciemny",
+  "scheme.faceit": "Ciemny FACEIT",
+  "scheme.custom": "Własny motyw",
+  "theme.normal": "Normalny",
+  "theme.compact": "Kompaktowy",
+  "theme.classic": "Klasyczny",
+  "theme.custom": "Własny CSS"
 }

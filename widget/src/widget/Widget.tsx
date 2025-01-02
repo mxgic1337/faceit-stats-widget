@@ -28,21 +28,21 @@ import '../styles/themes/classic.less'
 
 import '../styles/color_schemes.less'
 
-export const themes: { id: string, name: string, hidden?: boolean }[] = [
-  {id: "normal", name: "Normal"},
-  {id: "compact", name: "Compact"},
-  {id: "classic", name: "Classic"},
-  {id: "custom", name: "Custom CSS", hidden: true},
+export const themes: { id: string, hidden?: boolean }[] = [
+  {id: "normal"},
+  {id: "compact"},
+  {id: "classic"},
+  {id: "custom", hidden: true},
 ]
 
-export const colorSchemes: { id: string, name: string }[] = [
-  {id: "dark", name: "Dark"},
-  {id: "faceit", name: "FACEIT Dark"},
-  {id: "ctp-latte", name: "Catppuccin Latte"},
-  {id: "ctp-frappe", name: "Catppuccin Frappé"},
-  {id: "ctp-macchiato", name: "Catppuccin Macchiato"},
-  {id: "ctp-mocha", name: "Catppuccin Mocha"},
-  {id: "custom", name: "Custom"},
+export const colorSchemes: string[] = [
+  "dark",
+  "faceit",
+  "ctp-latte",
+  "ctp-frappe",
+  "ctp-macchiato",
+  "ctp-mocha",
+  "custom"
 ]
 
 interface Props {
@@ -236,7 +236,7 @@ export const Widget = ({
     if (!themes.find(theme1 => theme1.id === theme)) {
       theme = "normal"
     }
-    if (!colorSchemes.find(scheme1 => scheme1.id === scheme)) {
+    if (!colorSchemes.find(scheme1 => scheme1 === scheme)) {
       scheme = "dark"
     }
 
