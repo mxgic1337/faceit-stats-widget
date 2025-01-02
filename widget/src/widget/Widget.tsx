@@ -181,7 +181,7 @@ export const Widget = ({
     if (!preview) return;
     setStats(overrideStatistics as StatisticType[])
     setShowUsername(overrideShowUsername as boolean)
-  }, [overrideStatistics, overrideShowUsername, ]);
+  }, [overrideStatistics, overrideShowUsername,]);
 
   useEffect(() => {
     if (searchParams.get('scheme') === 'custom') {
@@ -388,7 +388,10 @@ export const Widget = ({
                    alt={`Level ${preview ? 10 : level}`}/>
               <div className={'elo'}>
                 {showUsername && <h2>{username || searchParams.get("player") || overrideUsername || "?"}</h2>}
-                <p className={showUsername ? "" : "username-hidden"}>{(overrideRankingState || (rankingState === RankingState.ONLY_WHEN_CHALLENGER && ranking <= 1000) || rankingState === RankingState.SHOW) && <span className={'ranking'}>#{ranking} </span>}{tl(language, `widget.elo${(preview && overrideShowEloSuffix) || (!preview && (searchParams.get('suffix') === null || searchParams.get('suffix') === 'true')) ? '' : '_no_suffix'}`, [preview ? `2001` : `${elo}`])
+                <p
+                  className={showUsername ? "" : "username-hidden"}>{(overrideRankingState || (rankingState === RankingState.ONLY_WHEN_CHALLENGER && ranking <= 1000) || rankingState === RankingState.SHOW) &&
+                  <span
+                    className={'ranking'}>#{ranking} </span>}{tl(language, `widget.elo${(preview && overrideShowEloSuffix) || (!preview && (searchParams.get('suffix') === null || searchParams.get('suffix') === 'true')) ? '' : '_no_suffix'}`, [preview ? `2001` : `${elo}`])
                   + ((preview && overrideShowEloDiff) || (!preview && (searchParams.get('diff') === 'true' || searchParams.get('diff') === null)) ? tl(language, 'widget.elo_diff', [0 > elo - startingElo ? `${elo - startingElo}` : `+${elo - startingElo}`]) : "")}</p>
               </div>
             </div>

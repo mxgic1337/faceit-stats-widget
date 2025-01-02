@@ -11,8 +11,6 @@ import {GeneratedWidgetModal} from "../components/generator/GeneratedWidgetModal
 import {InfoBox} from "../components/generator/InfoBox.tsx";
 import packageJSON from '../../package.json'
 
-export type SavedConfigurations = { [key: string]: string | number | undefined }[]
-
 export const Generator = () => {
 
   const [customCSS, setCustomCSS] = useState<string>("https://example.com")
@@ -140,7 +138,8 @@ export const Generator = () => {
                           showRankingOnlyWhenChallenger={showRankingOnlyWhenChallenger}
                           setShowRankingOnlyWhenChallenger={setShowRankingOnlyWhenChallenger}
                           refreshInterval={refreshInterval} setRefreshInterval={setRefreshInterval}
-                          onlyOfficialMatchesCount={onlyOfficialMatchesCount} setOnlyOfficialMatchesCount={setOnlyOfficialMatchesCount}
+                          onlyOfficialMatchesCount={onlyOfficialMatchesCount}
+                          setOnlyOfficialMatchesCount={setOnlyOfficialMatchesCount}
       />
     },
     {
