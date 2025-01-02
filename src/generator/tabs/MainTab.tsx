@@ -105,12 +105,14 @@ export const MainTab = ({
           {(JSON.parse(localStorage.getItem("fcw_settings") as string) as SavedConfigurations).map((configuration) => {
             const createdAt = new Date(configuration._createdAt as number);
             return <option key={configuration._createdAt} value={configuration._createdAt}>
-              {configuration.username} | {configuration.theme} | {configuration.colorScheme} | {createdAt.getDate()}.{createdAt.getMonth() + 1}.{createdAt.getFullYear()}
+              {configuration.username} | {tl(language, `scheme.${configuration.colorScheme}`)} | {tl(language, `theme.${configuration.theme}`)} | {createdAt.getDate()}.{createdAt.getMonth() + 1}.{createdAt.getFullYear()}
             </option>
           })}
         </select>
-        <button>{tl(language, 'generator.settings.load_saved_configuration.apply')}</button>
-        <button>{tl(language, 'generator.settings.load_saved_configuration.delete')}</button>
+        <div className={'flex'}>
+          <button>{tl(language, 'generator.settings.load_saved_configuration.apply')}</button>
+          <button>{tl(language, 'generator.settings.load_saved_configuration.delete')}</button>
+        </div>
       </div>
     </>}
   </>
