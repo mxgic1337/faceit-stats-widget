@@ -28,21 +28,21 @@ import '../styles/themes/classic.less'
 
 import '../styles/color_schemes.less'
 
-export const themes: { id: string, name: string, hidden?: boolean }[] = [
-  {id: "normal", name: "Normal"},
-  {id: "compact", name: "Compact"},
-  {id: "classic", name: "Classic"},
-  {id: "custom", name: "Custom CSS", hidden: true},
+export const themes: { id: string, hidden?: boolean }[] = [
+  {id: "normal"},
+  {id: "compact"},
+  {id: "classic"},
+  {id: "custom", hidden: true},
 ]
 
-export const colorSchemes: { id: string, name: string }[] = [
-  {id: "dark", name: "Dark"},
-  {id: "faceit", name: "FACEIT Dark"},
-  {id: "ctp-latte", name: "Catppuccin Latte"},
-  {id: "ctp-frappe", name: "Catppuccin Frappé"},
-  {id: "ctp-macchiato", name: "Catppuccin Macchiato"},
-  {id: "ctp-mocha", name: "Catppuccin Mocha"},
-  {id: "custom", name: "Custom"},
+export const colorSchemes: string[] = [
+  "dark",
+  "faceit",
+  "ctp-latte",
+  "ctp-frappe",
+  "ctp-macchiato",
+  "ctp-mocha",
+  "custom"
 ]
 
 interface Props {
@@ -60,7 +60,9 @@ interface Props {
   overrideShowEloSuffix?: boolean,
   overrideTextColor?: string,
   overrideUseBannerAsBackground?: boolean,
+  overrideBackgroundOpacity?: number,
   overrideUsername?: string,
+  overrideShowUsername?: boolean,
   preview?: boolean,
 }
 
@@ -96,12 +98,14 @@ export const Widget = ({
                          preview,
                          overrideStatistics,
                          overrideUsername,
+                         overrideShowUsername,
                          overrideRankingState,
                          overrideCustomScheme,
                          overrideBorder1,
                          overrideBorder2,
                          overrideTextColor,
                          overrideBackground,
+                         overrideBackgroundOpacity,
                          overrideCustomCSS,
                          overrideLanguage,
                          overrideUseBannerAsBackground,
@@ -125,7 +129,9 @@ export const Widget = ({
   const [losses, setLosses] = useState(0)
   const [username, setUsername] = useState<string>()
   const [banner, setBanner] = useState<string>()
+  const [showUsername, setShowUsername] = useState<boolean>(false)
   const [useBannerAsBackground, setUseBannerAsBackground] = useState<boolean>(false)
+  const [backgroundOpacity, setBackgroundOpacity] = useState<number>()
   const [currentEloDistribution, setCurrentEloDistribution] = useState<(string | number)[]>(eloDistribution[0])
   const [rankingState, setRankingState] = useState<RankingState>(0)
 
@@ -139,26 +145,34 @@ export const Widget = ({
     if (preview) return;
     const theme = searchParams.get('theme');
     const scheme = searchParams.get('scheme');
+    const name = searchParams.get('name');
+    const official = searchParams.get('only_official');
     const stats = searchParams.get('stats');
 
     if (stats) {
-      setStats(stats.split(",") as StatisticType[])
+      setStats(stats.split(',') as StatisticType[])
     }
 
-    setUseBannerAsBackground(searchParams.get('banner') === "true")
+    if (!name || name === 'true') {
+      setShowUsername(true)
+    }
+
+    if (!official) {
+      searchParams.set('official', 'true')
+    }
+
+    setUseBannerAsBackground(searchParams.get('banner') === 'true')
     if (theme === 'dark' || theme === 'normal-custom') {
       searchParams.set('theme', 'normal');
       searchParams.set('scheme', 'dark');
-    }
-    else if ((theme === 'compact' && !scheme) || theme === 'compact-custom') {
+    } else if ((theme === 'compact' && !scheme) || theme === 'compact-custom') {
       searchParams.set('theme', 'compact');
       if (theme === 'compact-custom') {
         searchParams.set('scheme', 'custom');
       } else {
         searchParams.set('scheme', 'dark');
       }
-    }
-    else if (theme === 'classic' && !scheme) {
+    } else if (theme === 'classic' && !scheme) {
       searchParams.set('scheme', 'faceit');
     }
   }, []);
@@ -166,7 +180,8 @@ export const Widget = ({
   useEffect(() => {
     if (!preview) return;
     setStats(overrideStatistics as StatisticType[])
-  }, [overrideStatistics]);
+    setShowUsername(overrideShowUsername as boolean)
+  }, [overrideStatistics, overrideShowUsername,]);
 
   useEffect(() => {
     if (searchParams.get('scheme') === 'custom') {
@@ -213,7 +228,7 @@ export const Widget = ({
   }, [preview])
 
   useEffect(() => {
-    const language = languages.find(language => language.id === searchParams.get("lang"));
+    const language = languages.find(language => language.id === searchParams.get('lang'));
     if (language) setLanguage(language);
   }, [overrideLanguage, searchParams]);
 
@@ -231,11 +246,16 @@ export const Widget = ({
 
     let theme = searchParams.get("theme") || "normal";
     let scheme = searchParams.get("scheme") || "dark";
+    const backgroundOpacity = searchParams.get("banner_opacity");
     if (!themes.find(theme1 => theme1.id === theme)) {
       theme = "normal"
     }
-    if (!colorSchemes.find(scheme1 => scheme1.id === scheme)) {
+    if (!colorSchemes.find(scheme1 => scheme1 === scheme)) {
       scheme = "dark"
+    }
+
+    if (backgroundOpacity) {
+      setBackgroundOpacity(parseFloat(backgroundOpacity));
     }
 
     const playerId = searchParams.get("player_id")
@@ -253,7 +273,7 @@ export const Widget = ({
     }
 
     const getStats = (firstTime?: boolean) => {
-      getPlayerStats(playerId, startDate).then((player) => {
+      getPlayerStats(playerId, startDate, searchParams.get('only_official') === 'true').then((player) => {
         if (!player) return;
         setUsername(player.username)
         setBanner(player.banner)
@@ -278,10 +298,24 @@ export const Widget = ({
       })
     }
     getStats(true)
+
+    let refreshDelay = 30;
+    const refreshParam = searchParams.get('refresh');
+    if (refreshParam) {
+      refreshDelay = parseInt(refreshParam)
+    }
+
+    if (refreshDelay < 10) {
+      refreshDelay = 10
+    }
+
     const interval =
-      setInterval(getStats, 1000 * 30)
+      setInterval(getStats, 1000 * refreshDelay)
     document.getElementsByTagName("html")[0].classList.add(`${theme}-theme`)
     document.getElementsByTagName("html")[0].classList.add(`${scheme}-scheme`)
+    if (searchParams.get('auto_width') === 'true') {
+      document.getElementsByTagName("html")[0].classList.add(`auto-width`)
+    }
 
     return () => {
       clearInterval(interval)
@@ -343,6 +377,7 @@ export const Widget = ({
       {(overrideUseBannerAsBackground || useBannerAsBackground) && <style>{`
                 .wrapper {
                     --background-url: url("${overrideUseBannerAsBackground ? sampleBanner : banner}") !important;
+                    ${overrideBackgroundOpacity || backgroundOpacity ? `--background-opacity: ${overrideBackgroundOpacity || backgroundOpacity} !important;` : ""}
                 }
             `}</style>}
       <div className={'wrapper'}>
@@ -352,8 +387,11 @@ export const Widget = ({
               <img src={getIcon()}
                    alt={`Level ${preview ? 10 : level}`}/>
               <div className={'elo'}>
-                <h2>{username || searchParams.get("player") || overrideUsername || "?"}</h2>
-                <p>{(overrideRankingState || (rankingState === RankingState.ONLY_WHEN_CHALLENGER && ranking <= 1000) || rankingState === RankingState.SHOW) && <>#{ranking} </>}{tl(language, `widget.elo${(preview && overrideShowEloSuffix) || (!preview && (searchParams.get('suffix') === null || searchParams.get('suffix') === 'true')) ? '' : '_no_suffix'}`, [preview ? `2001` : `${elo}`])
+                {showUsername && <h2>{username || searchParams.get("player") || overrideUsername || "?"}</h2>}
+                <p
+                  className={showUsername ? "" : "username-hidden"}>{(overrideRankingState || (rankingState === RankingState.ONLY_WHEN_CHALLENGER && ranking <= 1000) || rankingState === RankingState.SHOW) &&
+                  <span
+                    className={'ranking'}>#{ranking} </span>}{tl(language, `widget.elo${(preview && overrideShowEloSuffix) || (!preview && (searchParams.get('suffix') === null || searchParams.get('suffix') === 'true')) ? '' : '_no_suffix'}`, [preview ? `2001` : `${elo}`])
                   + ((preview && overrideShowEloDiff) || (!preview && (searchParams.get('diff') === 'true' || searchParams.get('diff') === null)) ? tl(language, 'widget.elo_diff', [0 > elo - startingElo ? `${elo - startingElo}` : `+${elo - startingElo}`]) : "")}</p>
               </div>
             </div>

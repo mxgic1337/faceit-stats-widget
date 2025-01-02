@@ -15,14 +15,20 @@ export const Generator = () => {
 
   const [customCSS, setCustomCSS] = useState<string>("https://example.com")
   const [generatedURL, setGeneratedURL] = useState<string | undefined>()
+  const [autoWidth, setAutoWidth] = useState<boolean>(true)
   const [username, setUsername] = useState<string>("Player")
+  const [onlyOfficialMatchesCount, setOnlyOfficialMatchesCount] = useState<boolean>(true)
   const [showRanking, setShowRanking] = useState<boolean>(true)
   const [showRankingOnlyWhenChallenger, setShowRankingOnlyWhenChallenger] = useState<boolean>(true)
   const [showEloDiff, setShowEloDiff] = useState<boolean>(true)
+  const [showUsername, setShowUsername] = useState<boolean>(true)
   const [showEloSuffix, setShowEloSuffix] = useState<boolean>(true)
   const [showStatistics, setShowStatistics] = useState<boolean>(true)
   const [showEloProgressBar, setShowEloProgressBar] = useState<boolean>(true)
   const [useBannerAsBackground, setUseBannerAsBackground] = useState<boolean>(false)
+  const [adjustBackgroundOpacity, setAdjustBackgroundOpacity] = useState<boolean>(false)
+  const [backgroundOpacity, setBackgroundOpacity] = useState<number>(0.15)
+  const [refreshInterval, setRefreshInterval] = useState<number>(30)
   const [colorScheme, setColorScheme] = useState<string>("dark")
   const [theme, setTheme] = useState<string>("normal")
   const [language, setLanguage] = useState<Language>(languages.find(language => language.id === localStorage.fcw_lang) || languages[0])
@@ -51,7 +57,7 @@ export const Generator = () => {
     if (!searchParams.get("lang")) navigate(`?lang=${language.id}`)
   }, []);
 
-  const generateLink = useCallback(() => {
+  const generateWidgetURL = useCallback(() => {
     getPlayerID(username).then(id => {
       if (!id) {
         alert(tl(language, 'generator.alert.player_not_found', [username]));
@@ -69,12 +75,23 @@ export const Generator = () => {
         "theme": theme,
         "ranking": showRanking ? showRankingOnlyWhenChallenger ? 2 : 1 : 0,
         "banner": useBannerAsBackground,
+        "refresh": refreshInterval,
+        "name": showUsername,
+        "auto_width": autoWidth,
+        "only_official": onlyOfficialMatchesCount,
         "stats": [
           statSlot1,
           statSlot2,
           statSlot3,
           statSlot4,
         ],
+      }
+
+      if (useBannerAsBackground && adjustBackgroundOpacity) {
+        params = {
+          ...params,
+          "banner_opacity": backgroundOpacity,
+        }
       }
 
       if (theme === "custom") {
@@ -96,7 +113,7 @@ export const Generator = () => {
 
       setGeneratedURL(`${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`)
     }).catch()
-  }, [customBackgroundColor, customBorderColor1, customBorderColor2, customCSS, customTextColor, language, showStatistics, showEloDiff, showEloProgressBar, showEloSuffix, showRanking, showRankingOnlyWhenChallenger, theme, username, colorScheme, useBannerAsBackground, statSlot1, statSlot2, statSlot3, statSlot4])
+  }, [customBackgroundColor, customBorderColor1, customBorderColor2, customCSS, customTextColor, language, showStatistics, showEloDiff, showEloProgressBar, showEloSuffix, showRanking, showRankingOnlyWhenChallenger, theme, username, colorScheme, useBannerAsBackground, adjustBackgroundOpacity, backgroundOpacity, refreshInterval, showUsername, autoWidth, onlyOfficialMatchesCount, statSlot1, statSlot2, statSlot3, statSlot4])
 
   const jsonToQuery = useCallback((params: { [key: string]: string | number | boolean | string[] }) => {
     return `?${Object.entries(params).map((param) => {
@@ -108,6 +125,8 @@ export const Generator = () => {
     {
       name: tl(language, 'generator.settings.title'),
       component: <MainTab key={'main'} username={username} setUsername={setUsername} language={language}
+                          autoWidth={autoWidth} setAutoWidth={setAutoWidth}
+                          showUsername={showUsername} setShowUsername={setShowUsername}
                           setLanguage={setLanguage}
                           showEloSuffix={showEloSuffix} setShowEloSuffix={setShowEloSuffix}
                           showAverage={showStatistics}
@@ -118,6 +137,9 @@ export const Generator = () => {
                           showEloDiff={showEloDiff} setShowEloDiff={setShowEloDiff}
                           showRankingOnlyWhenChallenger={showRankingOnlyWhenChallenger}
                           setShowRankingOnlyWhenChallenger={setShowRankingOnlyWhenChallenger}
+                          refreshInterval={refreshInterval} setRefreshInterval={setRefreshInterval}
+                          onlyOfficialMatchesCount={onlyOfficialMatchesCount}
+                          setOnlyOfficialMatchesCount={setOnlyOfficialMatchesCount}
       />
     },
     {
@@ -133,6 +155,10 @@ export const Generator = () => {
                            theme={theme} setTheme={setTheme} colorScheme={colorScheme}
                            useBannerAsBackground={useBannerAsBackground}
                            setUseBannerAsBackground={setUseBannerAsBackground}
+                           adjustBackgroundOpacity={adjustBackgroundOpacity}
+                           setAdjustBackgroundOpacity={setAdjustBackgroundOpacity}
+                           backgroundOpacity={backgroundOpacity}
+                           setBackgroundOpacity={setBackgroundOpacity}
 
                            setColorScheme={setColorScheme}/>
     },
@@ -188,6 +214,7 @@ export const Generator = () => {
         <Separator text={tl(language, 'generator.preview.title')}/>
         <div className={`${theme}-theme ${colorScheme}-scheme preview`}>
           <Widget preview={true} overrideShowEloDiff={showEloDiff} overrideShowEloSuffix={showEloSuffix}
+                  overrideShowUsername={showUsername}
                   overrideRankingState={showRanking}
                   overrideShowAverage={showStatistics}
                   overrideShowEloProgressBar={showEloProgressBar}
@@ -198,11 +225,14 @@ export const Generator = () => {
                   overrideTextColor={customTextColor} overrideBackground={customBackgroundColor}
                   overrideUseBannerAsBackground={useBannerAsBackground}
                   overrideStatistics={[statSlot1, statSlot2, statSlot3, statSlot4]}
+                  overrideBackgroundOpacity={useBannerAsBackground && adjustBackgroundOpacity ? backgroundOpacity : undefined}
           />
         </div>
-        <button onClick={() => {
-          generateLink()
-        }}>{tl(language, 'generator.generate.button')}</button>
+        <div className={'flex'}>
+          <button onClick={() => {
+            generateWidgetURL()
+          }}>{tl(language, 'generator.generate.button')}</button>
+        </div>
       </section>
     </main>
   </>

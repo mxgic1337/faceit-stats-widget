@@ -4,6 +4,17 @@
 @border-rotation: 0deg;
 
 .normal-theme {
+  --auto-width: 400px;
+
+  &.auto-width {
+    width: fit-content;
+    min-width: var(--auto-width);
+
+    .elo {
+      margin-right: 16px;
+    }
+  }
+
   * {
     padding: 0;
     margin: 0;
@@ -59,6 +70,13 @@
         .elo {
           p {
             font-size: .85em;
+          }
+          .username-hidden {
+            font-size: 1.1em;
+
+            .ranking {
+              font-weight: bold;
+            }
           }
         }
       }

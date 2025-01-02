@@ -1,5 +1,8 @@
 export const API_KEY = import.meta.env.VITE_FACEIT_API_KEY;
 
+/** Competition ID of official matches */
+export const OFFICIAL_COMPETITION_ID = 'f4148ddd-bce8-41b8-9131-ee83afcdd6dd'
+
 /** Info about player returned by API v4 */
 interface V4PlayersResponse {
   player_id: string,
@@ -78,7 +81,7 @@ const HEADERS = {
   'Authorization': `Bearer ${API_KEY}`
 };
 
-export function getPlayerStats(id: string, startDate: Date): Promise<FaceitPlayer | undefined> {
+export function getPlayerStats(id: string, startDate: Date, onlyOfficial: boolean): Promise<FaceitPlayer | undefined> {
   return new Promise<FaceitPlayer | undefined>((resolve) => {
     fetch('https://open.faceit.com/data/v4/players/' + id, {
       headers: HEADERS
@@ -108,6 +111,8 @@ export function getPlayerStats(id: string, startDate: Date): Promise<FaceitPlaye
         let losses = 0;
 
         for (const match of v4HistoryResponse.items) {
+          /* Count only official matches */
+          if (onlyOfficial && match.competition_id !== OFFICIAL_COMPETITION_ID) continue;
           if (match.finished_at < startDate.getTime() / 1000) continue;
           /* Player's team name */
           let playerTeam: string | undefined = undefined;
@@ -177,7 +182,6 @@ export function getPlayerStats(id: string, startDate: Date): Promise<FaceitPlaye
             });
           })
         })
-
       })
     })
   })
