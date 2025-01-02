@@ -158,7 +158,7 @@ export const Widget = ({
     }
 
     if (!official) {
-      searchParams.set('official', 'true')
+      searchParams.set('only_official', 'true')
     }
 
     setUseBannerAsBackground(searchParams.get('banner') === 'true')
