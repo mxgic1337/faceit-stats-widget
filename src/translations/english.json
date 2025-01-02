@@ -17,6 +17,7 @@
   "generator.settings.faceit_name": "FACEIT Username",
   "generator.settings.language": "Language",
   "generator.settings.show_username": "Show username",
+  "generator.settings.auto_width": "Automatically set widget width",
   "generator.settings.show_elo_suffix": "Show ELO suffix",
   "generator.settings.show_elo_diff": "Show ELO diff (gain/loss)",
   "generator.settings.show_elo_progress_bar": "Show ELO progress bar",

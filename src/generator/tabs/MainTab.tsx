@@ -14,11 +14,13 @@ type Props = {
   showEloProgressBar: boolean;
   showAverage: boolean;
   showRanking: boolean;
+  autoWidth: boolean;
   showRankingOnlyWhenChallenger: boolean;
   refreshInterval: number;
 
   setLanguage: Dispatch<Language>;
   setUsername: Dispatch<string>;
+  setAutoWidth: Dispatch<boolean>;
   setShowUsername: Dispatch<boolean>;
   setShowEloSuffix: Dispatch<boolean>;
   setShowEloDiff: Dispatch<boolean>;
@@ -32,6 +34,7 @@ type Props = {
 export const MainTab = ({
                           language, setLanguage,
                           username, setUsername,
+                          autoWidth, setAutoWidth,
                           showUsername, setShowUsername,
                           showEloSuffix, setShowEloSuffix,
                           showEloDiff, setShowEloDiff,
@@ -88,6 +91,8 @@ export const MainTab = ({
                 setState={setShowAverage}/>
       <Checkbox text={tl(language, 'generator.settings.show_ranking')} state={showRanking}
                 setState={setShowRanking}/>
+      <Checkbox text={tl(language, 'generator.settings.auto_width')} state={autoWidth}
+                setState={setAutoWidth}/>
       {showRanking &&
         <Checkbox text={tl(language, 'generator.settings.show_ranking_only_when_challenger')}
                   state={showRankingOnlyWhenChallenger}

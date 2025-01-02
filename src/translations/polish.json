@@ -16,6 +16,7 @@
   "generator.settings.faceit_name": "Nazwa użytkownika FACEIT",
   "generator.settings.language": "Język",
   "generator.settings.show_username": "Pokaż nazwę użytkownika",
+  "generator.settings.auto_width": "Automatycznie ustaw szerokość widżetu",
   "generator.settings.show_elo_suffix": "Pokaż sufiks ELO",
   "generator.settings.show_elo_diff": "Pokaż różnicę ELO (wzrost/spadek)",
   "generator.settings.show_elo_progress_bar": "Wyświetl pasek postępu ELO",

@@ -4,6 +4,17 @@
 @border-rotation: 0deg;
 
 .normal-theme {
+  --auto-width: 400px;
+
+  &.auto-width {
+    width: fit-content;
+    min-width: var(--auto-width);
+
+    .elo {
+      margin-right: 16px;
+    }
+  }
+
   * {
     padding: 0;
     margin: 0;

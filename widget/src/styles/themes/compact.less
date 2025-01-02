@@ -1,6 +1,7 @@
 @import "normal";
 
 .compact-theme:extend(.normal-theme all) {
+  --auto-width: 350px;
   .widget {
     padding: 8px 10px !important;
 
@@ -22,6 +23,7 @@
         flex: 1;
 
         h2 {
+          margin-left: 6px;
           margin-right: 6px;
           margin-bottom: 1px;
         }
@@ -65,6 +67,11 @@
       margin-top: 3px;
       padding: 0 5px;
       font-size: .85em;
+
+      text-wrap: nowrap;
+      white-space: nowrap;
+      flex-wrap: nowrap;
+      flex-basis: fit-content;
 
       flex-direction: row;
       justify-content: space-between;

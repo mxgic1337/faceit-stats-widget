@@ -176,7 +176,7 @@ export const Widget = ({
     if (!preview) return;
     setStats(overrideStatistics as StatisticType[])
     setShowUsername(overrideShowUsername as boolean)
-  }, [overrideStatistics, overrideShowUsername]);
+  }, [overrideStatistics, overrideShowUsername, ]);
 
   useEffect(() => {
     if (searchParams.get('scheme') === 'custom') {
@@ -308,6 +308,9 @@ export const Widget = ({
       setInterval(getStats, 1000 * refreshDelay)
     document.getElementsByTagName("html")[0].classList.add(`${theme}-theme`)
     document.getElementsByTagName("html")[0].classList.add(`${scheme}-scheme`)
+    if (searchParams.get('auto_width') === 'true') {
+      document.getElementsByTagName("html")[0].classList.add(`auto-width`)
+    }
 
     return () => {
       clearInterval(interval)

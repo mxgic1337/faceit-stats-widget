@@ -11,12 +11,13 @@ import {GeneratedWidgetModal} from "../components/generator/GeneratedWidgetModal
 import {InfoBox} from "../components/generator/InfoBox.tsx";
 import packageJSON from '../../package.json'
 
-export type SavedConfigurations = {[key: string]: string | number | undefined}[]
+export type SavedConfigurations = { [key: string]: string | number | undefined }[]
 
 export const Generator = () => {
 
   const [customCSS, setCustomCSS] = useState<string>("https://example.com")
   const [generatedURL, setGeneratedURL] = useState<string | undefined>()
+  const [autoWidth, setAutoWidth] = useState<boolean>(true)
   const [username, setUsername] = useState<string>("Player")
   const [showRanking, setShowRanking] = useState<boolean>(true)
   const [showRankingOnlyWhenChallenger, setShowRankingOnlyWhenChallenger] = useState<boolean>(true)
@@ -57,7 +58,7 @@ export const Generator = () => {
     if (!searchParams.get("lang")) navigate(`?lang=${language.id}`)
   }, []);
 
-  const generateLink = useCallback(() => {
+  const generateWidgetURL = useCallback(() => {
     getPlayerID(username).then(id => {
       if (!id) {
         alert(tl(language, 'generator.alert.player_not_found', [username]));
@@ -77,6 +78,7 @@ export const Generator = () => {
         "banner": useBannerAsBackground,
         "refresh": refreshInterval,
         "name": showUsername,
+        "auto_width": autoWidth,
         "stats": [
           statSlot1,
           statSlot2,
@@ -111,7 +113,7 @@ export const Generator = () => {
 
       setGeneratedURL(`${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`)
     }).catch()
-  }, [customBackgroundColor, customBorderColor1, customBorderColor2, customCSS, customTextColor, language, showStatistics, showEloDiff, showEloProgressBar, showEloSuffix, showRanking, showRankingOnlyWhenChallenger, theme, username, colorScheme, useBannerAsBackground, adjustBackgroundOpacity, backgroundOpacity, refreshInterval, showUsername, statSlot1, statSlot2, statSlot3, statSlot4])
+  }, [customBackgroundColor, customBorderColor1, customBorderColor2, customCSS, customTextColor, language, showStatistics, showEloDiff, showEloProgressBar, showEloSuffix, showRanking, showRankingOnlyWhenChallenger, theme, username, colorScheme, useBannerAsBackground, adjustBackgroundOpacity, backgroundOpacity, refreshInterval, showUsername, autoWidth, statSlot1, statSlot2, statSlot3, statSlot4])
 
   const jsonToQuery = useCallback((params: { [key: string]: string | number | boolean | string[] }) => {
     return `?${Object.entries(params).map((param) => {
@@ -148,6 +150,8 @@ export const Generator = () => {
       statSlot2,
       statSlot3,
       statSlot4,
+      autoWidth,
+      showUsername,
       refreshInterval
     }
 
@@ -158,6 +162,7 @@ export const Generator = () => {
     {
       name: tl(language, 'generator.settings.title'),
       component: <MainTab key={'main'} username={username} setUsername={setUsername} language={language}
+                          autoWidth={autoWidth} setAutoWidth={setAutoWidth}
                           showUsername={showUsername} setShowUsername={setShowUsername}
                           setLanguage={setLanguage}
                           showEloSuffix={showEloSuffix} setShowEloSuffix={setShowEloSuffix}
@@ -259,7 +264,7 @@ export const Generator = () => {
           />
         </div>
         <button onClick={() => {
-          generateLink()
+          generateWidgetURL()
         }}>{tl(language, 'generator.generate.button')}</button>
         <button onClick={() => {
           saveSettings()
