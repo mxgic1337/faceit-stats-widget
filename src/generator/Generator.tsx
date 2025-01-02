@@ -21,6 +21,7 @@ export const Generator = () => {
   const [showRanking, setShowRanking] = useState<boolean>(true)
   const [showRankingOnlyWhenChallenger, setShowRankingOnlyWhenChallenger] = useState<boolean>(true)
   const [showEloDiff, setShowEloDiff] = useState<boolean>(true)
+  const [showUsername, setShowUsername] = useState<boolean>(true)
   const [showEloSuffix, setShowEloSuffix] = useState<boolean>(true)
   const [showStatistics, setShowStatistics] = useState<boolean>(true)
   const [showEloProgressBar, setShowEloProgressBar] = useState<boolean>(true)
@@ -75,6 +76,7 @@ export const Generator = () => {
         "ranking": showRanking ? showRankingOnlyWhenChallenger ? 2 : 1 : 0,
         "banner": useBannerAsBackground,
         "refresh": refreshInterval,
+        "name": showUsername,
         "stats": [
           statSlot1,
           statSlot2,
@@ -109,7 +111,7 @@ export const Generator = () => {
 
       setGeneratedURL(`${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`)
     }).catch()
-  }, [customBackgroundColor, customBorderColor1, customBorderColor2, customCSS, customTextColor, language, showStatistics, showEloDiff, showEloProgressBar, showEloSuffix, showRanking, showRankingOnlyWhenChallenger, theme, username, colorScheme, useBannerAsBackground, adjustBackgroundOpacity, backgroundOpacity, refreshInterval, statSlot1, statSlot2, statSlot3, statSlot4])
+  }, [customBackgroundColor, customBorderColor1, customBorderColor2, customCSS, customTextColor, language, showStatistics, showEloDiff, showEloProgressBar, showEloSuffix, showRanking, showRankingOnlyWhenChallenger, theme, username, colorScheme, useBannerAsBackground, adjustBackgroundOpacity, backgroundOpacity, refreshInterval, showUsername, statSlot1, statSlot2, statSlot3, statSlot4])
 
   const jsonToQuery = useCallback((params: { [key: string]: string | number | boolean | string[] }) => {
     return `?${Object.entries(params).map((param) => {
@@ -156,6 +158,7 @@ export const Generator = () => {
     {
       name: tl(language, 'generator.settings.title'),
       component: <MainTab key={'main'} username={username} setUsername={setUsername} language={language}
+                          showUsername={showUsername} setShowUsername={setShowUsername}
                           setLanguage={setLanguage}
                           showEloSuffix={showEloSuffix} setShowEloSuffix={setShowEloSuffix}
                           showAverage={showStatistics}
@@ -241,6 +244,7 @@ export const Generator = () => {
         <Separator text={tl(language, 'generator.preview.title')}/>
         <div className={`${theme}-theme ${colorScheme}-scheme preview`}>
           <Widget preview={true} overrideShowEloDiff={showEloDiff} overrideShowEloSuffix={showEloSuffix}
+                  overrideShowUsername={showUsername}
                   overrideRankingState={showRanking}
                   overrideShowAverage={showStatistics}
                   overrideShowEloProgressBar={showEloProgressBar}

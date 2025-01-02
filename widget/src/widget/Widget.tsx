@@ -62,6 +62,7 @@ interface Props {
   overrideUseBannerAsBackground?: boolean,
   overrideBackgroundOpacity?: number,
   overrideUsername?: string,
+  overrideShowUsername?: boolean,
   preview?: boolean,
 }
 
@@ -97,6 +98,7 @@ export const Widget = ({
                          preview,
                          overrideStatistics,
                          overrideUsername,
+                         overrideShowUsername,
                          overrideRankingState,
                          overrideCustomScheme,
                          overrideBorder1,
@@ -127,6 +129,7 @@ export const Widget = ({
   const [losses, setLosses] = useState(0)
   const [username, setUsername] = useState<string>()
   const [banner, setBanner] = useState<string>()
+  const [showUsername, setShowUsername] = useState<boolean>(false)
   const [useBannerAsBackground, setUseBannerAsBackground] = useState<boolean>(false)
   const [backgroundOpacity, setBackgroundOpacity] = useState<number>()
   const [currentEloDistribution, setCurrentEloDistribution] = useState<(string | number)[]>(eloDistribution[0])
@@ -142,10 +145,15 @@ export const Widget = ({
     if (preview) return;
     const theme = searchParams.get('theme');
     const scheme = searchParams.get('scheme');
+    const name = searchParams.get('name');
     const stats = searchParams.get('stats');
 
     if (stats) {
       setStats(stats.split(",") as StatisticType[])
+    }
+
+    if (!name || name === 'true') {
+      setShowUsername(true)
     }
 
     setUseBannerAsBackground(searchParams.get('banner') === "true")
@@ -167,7 +175,8 @@ export const Widget = ({
   useEffect(() => {
     if (!preview) return;
     setStats(overrideStatistics as StatisticType[])
-  }, [overrideStatistics]);
+    setShowUsername(overrideShowUsername as boolean)
+  }, [overrideStatistics, overrideShowUsername]);
 
   useEffect(() => {
     if (searchParams.get('scheme') === 'custom') {
@@ -370,8 +379,8 @@ export const Widget = ({
               <img src={getIcon()}
                    alt={`Level ${preview ? 10 : level}`}/>
               <div className={'elo'}>
-                <h2>{username || searchParams.get("player") || overrideUsername || "?"}</h2>
-                <p>{(overrideRankingState || (rankingState === RankingState.ONLY_WHEN_CHALLENGER && ranking <= 1000) || rankingState === RankingState.SHOW) && <>#{ranking} </>}{tl(language, `widget.elo${(preview && overrideShowEloSuffix) || (!preview && (searchParams.get('suffix') === null || searchParams.get('suffix') === 'true')) ? '' : '_no_suffix'}`, [preview ? `2001` : `${elo}`])
+                {showUsername && <h2>{username || searchParams.get("player") || overrideUsername || "?"}</h2>}
+                <p className={showUsername ? "" : "username-hidden"}>{(overrideRankingState || (rankingState === RankingState.ONLY_WHEN_CHALLENGER && ranking <= 1000) || rankingState === RankingState.SHOW) && <span className={'ranking'}>#{ranking} </span>}{tl(language, `widget.elo${(preview && overrideShowEloSuffix) || (!preview && (searchParams.get('suffix') === null || searchParams.get('suffix') === 'true')) ? '' : '_no_suffix'}`, [preview ? `2001` : `${elo}`])
                   + ((preview && overrideShowEloDiff) || (!preview && (searchParams.get('diff') === 'true' || searchParams.get('diff') === null)) ? tl(language, 'widget.elo_diff', [0 > elo - startingElo ? `${elo - startingElo}` : `+${elo - startingElo}`]) : "")}</p>
               </div>
             </div>

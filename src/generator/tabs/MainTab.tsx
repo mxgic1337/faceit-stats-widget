@@ -8,6 +8,7 @@ import {SavedConfigurations} from "../Generator.tsx";
 type Props = {
   language: Language;
   username: string;
+  showUsername: boolean;
   showEloSuffix: boolean;
   showEloDiff: boolean;
   showEloProgressBar: boolean;
@@ -18,6 +19,7 @@ type Props = {
 
   setLanguage: Dispatch<Language>;
   setUsername: Dispatch<string>;
+  setShowUsername: Dispatch<boolean>;
   setShowEloSuffix: Dispatch<boolean>;
   setShowEloDiff: Dispatch<boolean>;
   setShowEloProgressBar: Dispatch<boolean>;
@@ -30,6 +32,7 @@ type Props = {
 export const MainTab = ({
                           language, setLanguage,
                           username, setUsername,
+                          showUsername, setShowUsername,
                           showEloSuffix, setShowEloSuffix,
                           showEloDiff, setShowEloDiff,
                           showEloProgressBar, setShowEloProgressBar,
@@ -73,6 +76,8 @@ export const MainTab = ({
       </select>
     </div>
     <div className={'setting'}>
+      <Checkbox text={tl(language, 'generator.settings.show_username')} state={showUsername}
+                setState={setShowUsername}/>
       <Checkbox text={tl(language, 'generator.settings.show_elo_suffix')} state={showEloSuffix}
                 setState={setShowEloSuffix}/>
       <Checkbox text={tl(language, 'generator.settings.show_elo_diff')} state={showEloDiff}
