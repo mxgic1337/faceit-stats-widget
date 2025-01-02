@@ -16,6 +16,7 @@ type Props = {
   showRanking: boolean;
   autoWidth: boolean;
   showRankingOnlyWhenChallenger: boolean;
+  onlyOfficialMatchesCount: boolean;
   refreshInterval: number;
 
   setLanguage: Dispatch<Language>;
@@ -28,6 +29,7 @@ type Props = {
   setShowAverage: Dispatch<boolean>;
   setShowRanking: Dispatch<boolean>;
   setShowRankingOnlyWhenChallenger: Dispatch<boolean>;
+  setOnlyOfficialMatchesCount: Dispatch<boolean>;
   setRefreshInterval: Dispatch<number>;
 }
 
@@ -42,6 +44,7 @@ export const MainTab = ({
                           showAverage, setShowAverage,
                           showRanking, setShowRanking,
                           showRankingOnlyWhenChallenger, setShowRankingOnlyWhenChallenger,
+                          onlyOfficialMatchesCount, setOnlyOfficialMatchesCount,
                           refreshInterval, setRefreshInterval,
                         }: Props) => {
   const navigate = useNavigate();
@@ -97,6 +100,8 @@ export const MainTab = ({
         <Checkbox text={tl(language, 'generator.settings.show_ranking_only_when_challenger')}
                   state={showRankingOnlyWhenChallenger}
                   setState={setShowRankingOnlyWhenChallenger}/>}
+      <Checkbox text={tl(language, 'generator.settings.only_official_matches')} state={onlyOfficialMatchesCount}
+                setState={setOnlyOfficialMatchesCount}/>
     </div>
     {localStorage.getItem("fcw_settings") && <>
       <Separator text={tl(language, 'generator.settings.load_saved_configuration')}/>

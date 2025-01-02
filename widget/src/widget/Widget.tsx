@@ -146,17 +146,22 @@ export const Widget = ({
     const theme = searchParams.get('theme');
     const scheme = searchParams.get('scheme');
     const name = searchParams.get('name');
+    const official = searchParams.get('only_official');
     const stats = searchParams.get('stats');
 
     if (stats) {
-      setStats(stats.split(",") as StatisticType[])
+      setStats(stats.split(',') as StatisticType[])
     }
 
     if (!name || name === 'true') {
       setShowUsername(true)
     }
 
-    setUseBannerAsBackground(searchParams.get('banner') === "true")
+    if (!official) {
+      searchParams.set('official', 'true')
+    }
+
+    setUseBannerAsBackground(searchParams.get('banner') === 'true')
     if (theme === 'dark' || theme === 'normal-custom') {
       searchParams.set('theme', 'normal');
       searchParams.set('scheme', 'dark');
@@ -223,7 +228,7 @@ export const Widget = ({
   }, [preview])
 
   useEffect(() => {
-    const language = languages.find(language => language.id === searchParams.get("lang"));
+    const language = languages.find(language => language.id === searchParams.get('lang'));
     if (language) setLanguage(language);
   }, [overrideLanguage, searchParams]);
 
@@ -268,7 +273,7 @@ export const Widget = ({
     }
 
     const getStats = (firstTime?: boolean) => {
-      getPlayerStats(playerId, startDate).then((player) => {
+      getPlayerStats(playerId, startDate, searchParams.get('only_official') === 'true').then((player) => {
         if (!player) return;
         setUsername(player.username)
         setBanner(player.banner)

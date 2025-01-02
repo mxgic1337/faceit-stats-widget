@@ -19,6 +19,7 @@ export const Generator = () => {
   const [generatedURL, setGeneratedURL] = useState<string | undefined>()
   const [autoWidth, setAutoWidth] = useState<boolean>(true)
   const [username, setUsername] = useState<string>("Player")
+  const [onlyOfficialMatchesCount, setOnlyOfficialMatchesCount] = useState<boolean>(true)
   const [showRanking, setShowRanking] = useState<boolean>(true)
   const [showRankingOnlyWhenChallenger, setShowRankingOnlyWhenChallenger] = useState<boolean>(true)
   const [showEloDiff, setShowEloDiff] = useState<boolean>(true)
@@ -134,6 +135,7 @@ export const Generator = () => {
       username,
       showRanking,
       showRankingOnlyWhenChallenger,
+      onlyOfficialMatchesCount,
       showEloDiff,
       showEloSuffix,
       showStatistics,
@@ -175,6 +177,7 @@ export const Generator = () => {
                           showRankingOnlyWhenChallenger={showRankingOnlyWhenChallenger}
                           setShowRankingOnlyWhenChallenger={setShowRankingOnlyWhenChallenger}
                           refreshInterval={refreshInterval} setRefreshInterval={setRefreshInterval}
+                          onlyOfficialMatchesCount={onlyOfficialMatchesCount} setOnlyOfficialMatchesCount={setOnlyOfficialMatchesCount}
       />
     },
     {
@@ -263,12 +266,14 @@ export const Generator = () => {
                   overrideBackgroundOpacity={useBannerAsBackground && adjustBackgroundOpacity ? backgroundOpacity : undefined}
           />
         </div>
-        <button onClick={() => {
-          generateWidgetURL()
-        }}>{tl(language, 'generator.generate.button')}</button>
-        <button onClick={() => {
-          saveSettings()
-        }}>{tl(language, 'generator.save_current_configuration')}</button>
+        <div className={'flex'}>
+          <button onClick={() => {
+            generateWidgetURL()
+          }}>{tl(language, 'generator.generate.button')}</button>
+          <button onClick={() => {
+            saveSettings()
+          }}>{tl(language, 'generator.save_current_configuration')}</button>
+        </div>
       </section>
     </main>
   </>

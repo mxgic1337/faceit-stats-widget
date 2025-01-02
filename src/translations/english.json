@@ -27,6 +27,7 @@
   "generator.settings.load_saved_configuration": "Load saved configuration",
   "generator.settings.load_saved_configuration.apply": "Apply selected",
   "generator.settings.load_saved_configuration.delete": "Delete selected",
+  "generator.settings.only_official_matches": "Only official matches count (don't count matches played on hubs)",
   "generator.settings.refresh_delay": "Refresh widget every:",
   "generator.settings.refresh_delay.quick": "{{0}}s (Quick)",
   "generator.settings.refresh_delay.normal": "{{0}}s",

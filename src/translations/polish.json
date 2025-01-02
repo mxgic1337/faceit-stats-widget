@@ -26,6 +26,7 @@
   "generator.settings.load_saved_configuration": "Wczytaj zapisaną konfigurację",
   "generator.settings.load_saved_configuration.apply": "Zastosuj wybraną konfigurację",
   "generator.settings.load_saved_configuration.delete": "Usuń wybraną konfigurację",
+  "generator.settings.only_official_matches": "Zaliczaj tylko oficjalne mecze (nie zaliczaj meczów granych na hubach)",
   "generator.settings.refresh_delay": "Odświeżaj widżet co:",
   "generator.settings.refresh_delay.quick": "{{0}}s (Szybko)",
   "generator.settings.refresh_delay.normal": "{{0}}s",
