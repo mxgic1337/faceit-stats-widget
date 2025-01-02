@@ -14,7 +14,7 @@ type Props = {
   showAverage: boolean;
   showRanking: boolean;
   showRankingOnlyWhenChallenger: boolean;
-  refreshDelay: number;
+  refreshInterval: number;
 
   setLanguage: Dispatch<Language>;
   setUsername: Dispatch<string>;
@@ -24,7 +24,7 @@ type Props = {
   setShowAverage: Dispatch<boolean>;
   setShowRanking: Dispatch<boolean>;
   setShowRankingOnlyWhenChallenger: Dispatch<boolean>;
-  setRefreshDelay: Dispatch<number>;
+  setRefreshInterval: Dispatch<number>;
 }
 
 export const MainTab = ({
@@ -36,7 +36,7 @@ export const MainTab = ({
                           showAverage, setShowAverage,
                           showRanking, setShowRanking,
                           showRankingOnlyWhenChallenger, setShowRankingOnlyWhenChallenger,
-                          refreshDelay, setRefreshDelay,
+                          refreshInterval, setRefreshInterval,
                         }: Props) => {
   const navigate = useNavigate();
 
@@ -64,8 +64,8 @@ export const MainTab = ({
     </div>
     <div className={'setting'}>
       <p>{tl(language, 'generator.settings.refresh_delay')}</p>
-      <select value={refreshDelay} onChange={event => {
-        setRefreshDelay(parseInt(event.currentTarget.value))
+      <select value={refreshInterval} onChange={event => {
+        setRefreshInterval(parseInt(event.currentTarget.value))
       }}>
         <option value={10}>{tl(language, 'generator.settings.refresh_delay.quick', ["10"])}</option>
         <option value={30}>{tl(language, 'generator.settings.refresh_delay.normal', ["30"])}</option>
