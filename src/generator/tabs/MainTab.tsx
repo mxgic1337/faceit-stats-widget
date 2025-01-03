@@ -91,10 +91,10 @@ export const MainTab = ({
                 setState={setShowEloProgressBar}/>
       <Checkbox text={tl(language, 'generator.settings.show_kd')} state={showAverage}
                 setState={setShowAverage}/>
-      <Checkbox text={tl(language, 'generator.settings.show_ranking')} state={showRanking}
-                setState={setShowRanking}/>
       <Checkbox text={tl(language, 'generator.settings.auto_width')} state={autoWidth}
                 setState={setAutoWidth}/>
+      <Checkbox text={tl(language, 'generator.settings.show_ranking')} state={showRanking}
+                setState={setShowRanking}/>
       {showRanking &&
         <Checkbox text={tl(language, 'generator.settings.show_ranking_only_when_challenger')}
                   state={showRankingOnlyWhenChallenger}

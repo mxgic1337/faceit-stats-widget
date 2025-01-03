@@ -194,8 +194,10 @@ section.preview {
 
   .check {
     @size: 16px;
-    width: @size;
-    height: @size;
+    min-width: @size;
+    min-height: @size;
+    max-width: @size;
+    max-height: @size;
     border: 1px solid @border;
     border-radius: 6px;
     margin-right: 4px;

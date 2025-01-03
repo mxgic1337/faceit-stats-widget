@@ -67,7 +67,7 @@ export const Generator = () => {
       let params: { [key: string]: string | number | boolean | string[] } = {
         "player_id": id,
         "lang": language.id,
-        "eloBar": showEloProgressBar,
+        "progress": showEloProgressBar,
         "avg": showStatistics,
         "suffix": showEloSuffix,
         "diff": showEloDiff,
@@ -216,7 +216,7 @@ export const Generator = () => {
           <Widget preview={true} overrideShowEloDiff={showEloDiff} overrideShowEloSuffix={showEloSuffix}
                   overrideShowUsername={showUsername}
                   overrideRankingState={showRanking}
-                  overrideShowAverage={showStatistics}
+                  overrideShowStatistics={showStatistics}
                   overrideShowEloProgressBar={showEloProgressBar}
                   overrideUsername={username.length > 0 ? username : "Player"}
                   overrideCustomCSS={customCSS} overrideCustomScheme={colorScheme === "custom"}
