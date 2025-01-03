@@ -40,6 +40,7 @@ interface Settings {
   statSlot4: StatisticType,
 }
 
+export const LanguageContext = createContext<((text: string, args?: string[])=>string) | null>(null)
 export const SettingsContext = createContext<Settings | null>(null)
 export const Generator = () => {
 
@@ -75,6 +76,10 @@ export const Generator = () => {
 
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
+
+  const translate = useCallback((text: string, args?: string[])=>{
+    return tl(language, text, args)
+  }, [language])
 
   useEffect(() => {
     document.getElementsByTagName("html")[0].classList.add(`generator`)
@@ -192,58 +197,60 @@ export const Generator = () => {
 
   const [selectedTabIndex, setSelectedTabIndex] = useState(0)
 
-  return <SettingsContext.Provider value={{
-    customCSS, autoWidth, username, onlyOfficialMatchesCount, showRanking, showRankingOnlyWhenChallenger,
-    showEloDiff, showEloSuffix, showUsername, showStatistics, showEloProgressBar, useBannerAsBackground,
-    adjustBackgroundOpacity, backgroundOpacity, refreshInterval, colorScheme, theme, language,
-    statSlot1, statSlot2, statSlot3, statSlot4,
-    customTextColor, customBackgroundColor, customBorderColor1, customBorderColor2
-  }}>
-    <GeneratedWidgetModal language={language} url={generatedURL} setURL={setGeneratedURL}/>
-    <header>
-      {import.meta.env.VITE_IS_TESTING &&
-        <InfoBox content={<p>{tl(language, 'generator.testing')}</p>} style={'info'}/>}
-      <div className={'tabs'}>
-        {tabs.map((tab, index) => {
-          return <button key={tab.name} onClick={() => {
-            setSelectedTabIndex(index)
-          }} className={index === selectedTabIndex ? "active" : ""}>{tab.name}</button>
-        })}
-      </div>
-    </header>
-    <main>
-      <section className={'fixed-width'}>
-        {tabs[selectedTabIndex].component}
-        <br/>
-        <footer>
-          <div>
-            <small>This project is not affiliated with <a href={'https://faceit.com'}
-                                                          target={'_blank'}>FACEIT</a>.</small>
-            <small>
-              <a href={'https://github.com/mxgic1337/faceit-stats-widget/blob/master/LICENSE'} target={'_blank'}>MIT
-                License</a> &bull; <a
-              href={'https://github.com/mxgic1337/faceit-stats-widget'} target={'_blank'}>GitHub</a> &bull; <a
-              href={'https://github.com/mxgic1337/faceit-stats-widget/issues/new'} target={'_blank'}>Report an issue</a>
-            </small>
-          </div>
-          <div>
-            <small>Copyright &copy; <a href={'https://github.com/mxgic1337'}
-                                       target={'_blank'}>mxgic1337_</a> 2024</small>
-            <small>v{packageJSON.version}</small>
-          </div>
-        </footer>
-      </section>
-      <section className={'preview'}>
-        <Separator text={tl(language, 'generator.preview.title')}/>
-        <div className={`${theme}-theme ${colorScheme}-scheme preview`}>
-          <Widget preview={true} />
+  return <LanguageContext.Provider value={translate}>
+    <SettingsContext.Provider value={{
+      customCSS, autoWidth, username, onlyOfficialMatchesCount, showRanking, showRankingOnlyWhenChallenger,
+      showEloDiff, showEloSuffix, showUsername, showStatistics, showEloProgressBar, useBannerAsBackground,
+      adjustBackgroundOpacity, backgroundOpacity, refreshInterval, colorScheme, theme, language,
+      statSlot1, statSlot2, statSlot3, statSlot4,
+      customTextColor, customBackgroundColor, customBorderColor1, customBorderColor2
+    }}>
+      <GeneratedWidgetModal language={language} url={generatedURL} setURL={setGeneratedURL}/>
+      <header>
+        {import.meta.env.VITE_IS_TESTING &&
+          <InfoBox content={<p>{tl(language, 'generator.testing')}</p>} style={'info'}/>}
+        <div className={'tabs'}>
+          {tabs.map((tab, index) => {
+            return <button key={tab.name} onClick={() => {
+              setSelectedTabIndex(index)
+            }} className={index === selectedTabIndex ? "active" : ""}>{tab.name}</button>
+          })}
         </div>
-        <div className={'flex'}>
-          <button onClick={() => {
-            generateWidgetURL()
-          }}>{tl(language, 'generator.generate.button')}</button>
-        </div>
-      </section>
-    </main>
-  </SettingsContext.Provider>
+      </header>
+      <main>
+        <section className={'fixed-width'}>
+          {tabs[selectedTabIndex].component}
+          <br/>
+          <footer>
+            <div>
+              <small>This project is not affiliated with <a href={'https://faceit.com'}
+                                                            target={'_blank'}>FACEIT</a>.</small>
+              <small>
+                <a href={'https://github.com/mxgic1337/faceit-stats-widget/blob/master/LICENSE'} target={'_blank'}>MIT
+                  License</a> &bull; <a
+                href={'https://github.com/mxgic1337/faceit-stats-widget'} target={'_blank'}>GitHub</a> &bull; <a
+                href={'https://github.com/mxgic1337/faceit-stats-widget/issues/new'} target={'_blank'}>Report an issue</a>
+              </small>
+            </div>
+            <div>
+              <small>Copyright &copy; <a href={'https://github.com/mxgic1337'}
+                                         target={'_blank'}>mxgic1337_</a> 2024</small>
+              <small>v{packageJSON.version}</small>
+            </div>
+          </footer>
+        </section>
+        <section className={'preview'}>
+          <Separator text={tl(language, 'generator.preview.title')}/>
+          <div className={`${theme}-theme ${colorScheme}-scheme preview`}>
+            <Widget preview={true} />
+          </div>
+          <div className={'flex'}>
+            <button onClick={() => {
+              generateWidgetURL()
+            }}>{tl(language, 'generator.generate.button')}</button>
+          </div>
+        </section>
+      </main>
+    </SettingsContext.Provider>
+  </LanguageContext.Provider>
 }

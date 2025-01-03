@@ -3,7 +3,7 @@ import {InfoBox} from "../../components/generator/InfoBox.tsx";
 import {Dispatch, useContext} from "react";
 import {Statistic} from "../../components/generator/Statistic.tsx";
 import {Separator} from "../../components/generator/Separator.tsx";
-import {SettingsContext} from "../Generator.tsx";
+import {LanguageContext, SettingsContext} from "../Generator.tsx";
 
 export enum StatisticType {
   KILLS = "KILLS",
@@ -27,15 +27,16 @@ export const StatisticsTab = ({
                                 setStatSlot3,
                                 setStatSlot4
                               }: Props) => {
+  const tl = useContext(LanguageContext);
   const settings = useContext(SettingsContext);
-  if (!settings) {
+  if (!settings || !tl) {
     return null;
   }
   return <>
-    <Separator text={tl(settings.language, 'generator.stats.title')}/>
+    <Separator text={tl('generator.stats.title')}/>
     <div className={'setting stats'}>
       {!settings.showStatistics &&
-        <InfoBox content={<p>{tl(settings.language, 'generator.stats.disabled')}</p>} style={'warn'}/>}
+        <InfoBox content={<p>{tl('generator.stats.disabled')}</p>} style={'warn'}/>}
       <Statistic slot={"1"} language={settings.language} statSlot={settings.statSlot1} setStatSlot={setStatSlot1}/>
       <Statistic slot={"2"} language={settings.language} statSlot={settings.statSlot2} setStatSlot={setStatSlot2}/>
       <Statistic slot={"3"} language={settings.language} statSlot={settings.statSlot3} setStatSlot={setStatSlot3}/>

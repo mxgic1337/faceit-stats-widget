@@ -1,11 +1,10 @@
 import {colorSchemes, themes} from "../../../widget/src/widget/Widget.tsx";
 import {ColorPicker} from "../../components/generator/ColorPicker.tsx";
-import {tl} from "../../translations/translations.ts";
 import {Dispatch, useContext, useRef} from "react";
 import {Checkbox} from "../../components/generator/Checkbox.tsx";
 import {InfoBox} from "../../components/generator/InfoBox.tsx";
 import {Separator} from "../../components/generator/Separator.tsx";
-import {SettingsContext} from "../Generator.tsx";
+import {LanguageContext, SettingsContext} from "../Generator.tsx";
 
 type Props = {
   setTheme: Dispatch<string>;
@@ -33,39 +32,40 @@ export const StyleTab = ({
                            setCustomCSS,
                          }: Props) => {
   const customCSSInputRef = useRef<HTMLInputElement>(null);
+  const tl = useContext(LanguageContext);
   const settings = useContext(SettingsContext);
-  if (!settings) {
+  if (!settings || !tl) {
     return null;
   }
 
   return <>
-    <Separator text={tl(settings.language, 'generator.theme.title')}/>
+    <Separator text={tl('generator.theme.title')}/>
     <div className={'setting'}>
       <div className={'flex'}>
         <div>
-          <p>{tl(settings.language, 'generator.theme.color_scheme')}</p>
+          <p>{tl('generator.theme.color_scheme')}</p>
           <select value={settings.colorScheme} onChange={(e) => setColorScheme(e.target.value)}>
             {colorSchemes.map(scheme => {
-              return <option key={scheme} value={scheme}>{tl(settings.language, `scheme.${scheme}`)}</option>
+              return <option key={scheme} value={scheme}>{tl(`scheme.${scheme}`)}</option>
             })}
           </select>
         </div>
         <div>
-          <p>{tl(settings.language, 'generator.theme.style')}</p>
+          <p>{tl('generator.theme.style')}</p>
           <select value={settings.theme} onChange={(e) => setTheme(e.target.value)}>
             {themes.map(theme => {
               if (theme.hidden) return;
-              return <option key={theme.id} value={theme.id}>{tl(settings.language, `theme.${theme.id}`)}</option>
+              return <option key={theme.id} value={theme.id}>{tl(`theme.${theme.id}`)}</option>
             })}
           </select>
         </div>
       </div>
-      <Checkbox text={tl(settings.language, 'generator.theme.banner_as_background')}
+      <Checkbox text={tl('generator.theme.banner_as_background')}
                 state={settings.useBannerAsBackground}
                 setState={setUseBannerAsBackground}/>
       {settings.useBannerAsBackground &&
         <>
-          <Checkbox text={tl(settings.language, 'generator.theme.banner_as_background.adjust_opacity')}
+          <Checkbox text={tl('generator.theme.banner_as_background.adjust_opacity')}
                     state={settings.adjustBackgroundOpacity}
                     setState={setAdjustBackgroundOpacity}/>
           <div className={'flex'} style={{alignItems: 'center'}}>
@@ -76,28 +76,28 @@ export const StyleTab = ({
             <p style={{width: '50px', textAlign: 'right'}}>{Math.round(settings.backgroundOpacity * 100)}%</p>
           </div>
           <InfoBox style={'info'}
-                   content={<p>{tl(settings.language, 'generator.theme.banner_as_background.warning')}</p>}/>
+                   content={<p>{tl('generator.theme.banner_as_background.warning')}</p>}/>
         </>}
     </div>
 
     {settings.colorScheme === 'custom' && <div className={'setting'}>
-      <ColorPicker text={tl(settings.language, 'generator.theme.border_color_1')} color={settings.customBorderColor1}
+      <ColorPicker text={tl('generator.theme.border_color_1')} color={settings.customBorderColor1}
                    setColor={setCustomBorderColor1}/>
-      <ColorPicker text={tl(settings.language, 'generator.theme.border_color_2')} color={settings.customBorderColor2}
+      <ColorPicker text={tl('generator.theme.border_color_2')} color={settings.customBorderColor2}
                    setColor={setCustomBorderColor2}/>
-      <ColorPicker text={tl(settings.language, 'generator.theme.text_color')}
+      <ColorPicker text={tl('generator.theme.text_color')}
                    color={settings.customTextColor} setColor={setCustomTextColor}/>
-      <ColorPicker text={tl(settings.language, 'generator.theme.background_color')}
+      <ColorPicker text={tl('generator.theme.background_color')}
                    color={settings.customBackgroundColor} setColor={setCustomBackgroundColor}/>
     </div>}
 
     {settings.theme === 'custom' && <div className={'setting'}>
-      <p>{tl(settings.language, 'generator.theme.custom_css.title')}</p>
+      <p>{tl('generator.theme.custom_css.title')}</p>
       <input defaultValue={settings.customCSS} ref={customCSSInputRef} onKeyDown={(e) => {
         if (e.code !== "Enter") return
         setCustomCSS(customCSSInputRef.current?.value as string)
       }}/>
-      <small>{tl(settings.language, 'generator.theme.custom_css.apply')}</small>
+      <small>{tl('generator.theme.custom_css.apply')}</small>
     </div>}
   </>
 }
