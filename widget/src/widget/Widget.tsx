@@ -107,8 +107,8 @@ export const Widget = ({preview}: { preview: boolean }) => {
   const [customBorderColor, setCustomBorderColor] = useState<string>()
   const [customBorderColor2, setCustomBorderColor2] = useState<string>()
   const overrides = useContext(SettingsContext);
-  
-  const translate = useCallback((text: string, args?: string[])=>{
+
+  const translate = useCallback((text: string, args?: string[]) => {
     return tl(language, text, args)
   }, [language])
 
@@ -161,8 +161,10 @@ export const Widget = ({preview}: { preview: boolean }) => {
     setUseBannerAsBackground(useBannerAsBackgroundParam === 'true')
     setShowEloProgressBar((showEloProgressBarParam || showEloProgressBarOldParam) === 'true')
 
-    if (rankingParam) {
-      setRankingState(rankingParam === '2' ? RankingState.ONLY_WHEN_CHALLENGER : RankingState.SHOW)
+    if (rankingParam === '2') {
+      setRankingState(RankingState.ONLY_WHEN_CHALLENGER)
+    } else if (rankingParam === '1') {
+      setRankingState(RankingState.SHOW)
     } else {
       setRankingState(RankingState.DISABLED)
     }
@@ -404,7 +406,7 @@ export const Widget = ({preview}: { preview: boolean }) => {
                 {showUsername && <h2>{username || overrides?.username || "?"}</h2>}
                 <p
                   className={showUsername ? "" : "username-hidden"}>
-                  {((rankingState === RankingState.ONLY_WHEN_CHALLENGER && ranking <= 1000) || rankingState === RankingState.SHOW) &&
+                  {(rankingState === RankingState.SHOW || (rankingState === RankingState.ONLY_WHEN_CHALLENGER && ranking <= 1000)) &&
                     <span
                       className={'ranking'}>#{ranking} </span>}{getElo()}</p>
               </div>
