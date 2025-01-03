@@ -107,6 +107,10 @@ export const Widget = ({preview}: { preview: boolean }) => {
   const [customBorderColor, setCustomBorderColor] = useState<string>()
   const [customBorderColor2, setCustomBorderColor2] = useState<string>()
   const overrides = useContext(SettingsContext);
+  
+  const translate = useCallback((text: string, args?: string[])=>{
+    return tl(language, text, args)
+  }, [language])
 
   /* Apply settings from query params */
   useLayoutEffect(() => {
@@ -365,9 +369,9 @@ export const Widget = ({preview}: { preview: boolean }) => {
       diff = elo - startingElo
     }
 
-    let text = tl(language, `widget.elo${!showEloSuffix ? "_no_suffix" : ""}`, [String(currentElo)])
+    let text = translate(`widget.elo${!showEloSuffix ? "_no_suffix" : ""}`, [String(currentElo)])
     if (showEloDiff) {
-      text += tl(language, `widget.elo_diff`, [`${diff >= 0 ? `+${diff}` : String(diff)}`])
+      text += translate(`widget.elo_diff`, [`${diff >= 0 ? `+${diff}` : String(diff)}`])
     }
     return text;
   }, [language, elo, startingElo, showEloDiff, showEloSuffix]);
@@ -407,8 +411,8 @@ export const Widget = ({preview}: { preview: boolean }) => {
             </div>
             <div className={'matches'}>
               <div className={'stats'}>
-                <Statistic color={'green'} value={String(wins)} text={tl(language, 'widget.wins')}/>
-                <Statistic color={'red'} value={String(losses)} text={tl(language, 'widget.losses')}/>
+                <Statistic color={'green'} value={String(wins)} text={translate('widget.wins')}/>
+                <Statistic color={'red'} value={String(losses)} text={translate('widget.losses')}/>
               </div>
             </div>
           </div>
@@ -416,7 +420,7 @@ export const Widget = ({preview}: { preview: boolean }) => {
             <div className={'average'}>
               {stats.map(stat => {
                 return <div className={'stat'}>
-                  <p>{tl(language, `widget.${stat.toLowerCase()}`)}</p>
+                  <p>{translate(`widget.${stat.toLowerCase()}`)}</p>
                   <p>{getStat(stat)}</p>
                 </div>
               })}

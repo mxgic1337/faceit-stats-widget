@@ -1,4 +1,3 @@
-import {tl} from "../../translations/translations.ts";
 import {InfoBox} from "../../components/generator/InfoBox.tsx";
 import {Dispatch, useContext} from "react";
 import {Statistic} from "../../components/generator/Statistic.tsx";
