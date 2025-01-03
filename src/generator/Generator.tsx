@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from "react";
+import {createContext, useCallback, useEffect, useState} from "react";
 import {Widget} from "../../widget/src/widget/Widget.tsx";
 import {Separator} from "../components/generator/Separator.tsx";
 import {Language, languages, tl} from "../translations/translations.ts";
@@ -11,6 +11,37 @@ import {GeneratedWidgetModal} from "../components/generator/GeneratedWidgetModal
 import {InfoBox} from "../components/generator/InfoBox.tsx";
 import packageJSON from '../../package.json'
 
+interface Settings {
+  customCSS: string,
+  autoWidth: boolean,
+  username: string,
+  onlyOfficialMatchesCount: boolean,
+  showRanking: boolean,
+  showRankingOnlyWhenChallenger: boolean,
+  showEloDiff: boolean,
+  showUsername: boolean,
+  showEloSuffix: boolean,
+  showStatistics: boolean,
+  showEloProgressBar: boolean,
+  useBannerAsBackground: boolean,
+  adjustBackgroundOpacity: boolean,
+  backgroundOpacity: number,
+  refreshInterval: number,
+  colorScheme: string,
+  theme: string,
+  customBorderColor1: string,
+  customBorderColor2: string,
+  customTextColor: string,
+  customBackgroundColor: string,
+  language: Language,
+  statSlot1: StatisticType,
+  statSlot2: StatisticType,
+  statSlot3: StatisticType,
+  statSlot4: StatisticType,
+}
+
+export const LanguageContext = createContext<((text: string, args?: string[])=>string) | null>(null)
+export const SettingsContext = createContext<Settings | null>(null)
 export const Generator = () => {
 
   const [customCSS, setCustomCSS] = useState<string>("https://example.com")
@@ -46,6 +77,10 @@ export const Generator = () => {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
 
+  const translate = useCallback((text: string, args?: string[])=>{
+    return tl(language, text, args)
+  }, [language])
+
   useEffect(() => {
     document.getElementsByTagName("html")[0].classList.add(`generator`)
     return () => {
@@ -67,7 +102,7 @@ export const Generator = () => {
       let params: { [key: string]: string | number | boolean | string[] } = {
         "player_id": id,
         "lang": language.id,
-        "eloBar": showEloProgressBar,
+        "progress": showEloProgressBar,
         "avg": showStatistics,
         "suffix": showEloSuffix,
         "diff": showEloDiff,
@@ -124,116 +159,98 @@ export const Generator = () => {
   const tabs = [
     {
       name: tl(language, 'generator.settings.title'),
-      component: <MainTab key={'main'} username={username} setUsername={setUsername} language={language}
-                          autoWidth={autoWidth} setAutoWidth={setAutoWidth}
-                          showUsername={showUsername} setShowUsername={setShowUsername}
+      component: <MainTab key={'main'} setUsername={setUsername}
+                          setAutoWidth={setAutoWidth}
+                          setShowUsername={setShowUsername}
                           setLanguage={setLanguage}
-                          showEloSuffix={showEloSuffix} setShowEloSuffix={setShowEloSuffix}
-                          showAverage={showStatistics}
-                          setShowAverage={setShowStatistics}
-                          showRanking={showRanking} setShowRanking={setShowRanking}
-                          showEloProgressBar={showEloProgressBar}
+                          setShowEloSuffix={setShowEloSuffix}
+                          setShowStatistics={setShowStatistics}
+                          setShowRanking={setShowRanking}
                           setShowEloProgressBar={setShowEloProgressBar}
-                          showEloDiff={showEloDiff} setShowEloDiff={setShowEloDiff}
-                          showRankingOnlyWhenChallenger={showRankingOnlyWhenChallenger}
+                          setShowEloDiff={setShowEloDiff}
                           setShowRankingOnlyWhenChallenger={setShowRankingOnlyWhenChallenger}
-                          refreshInterval={refreshInterval} setRefreshInterval={setRefreshInterval}
-                          onlyOfficialMatchesCount={onlyOfficialMatchesCount}
+                          setRefreshInterval={setRefreshInterval}
                           setOnlyOfficialMatchesCount={setOnlyOfficialMatchesCount}
       />
     },
     {
       name: tl(language, 'generator.theme.title'),
-      component: <StyleTab key={'style'} language={language} customBorderColor1={customBorderColor1}
-                           customBorderColor2={customBorderColor2}
+      component: <StyleTab key={'style'}
                            setCustomBorderColor1={setCustomBorderColor1}
                            setCustomBorderColor2={setCustomBorderColor2}
-                           customBackgroundColor={customBackgroundColor}
                            setCustomBackgroundColor={setCustomBackgroundColor}
-                           customTextColor={customTextColor} setCustomTextColor={setCustomTextColor}
-                           customCSS={customCSS} setCustomCSS={setCustomCSS}
-                           theme={theme} setTheme={setTheme} colorScheme={colorScheme}
-                           useBannerAsBackground={useBannerAsBackground}
+                           setCustomTextColor={setCustomTextColor}
+                           setCustomCSS={setCustomCSS}
+                           setTheme={setTheme}
                            setUseBannerAsBackground={setUseBannerAsBackground}
-                           adjustBackgroundOpacity={adjustBackgroundOpacity}
                            setAdjustBackgroundOpacity={setAdjustBackgroundOpacity}
-                           backgroundOpacity={backgroundOpacity}
                            setBackgroundOpacity={setBackgroundOpacity}
-
                            setColorScheme={setColorScheme}/>
     },
     {
       name: tl(language, 'generator.stats.title'),
-      component: <StatisticsTab key={'stats'} language={language} showStatistics={showStatistics}
-                                statSlot1={statSlot1} setStatSlot1={setStatSlot1}
-                                statSlot2={statSlot2} setStatSlot2={setStatSlot2}
-                                statSlot3={statSlot3} setStatSlot3={setStatSlot3}
-                                statSlot4={statSlot4} setStatSlot4={setStatSlot4}
+      component: <StatisticsTab key={'stats'} setStatSlot1={setStatSlot1} setStatSlot2={setStatSlot2}
+                                setStatSlot3={setStatSlot3} setStatSlot4={setStatSlot4}
       />
     }
   ]
 
   const [selectedTabIndex, setSelectedTabIndex] = useState(0)
 
-  return <>
-    <GeneratedWidgetModal language={language} url={generatedURL} setURL={setGeneratedURL}/>
-    <header>
-      {import.meta.env.VITE_IS_TESTING &&
-        <InfoBox content={<p>{tl(language, 'generator.testing')}</p>} style={'info'}/>}
-      <div className={'tabs'}>
-        {tabs.map((tab, index) => {
-          return <button key={tab.name} onClick={() => {
-            setSelectedTabIndex(index)
-          }} className={index === selectedTabIndex ? "active" : ""}>{tab.name}</button>
-        })}
-      </div>
-    </header>
-    <main>
-      <section className={'fixed-width'}>
-        {tabs[selectedTabIndex].component}
-        <br/>
-        <footer>
-          <div>
-            <small>This project is not affiliated with <a href={'https://faceit.com'}
-                                                          target={'_blank'}>FACEIT</a>.</small>
-            <small>
-              <a href={'https://github.com/mxgic1337/faceit-stats-widget/blob/master/LICENSE'} target={'_blank'}>MIT
-                License</a> &bull; <a
-              href={'https://github.com/mxgic1337/faceit-stats-widget'} target={'_blank'}>GitHub</a> &bull; <a
-              href={'https://github.com/mxgic1337/faceit-stats-widget/issues/new'} target={'_blank'}>Report an issue</a>
-            </small>
-          </div>
-          <div>
-            <small>Copyright &copy; <a href={'https://github.com/mxgic1337'}
-                                       target={'_blank'}>mxgic1337_</a> 2024</small>
-            <small>v{packageJSON.version}</small>
-          </div>
-        </footer>
-      </section>
-      <section className={'preview'}>
-        <Separator text={tl(language, 'generator.preview.title')}/>
-        <div className={`${theme}-theme ${colorScheme}-scheme preview`}>
-          <Widget preview={true} overrideShowEloDiff={showEloDiff} overrideShowEloSuffix={showEloSuffix}
-                  overrideShowUsername={showUsername}
-                  overrideRankingState={showRanking}
-                  overrideShowAverage={showStatistics}
-                  overrideShowEloProgressBar={showEloProgressBar}
-                  overrideUsername={username.length > 0 ? username : "Player"}
-                  overrideCustomCSS={customCSS} overrideCustomScheme={colorScheme === "custom"}
-                  overrideLanguage={language.id}
-                  overrideBorder1={customBorderColor1} overrideBorder2={customBorderColor2}
-                  overrideTextColor={customTextColor} overrideBackground={customBackgroundColor}
-                  overrideUseBannerAsBackground={useBannerAsBackground}
-                  overrideStatistics={[statSlot1, statSlot2, statSlot3, statSlot4]}
-                  overrideBackgroundOpacity={useBannerAsBackground && adjustBackgroundOpacity ? backgroundOpacity : undefined}
-          />
+  return <LanguageContext.Provider value={translate}>
+    <SettingsContext.Provider value={{
+      customCSS, autoWidth, username, onlyOfficialMatchesCount, showRanking, showRankingOnlyWhenChallenger,
+      showEloDiff, showEloSuffix, showUsername, showStatistics, showEloProgressBar, useBannerAsBackground,
+      adjustBackgroundOpacity, backgroundOpacity, refreshInterval, colorScheme, theme, language,
+      statSlot1, statSlot2, statSlot3, statSlot4,
+      customTextColor, customBackgroundColor, customBorderColor1, customBorderColor2
+    }}>
+      <GeneratedWidgetModal language={language} url={generatedURL} setURL={setGeneratedURL}/>
+      <header>
+        {import.meta.env.VITE_IS_TESTING &&
+          <InfoBox content={<p>{tl(language, 'generator.testing')}</p>} style={'info'}/>}
+        <div className={'tabs'}>
+          {tabs.map((tab, index) => {
+            return <button key={tab.name} onClick={() => {
+              setSelectedTabIndex(index)
+            }} className={index === selectedTabIndex ? "active" : ""}>{tab.name}</button>
+          })}
         </div>
-        <div className={'flex'}>
-          <button onClick={() => {
-            generateWidgetURL()
-          }}>{tl(language, 'generator.generate.button')}</button>
-        </div>
-      </section>
-    </main>
-  </>
+      </header>
+      <main>
+        <section className={'fixed-width'}>
+          {tabs[selectedTabIndex].component}
+          <br/>
+          <footer>
+            <div>
+              <small>This project is not affiliated with <a href={'https://faceit.com'}
+                                                            target={'_blank'}>FACEIT</a>.</small>
+              <small>
+                <a href={'https://github.com/mxgic1337/faceit-stats-widget/blob/master/LICENSE'} target={'_blank'}>MIT
+                  License</a> &bull; <a
+                href={'https://github.com/mxgic1337/faceit-stats-widget'} target={'_blank'}>GitHub</a> &bull; <a
+                href={'https://github.com/mxgic1337/faceit-stats-widget/issues/new'} target={'_blank'}>Report an issue</a>
+              </small>
+            </div>
+            <div>
+              <small>Copyright &copy; <a href={'https://github.com/mxgic1337'}
+                                         target={'_blank'}>mxgic1337_</a> 2024</small>
+              <small>v{packageJSON.version}</small>
+            </div>
+          </footer>
+        </section>
+        <section className={'preview'}>
+          <Separator text={tl(language, 'generator.preview.title')}/>
+          <div className={`${theme}-theme ${colorScheme}-scheme preview`}>
+            <Widget preview={true} />
+          </div>
+          <div className={'flex'}>
+            <button onClick={() => {
+              generateWidgetURL()
+            }}>{tl(language, 'generator.generate.button')}</button>
+          </div>
+        </section>
+      </main>
+    </SettingsContext.Provider>
+  </LanguageContext.Provider>
 }

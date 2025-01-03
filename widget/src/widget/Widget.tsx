@@ -1,5 +1,5 @@
 import {Statistic} from "../../../src/components/widget/Statistic.tsx";
-import {useCallback, useEffect, useLayoutEffect, useState} from "react";
+import {useCallback, useContext, useEffect, useLayoutEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {Language, languages, tl} from "../../../src/translations/translations.ts";
 import {getPlayerID, getPlayerStats} from "../utils/faceit_util.ts";
@@ -27,6 +27,7 @@ import '../styles/themes/compact.less'
 import '../styles/themes/classic.less'
 
 import '../styles/color_schemes.less'
+import {SettingsContext} from "../../../src/generator/Generator.tsx";
 
 export const themes: { id: string, hidden?: boolean }[] = [
   {id: "normal"},
@@ -44,27 +45,6 @@ export const colorSchemes: string[] = [
   "ctp-mocha",
   "custom"
 ]
-
-interface Props {
-  overrideBackground?: string,
-  overrideStatistics?: StatisticType[],
-  overrideBorder1?: string,
-  overrideBorder2?: string,
-  overrideCustomCSS?: string,
-  overrideCustomScheme?: boolean,
-  overrideLanguage?: string,
-  overrideRankingState?: boolean,
-  overrideShowAverage?: boolean,
-  overrideShowEloDiff?: boolean,
-  overrideShowEloProgressBar?: boolean,
-  overrideShowEloSuffix?: boolean,
-  overrideTextColor?: string,
-  overrideUseBannerAsBackground?: boolean,
-  overrideBackgroundOpacity?: number,
-  overrideUsername?: string,
-  overrideShowUsername?: boolean,
-  preview?: boolean,
-}
 
 const levelIcons = [
   fc1, fc2, fc3, fc4, fc5, fc6, fc7, fc8, fc9, fc10,
@@ -94,26 +74,7 @@ enum RankingState {
   ONLY_WHEN_CHALLENGER = 2,
 }
 
-export const Widget = ({
-                         preview,
-                         overrideStatistics,
-                         overrideUsername,
-                         overrideShowUsername,
-                         overrideRankingState,
-                         overrideCustomScheme,
-                         overrideBorder1,
-                         overrideBorder2,
-                         overrideTextColor,
-                         overrideBackground,
-                         overrideBackgroundOpacity,
-                         overrideCustomCSS,
-                         overrideLanguage,
-                         overrideUseBannerAsBackground,
-                         overrideShowAverage,
-                         overrideShowEloDiff,
-                         overrideShowEloSuffix,
-                         overrideShowEloProgressBar
-                       }: Props) => {
+export const Widget = ({preview}: { preview: boolean }) => {
   const [level, setLevel] = useState(1)
   const [language, setLanguage] = useState<Language>(languages[0])
   const [startingElo, setStartingElo] = useState<number>(100)
@@ -131,80 +92,145 @@ export const Widget = ({
   const [banner, setBanner] = useState<string>()
   const [showUsername, setShowUsername] = useState<boolean>(false)
   const [useBannerAsBackground, setUseBannerAsBackground] = useState<boolean>(false)
-  const [backgroundOpacity, setBackgroundOpacity] = useState<number>()
+  const [backgroundOpacity, setBackgroundOpacity] = useState<number | undefined>()
   const [currentEloDistribution, setCurrentEloDistribution] = useState<(string | number)[]>(eloDistribution[0])
   const [rankingState, setRankingState] = useState<RankingState>(0)
+
+  const [showEloDiff, setShowEloDiff] = useState<boolean>()
+  const [showEloSuffix, setShowEloSuffix] = useState<boolean>()
+  const [showStatistics, setShowStatistics] = useState<boolean>()
+  const [showEloProgressBar, setShowEloProgressBar] = useState<boolean>()
 
   const [customColorScheme, setCustomColorScheme] = useState<boolean>()
   const [customColor, setCustomColor] = useState<string>()
   const [customBackgroundColor, setCustomBackgroundColor] = useState<string>()
   const [customBorderColor, setCustomBorderColor] = useState<string>()
   const [customBorderColor2, setCustomBorderColor2] = useState<string>()
+  const overrides = useContext(SettingsContext);
+  
+  const translate = useCallback((text: string, args?: string[])=>{
+    return tl(language, text, args)
+  }, [language])
 
+  /* Apply settings from query params */
   useLayoutEffect(() => {
     if (preview) return;
-    const theme = searchParams.get('theme');
-    const scheme = searchParams.get('scheme');
-    const name = searchParams.get('name');
-    const official = searchParams.get('only_official');
-    const stats = searchParams.get('stats');
+    const languageParam = searchParams.get('lang');
+    let themeParam = searchParams.get('theme');
+    let colorSchemeParam = searchParams.get('scheme');
+    const showUsernameParam = searchParams.get('name');
+    const onlyOfficialParam = searchParams.get('only_official');
+    const statsParam = searchParams.get('stats');
+    const showEloDiffParam = searchParams.get('diff');
+    const showEloSuffixParam = searchParams.get('suffix');
+    const showStatisticsParam = searchParams.get('avg');
+    const rankingParam = searchParams.get('ranking');
+    const useBannerAsBackgroundParam = searchParams.get('banner');
+    const backgroundOpacityParam = searchParams.get("banner_opacity");
+    const autoWidthParam = searchParams.get('auto_width');
+    const showEloProgressBarParam = searchParams.get('progress');
+    const showEloProgressBarOldParam = searchParams.get('eloBar');
 
-    if (stats) {
-      setStats(stats.split(',') as StatisticType[])
+    /* Redirect old theme format to new theme & style format */
+    if (themeParam === 'dark' || themeParam === 'normal-custom') {
+      themeParam = 'normal'
+      colorSchemeParam = 'dark'
+    } else if ((themeParam === 'compact' && !colorSchemeParam) || themeParam === 'compact-custom') {
+      themeParam = 'compact'
+      if (themeParam === 'compact-custom') {
+        colorSchemeParam = 'custom'
+      } else {
+        colorSchemeParam = 'dark'
+      }
+    } else if (themeParam === 'classic' && !colorSchemeParam) {
+      colorSchemeParam = 'faceit'
     }
 
-    if (!name || name === 'true') {
-      setShowUsername(true)
+    if (statsParam) {
+      setStats(statsParam.split(',') as StatisticType[])
     }
 
-    if (!official) {
+    if (!onlyOfficialParam) {
       searchParams.set('only_official', 'true')
     }
 
-    setUseBannerAsBackground(searchParams.get('banner') === 'true')
-    if (theme === 'dark' || theme === 'normal-custom') {
-      searchParams.set('theme', 'normal');
-      searchParams.set('scheme', 'dark');
-    } else if ((theme === 'compact' && !scheme) || theme === 'compact-custom') {
-      searchParams.set('theme', 'compact');
-      if (theme === 'compact-custom') {
-        searchParams.set('scheme', 'custom');
-      } else {
-        searchParams.set('scheme', 'dark');
-      }
-    } else if (theme === 'classic' && !scheme) {
-      searchParams.set('scheme', 'faceit');
+    setShowUsername(!showUsernameParam || showUsernameParam === 'true')
+    setShowEloDiff(!showEloDiffParam || showEloDiffParam === 'true')
+    setShowEloSuffix(!showEloSuffixParam || showEloSuffixParam === 'true')
+    setShowStatistics(showStatisticsParam === 'true')
+    setUseBannerAsBackground(useBannerAsBackgroundParam === 'true')
+    setShowEloProgressBar((showEloProgressBarParam || showEloProgressBarOldParam) === 'true')
+
+    if (rankingParam) {
+      setRankingState(rankingParam === '2' ? RankingState.ONLY_WHEN_CHALLENGER : RankingState.SHOW)
+    } else {
+      setRankingState(RankingState.DISABLED)
     }
-  }, []);
 
-  useEffect(() => {
-    if (!preview) return;
-    setStats(overrideStatistics as StatisticType[])
-    setShowUsername(overrideShowUsername as boolean)
-  }, [overrideStatistics, overrideShowUsername,]);
+    if (backgroundOpacityParam) {
+      setBackgroundOpacity(parseFloat(backgroundOpacityParam));
+    }
 
-  useEffect(() => {
-    if (searchParams.get('scheme') === 'custom') {
+    if (colorSchemeParam === 'custom') {
       setCustomColorScheme(true)
       setCustomColor(`#${searchParams.get('color')}`)
       setCustomBackgroundColor(`#${searchParams.get('bg-color')}`)
       setCustomBorderColor(`#${searchParams.get('border1')}`)
       setCustomBorderColor2(`#${searchParams.get('border2')}`)
-    } else if (preview && overrideCustomScheme) {
-      setCustomColorScheme(true)
-      setCustomColor(overrideTextColor)
-      setCustomBackgroundColor(overrideBackground)
-      setCustomBorderColor(overrideBorder1)
-      setCustomBorderColor2(overrideBorder2)
-
-    } else {
-      setCustomColorScheme(false)
     }
-  }, [overrideTextColor, overrideBackground, overrideBorder1, overrideBorder2, overrideCustomScheme]);
+
+    let theme = themeParam;
+    let scheme = colorSchemeParam;
+
+    if (!themes.find(theme1 => theme1.id === theme)) {
+      theme = 'normal'
+    }
+    if (!colorSchemes.find(scheme1 => scheme1 === scheme)) {
+      scheme = 'dark'
+    }
+
+    document.getElementsByTagName("html")[0].classList.add(`${theme}-theme`)
+    document.getElementsByTagName("html")[0].classList.add(`${scheme}-scheme`)
+    if (autoWidthParam === 'true') {
+      document.getElementsByTagName("html")[0].classList.add(`auto-width`)
+    }
+
+    const language = languages.find(language => language.id === languageParam);
+    if (language) setLanguage(language);
+
+    return () => {
+      document.getElementsByTagName("html")[0].classList.remove(`${theme}-theme`)
+      document.getElementsByTagName("html")[0].classList.remove(`${scheme}-scheme`)
+      if (autoWidthParam === 'true') {
+        document.getElementsByTagName("html")[0].classList.remove(`auto-width`)
+      }
+    }
+  }, []);
+
+  /* Apply settings from preview */
+  useLayoutEffect(() => {
+    if (!preview || !overrides) return;
+    setStats([overrides.statSlot1, overrides.statSlot2, overrides.statSlot3, overrides.statSlot4]);
+    setShowUsername(overrides.showUsername as boolean)
+    setShowEloDiff(overrides.showEloDiff as boolean)
+    setShowEloSuffix(overrides.showEloSuffix as boolean)
+    setBackgroundOpacity(overrides.backgroundOpacity as number)
+    setShowStatistics(overrides.showStatistics as boolean)
+    setRankingState(overrides.showRanking ? RankingState.SHOW : RankingState.DISABLED)
+    setUseBannerAsBackground(overrides.useBannerAsBackground as boolean)
+    setLanguage(overrides.language)
+    setCustomColorScheme(overrides.colorScheme === "custom")
+    setCustomColor(overrides.customTextColor)
+    setCustomBackgroundColor(overrides.customBackgroundColor)
+    setCustomBorderColor(overrides.customBorderColor1)
+    setCustomBorderColor2(overrides.customBorderColor2)
+    setShowEloProgressBar(overrides.showEloProgressBar)
+  }, [overrides]);
 
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
 
+  /** Returns a path to a level icon */
   const getIcon = useCallback(() => {
     if (preview) return levelIcons[10]
     if (level === 10 && ranking <= 1000) {
@@ -216,6 +242,7 @@ export const Widget = ({
     return levelIcons[level - 1]
   }, [level, ranking, preview])
 
+  /** Returns a color, min ELO and max ELO of a level */
   const getEloDistribution = useCallback((level: number, ranking: number) => {
     if (preview) return eloDistribution[10]
     if (level === 10 && ranking <= 1000) {
@@ -227,36 +254,14 @@ export const Widget = ({
     return eloDistribution[level - 1]
   }, [preview])
 
-  useEffect(() => {
-    const language = languages.find(language => language.id === searchParams.get('lang'));
-    if (language) setLanguage(language);
-  }, [overrideLanguage, searchParams]);
-
+  /* Update player stats */
   useEffect(() => {
     if (preview) {
       setCurrentEloDistribution(eloDistribution[10]);
       return;
     }
-    let rankingParam = parseInt(searchParams.get('ranking') || "2");
-    console.log(searchParams.get('ranking'), rankingParam)
-    if (isNaN(rankingParam)) rankingParam = RankingState.ONLY_WHEN_CHALLENGER
-    setRankingState(rankingParam)
 
     const startDate = new Date();
-
-    let theme = searchParams.get("theme") || "normal";
-    let scheme = searchParams.get("scheme") || "dark";
-    const backgroundOpacity = searchParams.get("banner_opacity");
-    if (!themes.find(theme1 => theme1.id === theme)) {
-      theme = "normal"
-    }
-    if (!colorSchemes.find(scheme1 => scheme1 === scheme)) {
-      scheme = "dark"
-    }
-
-    if (backgroundOpacity) {
-      setBackgroundOpacity(parseFloat(backgroundOpacity));
-    }
 
     const playerId = searchParams.get("player_id")
     const samplePlayerId = '24180323-d946-4bb7-a334-be3e96fcac05'
@@ -311,38 +316,31 @@ export const Widget = ({
 
     const interval =
       setInterval(getStats, 1000 * refreshDelay)
-    document.getElementsByTagName("html")[0].classList.add(`${theme}-theme`)
-    document.getElementsByTagName("html")[0].classList.add(`${scheme}-scheme`)
-    if (searchParams.get('auto_width') === 'true') {
-      document.getElementsByTagName("html")[0].classList.add(`auto-width`)
-    }
-
     return () => {
       clearInterval(interval)
-      document.getElementsByTagName("html")[0].classList.remove(`${theme}-theme`)
-      document.getElementsByTagName("html")[0].classList.remove(`${scheme}-scheme`)
     }
   }, [])
 
+  /* Custom CSS */
   useEffect(() => {
-    if (!searchParams.get("theme") || searchParams.get("theme") !== "custom") return
+    if (searchParams.get('theme') !== 'custom') return
 
-    const cssPath = overrideCustomCSS || searchParams.get("css") || undefined
+    const cssPath = overrides?.customCSS || searchParams.get('css') || undefined
     if (!cssPath) return;
 
     const head = document.head;
-    const link = document.createElement("link");
-    link.type = "text/css";
-    link.rel = "stylesheet";
+    const link = document.createElement('link');
+    link.type = 'text/css';
+    link.rel = 'stylesheet';
     link.href = cssPath;
 
     head.appendChild(link);
     return () => {
       head.removeChild(link);
     }
+  }, [overrides])
 
-  }, [overrideCustomCSS, overrideCustomScheme])
-
+  /** Returns player statistic */
   const getStat = useCallback((stat: StatisticType) => {
     switch (stat) {
       case StatisticType.KILLS:
@@ -362,6 +360,22 @@ export const Widget = ({
     }
   }, [kills, deaths, winsPercent, hsPercent, ranking, avgMatches])
 
+  /** Returns player ELO text */
+  const getElo = useCallback(() => {
+    const currentElo = preview ? 2001 : elo
+    let diff = 0
+
+    if (!preview) {
+      diff = elo - startingElo
+    }
+
+    let text = translate(`widget.elo${!showEloSuffix ? "_no_suffix" : ""}`, [String(currentElo)])
+    if (showEloDiff) {
+      text += translate(`widget.elo_diff`, [`${diff >= 0 ? `+${diff}` : String(diff)}`])
+    }
+    return text;
+  }, [language, elo, startingElo, showEloDiff, showEloSuffix]);
+
   return (
     <>
       {customColorScheme && <style>{`
@@ -374,44 +388,44 @@ export const Widget = ({
                     --background: ${customBackgroundColor} !important;
                 }
             `}</style>}
-      {(overrideUseBannerAsBackground || useBannerAsBackground) && <style>{`
+      {useBannerAsBackground && <style>{`
                 .wrapper {
-                    --background-url: url("${overrideUseBannerAsBackground ? sampleBanner : banner}") !important;
-                    ${overrideBackgroundOpacity || backgroundOpacity ? `--background-opacity: ${overrideBackgroundOpacity || backgroundOpacity} !important;` : ""}
+                    --background-url: url("${preview ? sampleBanner : banner}") !important;
+                    ${backgroundOpacity ? `--background-opacity: ${backgroundOpacity} !important;` : ""}
                 }
             `}</style>}
       <div className={'wrapper'}>
-        <div className={`widget ${overrideUseBannerAsBackground || useBannerAsBackground ? 'banner' : ''}`}>
+        <div className={`widget ${useBannerAsBackground ? 'banner' : ''}`}>
           <div className={'player-stats'}>
             <div className={'level'}>
               <img src={getIcon()}
                    alt={`Level ${preview ? 10 : level}`}/>
               <div className={'elo'}>
-                {showUsername && <h2>{username || searchParams.get("player") || overrideUsername || "?"}</h2>}
+                {showUsername && <h2>{username || overrides?.username || "?"}</h2>}
                 <p
-                  className={showUsername ? "" : "username-hidden"}>{(overrideRankingState || (rankingState === RankingState.ONLY_WHEN_CHALLENGER && ranking <= 1000) || rankingState === RankingState.SHOW) &&
-                  <span
-                    className={'ranking'}>#{ranking} </span>}{tl(language, `widget.elo${(preview && overrideShowEloSuffix) || (!preview && (searchParams.get('suffix') === null || searchParams.get('suffix') === 'true')) ? '' : '_no_suffix'}`, [preview ? `2001` : `${elo}`])
-                  + ((preview && overrideShowEloDiff) || (!preview && (searchParams.get('diff') === 'true' || searchParams.get('diff') === null)) ? tl(language, 'widget.elo_diff', [0 > elo - startingElo ? `${elo - startingElo}` : `+${elo - startingElo}`]) : "")}</p>
+                  className={showUsername ? "" : "username-hidden"}>
+                  {((rankingState === RankingState.ONLY_WHEN_CHALLENGER && ranking <= 1000) || rankingState === RankingState.SHOW) &&
+                    <span
+                      className={'ranking'}>#{ranking} </span>}{getElo()}</p>
               </div>
             </div>
             <div className={'matches'}>
               <div className={'stats'}>
-                <Statistic color={'green'} value={String(wins)} text={tl(language, 'widget.wins')}/>
-                <Statistic color={'red'} value={String(losses)} text={tl(language, 'widget.losses')}/>
+                <Statistic color={'green'} value={String(wins)} text={translate('widget.wins')}/>
+                <Statistic color={'red'} value={String(losses)} text={translate('widget.losses')}/>
               </div>
             </div>
           </div>
-          {((preview && overrideShowAverage) || (!preview && searchParams.get('avg') === 'true')) &&
+          {showStatistics &&
             <div className={'average'}>
               {stats.map(stat => {
                 return <div className={'stat'}>
-                  <p>{tl(language, `widget.${stat.toLowerCase()}`)}</p>
+                  <p>{translate(`widget.${stat.toLowerCase()}`)}</p>
                   <p>{getStat(stat)}</p>
                 </div>
               })}
             </div>}
-          {((preview && overrideShowEloProgressBar) || (!preview && searchParams.get('eloBar') === 'true')) &&
+          {showEloProgressBar &&
             <div className={'progress-bar'}>
               <div className={'progress'} style={{
                 width: preview || level === 10 ? '100%' : `${((elo - (currentEloDistribution[1] as number)) / ((currentEloDistribution[2] as number) - (currentEloDistribution[1] as number))) * 100}%`,

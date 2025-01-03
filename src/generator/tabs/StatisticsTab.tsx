@@ -1,8 +1,8 @@
-import {Language, tl} from "../../translations/translations.ts";
 import {InfoBox} from "../../components/generator/InfoBox.tsx";
-import {Dispatch} from "react";
+import {Dispatch, useContext} from "react";
 import {Statistic} from "../../components/generator/Statistic.tsx";
 import {Separator} from "../../components/generator/Separator.tsx";
+import {LanguageContext, SettingsContext} from "../Generator.tsx";
 
 export enum StatisticType {
   KILLS = "KILLS",
@@ -14,12 +14,6 @@ export enum StatisticType {
 }
 
 interface Props {
-  language: Language;
-  showStatistics: boolean;
-  statSlot1: StatisticType;
-  statSlot2: StatisticType;
-  statSlot3: StatisticType;
-  statSlot4: StatisticType;
   setStatSlot1: Dispatch<StatisticType>;
   setStatSlot2: Dispatch<StatisticType>;
   setStatSlot3: Dispatch<StatisticType>;
@@ -27,25 +21,25 @@ interface Props {
 }
 
 export const StatisticsTab = ({
-                                language,
-                                showStatistics,
-                                statSlot1,
-                                statSlot2,
-                                statSlot3,
-                                statSlot4,
                                 setStatSlot1,
                                 setStatSlot2,
                                 setStatSlot3,
                                 setStatSlot4
                               }: Props) => {
+  const tl = useContext(LanguageContext);
+  const settings = useContext(SettingsContext);
+  if (!settings || !tl) {
+    return null;
+  }
   return <>
-    <Separator text={tl(language, 'generator.stats.title')}/>
+    <Separator text={tl('generator.stats.title')}/>
     <div className={'setting stats'}>
-      {!showStatistics && <InfoBox content={<p>{tl(language, 'generator.stats.disabled')}</p>} style={'warn'}/>}
-      <Statistic slot={"1"} language={language} statSlot={statSlot1} setStatSlot={setStatSlot1}/>
-      <Statistic slot={"2"} language={language} statSlot={statSlot2} setStatSlot={setStatSlot2}/>
-      <Statistic slot={"3"} language={language} statSlot={statSlot3} setStatSlot={setStatSlot3}/>
-      <Statistic slot={"4"} language={language} statSlot={statSlot4} setStatSlot={setStatSlot4}/>
+      {!settings.showStatistics &&
+        <InfoBox content={<p>{tl('generator.stats.disabled')}</p>} style={'warn'}/>}
+      <Statistic slot={"1"} language={settings.language} statSlot={settings.statSlot1} setStatSlot={setStatSlot1}/>
+      <Statistic slot={"2"} language={settings.language} statSlot={settings.statSlot2} setStatSlot={setStatSlot2}/>
+      <Statistic slot={"3"} language={settings.language} statSlot={settings.statSlot3} setStatSlot={setStatSlot3}/>
+      <Statistic slot={"4"} language={settings.language} statSlot={settings.statSlot4} setStatSlot={setStatSlot4}/>
     </div>
   </>
 }

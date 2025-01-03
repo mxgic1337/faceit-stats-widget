@@ -39,7 +39,7 @@
   "generator.theme.style": "Styl widżetu",
   "generator.theme.banner_as_background": "Użyj baneru profilu jako tła",
   "generator.theme.banner_as_background.warning": "Podgląd pokazuje przykładowy baner. Poprawny baner wyświetli się dopiero po wygenerowaniu widżetu.",
-  "generator.theme.banner_as_background.adjust_opacity": "Dostosuj przezroczystość tła",
+  "generator.theme.banner_as_background.adjust_opacity": "Dostosuj przezroczystość baneru",
   "generator.generate.title": "Wygeneruj widżet",
   "generator.generate.button": "Wygeneruj",
   "generator.generate.open_in_browser.button": "Otwórz w przeglądarce",
