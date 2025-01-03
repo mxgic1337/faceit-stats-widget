@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from "react";
+import {createContext, useCallback, useEffect, useState} from "react";
 import {Widget} from "../../widget/src/widget/Widget.tsx";
 import {Separator} from "../components/generator/Separator.tsx";
 import {Language, languages, tl} from "../translations/translations.ts";
@@ -11,6 +11,36 @@ import {GeneratedWidgetModal} from "../components/generator/GeneratedWidgetModal
 import {InfoBox} from "../components/generator/InfoBox.tsx";
 import packageJSON from '../../package.json'
 
+interface Settings {
+  customCSS: string,
+  autoWidth: boolean,
+  username: string,
+  onlyOfficialMatchesCount: boolean,
+  showRanking: boolean,
+  showRankingOnlyWhenChallenger: boolean,
+  showEloDiff: boolean,
+  showUsername: boolean,
+  showEloSuffix: boolean,
+  showStatistics: boolean,
+  showEloProgressBar: boolean,
+  useBannerAsBackground: boolean,
+  adjustBackgroundOpacity: boolean,
+  backgroundOpacity: number,
+  refreshInterval: number,
+  colorScheme: string,
+  theme: string,
+  customBorderColor1: string,
+  customBorderColor2: string,
+  customTextColor: string,
+  customBackgroundColor: string,
+  language: Language,
+  statSlot1: StatisticType,
+  statSlot2: StatisticType,
+  statSlot3: StatisticType,
+  statSlot4: StatisticType,
+}
+
+export const SettingsContext = createContext<Settings | null>(null)
 export const Generator = () => {
 
   const [customCSS, setCustomCSS] = useState<string>("https://example.com")
@@ -124,58 +154,51 @@ export const Generator = () => {
   const tabs = [
     {
       name: tl(language, 'generator.settings.title'),
-      component: <MainTab key={'main'} username={username} setUsername={setUsername} language={language}
-                          autoWidth={autoWidth} setAutoWidth={setAutoWidth}
-                          showUsername={showUsername} setShowUsername={setShowUsername}
+      component: <MainTab key={'main'} setUsername={setUsername}
+                          setAutoWidth={setAutoWidth}
+                          setShowUsername={setShowUsername}
                           setLanguage={setLanguage}
-                          showEloSuffix={showEloSuffix} setShowEloSuffix={setShowEloSuffix}
-                          showAverage={showStatistics}
-                          setShowAverage={setShowStatistics}
-                          showRanking={showRanking} setShowRanking={setShowRanking}
-                          showEloProgressBar={showEloProgressBar}
+                          setShowEloSuffix={setShowEloSuffix}
+                          setShowStatistics={setShowStatistics}
+                          setShowRanking={setShowRanking}
                           setShowEloProgressBar={setShowEloProgressBar}
-                          showEloDiff={showEloDiff} setShowEloDiff={setShowEloDiff}
-                          showRankingOnlyWhenChallenger={showRankingOnlyWhenChallenger}
+                          setShowEloDiff={setShowEloDiff}
                           setShowRankingOnlyWhenChallenger={setShowRankingOnlyWhenChallenger}
-                          refreshInterval={refreshInterval} setRefreshInterval={setRefreshInterval}
-                          onlyOfficialMatchesCount={onlyOfficialMatchesCount}
+                          setRefreshInterval={setRefreshInterval}
                           setOnlyOfficialMatchesCount={setOnlyOfficialMatchesCount}
       />
     },
     {
       name: tl(language, 'generator.theme.title'),
-      component: <StyleTab key={'style'} language={language} customBorderColor1={customBorderColor1}
-                           customBorderColor2={customBorderColor2}
+      component: <StyleTab key={'style'}
                            setCustomBorderColor1={setCustomBorderColor1}
                            setCustomBorderColor2={setCustomBorderColor2}
-                           customBackgroundColor={customBackgroundColor}
                            setCustomBackgroundColor={setCustomBackgroundColor}
-                           customTextColor={customTextColor} setCustomTextColor={setCustomTextColor}
-                           customCSS={customCSS} setCustomCSS={setCustomCSS}
-                           theme={theme} setTheme={setTheme} colorScheme={colorScheme}
-                           useBannerAsBackground={useBannerAsBackground}
+                           setCustomTextColor={setCustomTextColor}
+                           setCustomCSS={setCustomCSS}
+                           setTheme={setTheme}
                            setUseBannerAsBackground={setUseBannerAsBackground}
-                           adjustBackgroundOpacity={adjustBackgroundOpacity}
                            setAdjustBackgroundOpacity={setAdjustBackgroundOpacity}
-                           backgroundOpacity={backgroundOpacity}
                            setBackgroundOpacity={setBackgroundOpacity}
-
                            setColorScheme={setColorScheme}/>
     },
     {
       name: tl(language, 'generator.stats.title'),
-      component: <StatisticsTab key={'stats'} language={language} showStatistics={showStatistics}
-                                statSlot1={statSlot1} setStatSlot1={setStatSlot1}
-                                statSlot2={statSlot2} setStatSlot2={setStatSlot2}
-                                statSlot3={statSlot3} setStatSlot3={setStatSlot3}
-                                statSlot4={statSlot4} setStatSlot4={setStatSlot4}
+      component: <StatisticsTab key={'stats'} setStatSlot1={setStatSlot1} setStatSlot2={setStatSlot2}
+                                setStatSlot3={setStatSlot3} setStatSlot4={setStatSlot4}
       />
     }
   ]
 
   const [selectedTabIndex, setSelectedTabIndex] = useState(0)
 
-  return <>
+  return <SettingsContext.Provider value={{
+    customCSS, autoWidth, username, onlyOfficialMatchesCount, showRanking, showRankingOnlyWhenChallenger,
+    showEloDiff, showEloSuffix, showUsername, showStatistics, showEloProgressBar, useBannerAsBackground,
+    adjustBackgroundOpacity, backgroundOpacity, refreshInterval, colorScheme, theme, language,
+    statSlot1, statSlot2, statSlot3, statSlot4,
+    customTextColor, customBackgroundColor, customBorderColor1, customBorderColor2
+  }}>
     <GeneratedWidgetModal language={language} url={generatedURL} setURL={setGeneratedURL}/>
     <header>
       {import.meta.env.VITE_IS_TESTING &&
@@ -235,5 +258,5 @@ export const Generator = () => {
         </div>
       </section>
     </main>
-  </>
+  </SettingsContext.Provider>
 }
