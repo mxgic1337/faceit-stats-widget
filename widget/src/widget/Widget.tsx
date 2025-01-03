@@ -1,5 +1,5 @@
 import {Statistic} from "../../../src/components/widget/Statistic.tsx";
-import {useCallback, useEffect, useLayoutEffect, useState} from "react";
+import {useCallback, useContext, useEffect, useLayoutEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {Language, languages, tl} from "../../../src/translations/translations.ts";
 import {getPlayerID, getPlayerStats} from "../utils/faceit_util.ts";
@@ -27,6 +27,7 @@ import '../styles/themes/compact.less'
 import '../styles/themes/classic.less'
 
 import '../styles/color_schemes.less'
+import {SettingsContext} from "../../../src/generator/Generator.tsx";
 
 export const themes: { id: string, hidden?: boolean }[] = [
   {id: "normal"},
@@ -44,27 +45,6 @@ export const colorSchemes: string[] = [
   "ctp-mocha",
   "custom"
 ]
-
-interface Props {
-  overrideBackground?: string,
-  overrideStatistics?: StatisticType[],
-  overrideBorder1?: string,
-  overrideBorder2?: string,
-  overrideCustomCSS?: string,
-  overrideCustomScheme?: boolean,
-  overrideLanguage?: string,
-  overrideRankingState?: boolean,
-  overrideShowStatistics?: boolean,
-  overrideShowEloDiff?: boolean,
-  overrideShowEloProgressBar?: boolean,
-  overrideShowEloSuffix?: boolean,
-  overrideTextColor?: string,
-  overrideUseBannerAsBackground?: boolean,
-  overrideBackgroundOpacity?: number,
-  overrideUsername?: string,
-  overrideShowUsername?: boolean,
-  preview?: boolean,
-}
 
 const levelIcons = [
   fc1, fc2, fc3, fc4, fc5, fc6, fc7, fc8, fc9, fc10,
@@ -94,26 +74,7 @@ enum RankingState {
   ONLY_WHEN_CHALLENGER = 2,
 }
 
-export const Widget = ({
-                         preview,
-                         overrideStatistics,
-                         overrideUsername,
-                         overrideShowUsername,
-                         overrideRankingState,
-                         overrideCustomScheme,
-                         overrideBorder1,
-                         overrideBorder2,
-                         overrideTextColor,
-                         overrideBackground,
-                         overrideBackgroundOpacity,
-                         overrideCustomCSS,
-                         overrideLanguage,
-                         overrideUseBannerAsBackground,
-                         overrideShowStatistics,
-                         overrideShowEloDiff,
-                         overrideShowEloSuffix,
-                         overrideShowEloProgressBar
-                       }: Props) => {
+export const Widget = ({preview}: { preview: boolean }) => {
   const [level, setLevel] = useState(1)
   const [language, setLanguage] = useState<Language>(languages[0])
   const [startingElo, setStartingElo] = useState<number>(100)
@@ -145,6 +106,7 @@ export const Widget = ({
   const [customBackgroundColor, setCustomBackgroundColor] = useState<string>()
   const [customBorderColor, setCustomBorderColor] = useState<string>()
   const [customBorderColor2, setCustomBorderColor2] = useState<string>()
+  const overrides = useContext(SettingsContext);
 
   /* Apply settings from query params */
   useLayoutEffect(() => {
@@ -243,23 +205,23 @@ export const Widget = ({
 
   /* Apply settings from preview */
   useLayoutEffect(() => {
-    if (!preview) return;
-    setStats(overrideStatistics as StatisticType[])
-    setShowUsername(overrideShowUsername as boolean)
-    setShowEloDiff(overrideShowEloDiff as boolean)
-    setShowEloSuffix(overrideShowEloSuffix as boolean)
-    setBackgroundOpacity(overrideBackgroundOpacity as number)
-    setShowStatistics(overrideShowStatistics as boolean)
-    setRankingState(overrideRankingState ? RankingState.SHOW : RankingState.DISABLED)
-    setUseBannerAsBackground(overrideUseBannerAsBackground as boolean)
-    setLanguage(languages.find(language => language.id === overrideLanguage) || languages[0])
-    setCustomColorScheme(overrideCustomScheme)
-    setCustomColor(overrideTextColor)
-    setCustomBackgroundColor(overrideBackground)
-    setCustomBorderColor(overrideBorder1)
-    setCustomBorderColor2(overrideBorder2)
-    setShowEloProgressBar(overrideShowEloProgressBar)
-  }, [overrideBackgroundOpacity, overrideCustomScheme, overrideTextColor, overrideBackground, overrideBorder1, overrideBorder2, overrideRankingState, overrideShowStatistics, overrideStatistics, overrideShowUsername, overrideShowEloDiff, overrideShowEloSuffix, overrideUseBannerAsBackground]);
+    if (!preview || !overrides) return;
+    setStats([overrides.statSlot1, overrides.statSlot2, overrides.statSlot3, overrides.statSlot4]);
+    setShowUsername(overrides.showUsername as boolean)
+    setShowEloDiff(overrides.showEloDiff as boolean)
+    setShowEloSuffix(overrides.showEloSuffix as boolean)
+    setBackgroundOpacity(overrides.backgroundOpacity as number)
+    setShowStatistics(overrides.showStatistics as boolean)
+    setRankingState(overrides.showRanking ? RankingState.SHOW : RankingState.DISABLED)
+    setUseBannerAsBackground(overrides.useBannerAsBackground as boolean)
+    setLanguage(overrides.language)
+    setCustomColorScheme(overrides.colorScheme === "custom")
+    setCustomColor(overrides.customTextColor)
+    setCustomBackgroundColor(overrides.customBackgroundColor)
+    setCustomBorderColor(overrides.customBorderColor1)
+    setCustomBorderColor2(overrides.customBorderColor2)
+    setShowEloProgressBar(overrides.showEloProgressBar)
+  }, [overrides]);
 
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
@@ -359,7 +321,7 @@ export const Widget = ({
   useEffect(() => {
     if (searchParams.get('theme') !== 'custom') return
 
-    const cssPath = overrideCustomCSS || searchParams.get('css') || undefined
+    const cssPath = overrides?.customCSS || searchParams.get('css') || undefined
     if (!cssPath) return;
 
     const head = document.head;
@@ -372,7 +334,7 @@ export const Widget = ({
     return () => {
       head.removeChild(link);
     }
-  }, [overrideCustomCSS, overrideCustomScheme])
+  }, [overrides])
 
   /** Returns player statistic */
   const getStat = useCallback((stat: StatisticType) => {
@@ -429,13 +391,13 @@ export const Widget = ({
                 }
             `}</style>}
       <div className={'wrapper'}>
-        <div className={`widget ${overrideUseBannerAsBackground || useBannerAsBackground ? 'banner' : ''}`}>
+        <div className={`widget ${useBannerAsBackground ? 'banner' : ''}`}>
           <div className={'player-stats'}>
             <div className={'level'}>
               <img src={getIcon()}
                    alt={`Level ${preview ? 10 : level}`}/>
               <div className={'elo'}>
-                {showUsername && <h2>{username || overrideUsername || "?"}</h2>}
+                {showUsername && <h2>{username || overrides?.username || "?"}</h2>}
                 <p
                   className={showUsername ? "" : "username-hidden"}>
                   {((rankingState === RankingState.ONLY_WHEN_CHALLENGER && ranking <= 1000) || rankingState === RankingState.SHOW) &&
