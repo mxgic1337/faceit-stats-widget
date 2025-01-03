@@ -236,20 +236,7 @@ export const Generator = () => {
       <section className={'preview'}>
         <Separator text={tl(language, 'generator.preview.title')}/>
         <div className={`${theme}-theme ${colorScheme}-scheme preview`}>
-          <Widget preview={true} overrideShowEloDiff={showEloDiff} overrideShowEloSuffix={showEloSuffix}
-                  overrideShowUsername={showUsername}
-                  overrideRankingState={showRanking}
-                  overrideShowStatistics={showStatistics}
-                  overrideShowEloProgressBar={showEloProgressBar}
-                  overrideUsername={username.length > 0 ? username : "Player"}
-                  overrideCustomCSS={customCSS} overrideCustomScheme={colorScheme === "custom"}
-                  overrideLanguage={language.id}
-                  overrideBorder1={customBorderColor1} overrideBorder2={customBorderColor2}
-                  overrideTextColor={customTextColor} overrideBackground={customBackgroundColor}
-                  overrideUseBannerAsBackground={useBannerAsBackground}
-                  overrideStatistics={[statSlot1, statSlot2, statSlot3, statSlot4]}
-                  overrideBackgroundOpacity={useBannerAsBackground && adjustBackgroundOpacity ? backgroundOpacity : undefined}
-          />
+          <Widget preview={true} />
         </div>
         <div className={'flex'}>
           <button onClick={() => {
