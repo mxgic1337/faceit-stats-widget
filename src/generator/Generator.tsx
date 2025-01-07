@@ -234,7 +234,7 @@ export const Generator = () => {
             </div>
             <div>
               <small>Copyright &copy; <a href={'https://github.com/mxgic1337'}
-                                         target={'_blank'}>mxgic1337_</a> 2024</small>
+                                         target={'_blank'}>mxgic1337_</a> 2025</small>
               <small>v{packageJSON.version}</small>
             </div>
           </footer>
