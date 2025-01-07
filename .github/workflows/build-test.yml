@@ -5,7 +5,7 @@ on:
       - '*'
       - '*/*'
       - '**'
-      - '!master'
+      - '!main'
   pull_request:
 
 jobs:
