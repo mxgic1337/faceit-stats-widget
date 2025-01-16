@@ -37,13 +37,15 @@ body {
   background: @background;
 }
 
-input, select, button {
+input,
+select,
+button {
   border: 1px solid @border;
   background: @background-input;
   padding: 6px;
   border-radius: 6px;
   outline: none;
-  transition: .2s;
+  transition: 0.2s;
   width: 100%;
   box-sizing: border-box;
   margin: 6px 0;
@@ -70,7 +72,7 @@ button {
   }
 
   button:last-child {
-    margin-right: 0
+    margin-right: 0;
   }
 }
 
@@ -143,7 +145,8 @@ header {
   box-sizing: border-box;
 }
 
-header, footer {
+header,
+footer {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -232,12 +235,12 @@ section.preview {
     border: 1px solid @border;
     border-radius: 6px;
     margin-right: 4px;
-    transition: .1s;
+    transition: 0.1s;
   }
 
   .check.checked {
     background: #113118;
-    border: 1px solid #00FF5F;
+    border: 1px solid #00ff5f;
   }
 }
 
@@ -308,11 +311,11 @@ section.preview {
 }
 
 .box.info {
-  .info-box(@info)
+  .info-box(@info);
 }
 
 .box.warn {
-  .info-box(@warn)
+  .info-box(@warn);
 }
 
 dialog {
@@ -323,7 +326,7 @@ dialog {
   opacity: 0;
   padding: 16px;
 
-  transition: .25s;
+  transition: 0.25s;
 
   text-align: center;
 

@@ -1,9 +1,9 @@
-import { BrowserRouter } from "react-router-dom";
-import { Widget } from "./widget/Widget";
-import ReactDOM from "react-dom/client";
+import { BrowserRouter } from 'react-router-dom';
+import { Widget } from './widget/Widget';
+import ReactDOM from 'react-dom/client';
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <Widget />
-  </BrowserRouter>,
+  </BrowserRouter>
 );

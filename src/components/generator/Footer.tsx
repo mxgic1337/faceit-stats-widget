@@ -1,12 +1,12 @@
-import packageJSON from "../../../package.json";
+import packageJSON from '../../../package.json';
 
 export const Footer = () => {
   return (
     <footer>
       <div>
         <small>
-          This project is not affiliated with{" "}
-          <a href={"https://faceit.com"} target={"_blank"}>
+          This project is not affiliated with{' '}
+          <a href={'https://faceit.com'} target={'_blank'}>
             FACEIT
           </a>
           .
@@ -14,23 +14,23 @@ export const Footer = () => {
         <small>
           <a
             href={
-              "https://github.com/mxgic1337/faceit-stats-widget/blob/master/LICENSE"
+              'https://github.com/mxgic1337/faceit-stats-widget/blob/master/LICENSE'
             }
-            target={"_blank"}
+            target={'_blank'}
           >
             MIT License
-          </a>{" "}
-          &bull;{" "}
+          </a>{' '}
+          &bull;{' '}
           <a
-            href={"https://github.com/mxgic1337/faceit-stats-widget"}
-            target={"_blank"}
+            href={'https://github.com/mxgic1337/faceit-stats-widget'}
+            target={'_blank'}
           >
             GitHub
-          </a>{" "}
-          &bull;{" "}
+          </a>{' '}
+          &bull;{' '}
           <a
-            href={"https://github.com/mxgic1337/faceit-stats-widget/issues/new"}
-            target={"_blank"}
+            href={'https://github.com/mxgic1337/faceit-stats-widget/issues/new'}
+            target={'_blank'}
           >
             Report an issue
           </a>
@@ -38,10 +38,10 @@ export const Footer = () => {
       </div>
       <div>
         <small>
-          Copyright &copy;{" "}
-          <a href={"https://github.com/mxgic1337"} target={"_blank"}>
+          Copyright &copy;{' '}
+          <a href={'https://github.com/mxgic1337'} target={'_blank'}>
             mxgic1337_
-          </a>{" "}
+          </a>{' '}
           2025
         </small>
         <small>v{packageJSON.version}</small>

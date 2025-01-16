@@ -1,16 +1,15 @@
-import { createContext, useCallback, useEffect, useState } from "react";
-import { Widget } from "../../widget/src/widget/Widget.tsx";
-import { Separator } from "../components/generator/Separator.tsx";
-import { Language, languages, tl } from "../translations/translations.ts";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { getPlayerID } from "../../widget/src/utils/faceit_util.ts";
-import { MainTab } from "./tabs/MainTab.tsx";
-import { StyleTab } from "./tabs/StyleTab.tsx";
-import { StatisticsTab, StatisticType } from "./tabs/StatisticsTab.tsx";
-import { GeneratedWidgetModal } from "../components/generator/GeneratedWidgetModal.tsx";
-import { InfoBox } from "../components/generator/InfoBox.tsx";
-import packageJSON from "../../package.json";
-import { Footer } from "../components/generator/Footer.tsx";
+import { createContext, useCallback, useEffect, useState } from 'react';
+import { Widget } from '../../widget/src/widget/Widget.tsx';
+import { Separator } from '../components/generator/Separator.tsx';
+import { Language, languages, tl } from '../translations/translations.ts';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { getPlayerID } from '../../widget/src/utils/faceit_util.ts';
+import { MainTab } from './tabs/MainTab.tsx';
+import { StyleTab } from './tabs/StyleTab.tsx';
+import { StatisticsTab, StatisticType } from './tabs/StatisticsTab.tsx';
+import { GeneratedWidgetModal } from '../components/generator/GeneratedWidgetModal.tsx';
+import { InfoBox } from '../components/generator/InfoBox.tsx';
+import { Footer } from '../components/generator/Footer.tsx';
 
 interface Settings {
   customCSS: string;
@@ -47,10 +46,10 @@ export const LanguageContext = createContext<
 >(null);
 export const SettingsContext = createContext<Settings | null>(null);
 export const Generator = () => {
-  const [customCSS, setCustomCSS] = useState<string>("https://example.com");
+  const [customCSS, setCustomCSS] = useState<string>('https://example.com');
   const [generatedURL, setGeneratedURL] = useState<string | undefined>();
   const [autoWidth, setAutoWidth] = useState<boolean>(true);
-  const [username, setUsername] = useState<string>("Player");
+  const [username, setUsername] = useState<string>('Player');
   const [onlyOfficialMatchesCount, setOnlyOfficialMatchesCount] =
     useState<boolean>(true);
   const [showRanking, setShowRanking] = useState<boolean>(true);
@@ -67,31 +66,31 @@ export const Generator = () => {
     useState<boolean>(false);
   const [backgroundOpacity, setBackgroundOpacity] = useState<number>(0.15);
   const [refreshInterval, setRefreshInterval] = useState<number>(30);
-  const [colorScheme, setColorScheme] = useState<string>("dark");
-  const [theme, setTheme] = useState<string>("normal");
+  const [colorScheme, setColorScheme] = useState<string>('dark');
+  const [theme, setTheme] = useState<string>('normal');
   const [language, setLanguage] = useState<Language>(
     languages.find((language) => language.id === localStorage.fcw_lang) ||
-      languages[0],
+      languages[0]
   );
   const [saveSession, setSaveSession] = useState<boolean>(false);
 
   const [customBorderColor1, setCustomBorderColor1] =
-    useState<string>("#595959");
+    useState<string>('#595959');
   const [customBorderColor2, setCustomBorderColor2] =
-    useState<string>("#8d8d8d");
-  const [customTextColor, setCustomTextColor] = useState<string>("#ffffff");
+    useState<string>('#8d8d8d');
+  const [customTextColor, setCustomTextColor] = useState<string>('#ffffff');
   const [customBackgroundColor, setCustomBackgroundColor] =
-    useState<string>("#121212");
+    useState<string>('#121212');
 
   const [statSlot1, setStatSlot1] = useState<StatisticType>(
-    StatisticType.KILLS,
+    StatisticType.KILLS
   );
   const [statSlot2, setStatSlot2] = useState<StatisticType>(StatisticType.KD);
   const [statSlot3, setStatSlot3] = useState<StatisticType>(
-    StatisticType.HSPERCENT,
+    StatisticType.HSPERCENT
   );
   const [statSlot4, setStatSlot4] = useState<StatisticType>(
-    StatisticType.WINRATIO,
+    StatisticType.WINRATIO
   );
 
   const [searchParams] = useSearchParams();
@@ -101,25 +100,25 @@ export const Generator = () => {
     (text: string, args?: string[]) => {
       return tl(language, text, args);
     },
-    [language],
+    [language]
   );
 
   useEffect(() => {
-    document.getElementsByTagName("html")[0].classList.add(`generator`);
+    document.getElementsByTagName('html')[0].classList.add(`generator`);
     return () => {
-      document.getElementsByTagName("html")[0].classList.remove(`generator`);
+      document.getElementsByTagName('html')[0].classList.remove(`generator`);
     };
   }, []);
 
   useEffect(() => {
-    if (!searchParams.get("lang")) navigate(`?lang=${language.id}`);
+    if (!searchParams.get('lang')) navigate(`?lang=${language.id}`);
   }, []);
 
   const generateWidgetURL = useCallback(() => {
     getPlayerID(username)
       .then((id) => {
         if (!id) {
-          alert(tl(language, "generator.alert.player_not_found", [username]));
+          alert(tl(language, 'generator.alert.player_not_found', [username]));
           return;
         }
 
@@ -148,25 +147,25 @@ export const Generator = () => {
           };
         }
 
-        if (theme === "custom") {
+        if (theme === 'custom') {
           params = {
             ...params,
             css: customCSS,
           };
         }
 
-        if (colorScheme === "custom") {
+        if (colorScheme === 'custom') {
           params = {
             ...params,
             color: customTextColor.substring(1),
-            "bg-color": customBackgroundColor.substring(1),
+            'bg-color': customBackgroundColor.substring(1),
             border1: customBorderColor1.substring(1),
             border2: customBorderColor2.substring(1),
           };
         }
 
         setGeneratedURL(
-          `${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`,
+          `${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`
         );
       })
       .catch();
@@ -206,17 +205,17 @@ export const Generator = () => {
         .map((param) => {
           return `${param[0]}=${param[1]}`;
         })
-        .join("&")}`;
+        .join('&')}`;
     },
-    [],
+    []
   );
 
   const tabs = [
     {
-      name: tl(language, "generator.settings.title"),
+      name: tl(language, 'generator.settings.title'),
       component: (
         <MainTab
-          key={"main"}
+          key={'main'}
           setUsername={setUsername}
           setAutoWidth={setAutoWidth}
           setShowUsername={setShowUsername}
@@ -234,10 +233,10 @@ export const Generator = () => {
       ),
     },
     {
-      name: tl(language, "generator.theme.title"),
+      name: tl(language, 'generator.theme.title'),
       component: (
         <StyleTab
-          key={"style"}
+          key={'style'}
           setCustomBorderColor1={setCustomBorderColor1}
           setCustomBorderColor2={setCustomBorderColor2}
           setCustomBackgroundColor={setCustomBackgroundColor}
@@ -252,10 +251,10 @@ export const Generator = () => {
       ),
     },
     {
-      name: tl(language, "generator.stats.title"),
+      name: tl(language, 'generator.stats.title'),
       component: (
         <StatisticsTab
-          key={"stats"}
+          key={'stats'}
           setStatSlot1={setStatSlot1}
           setStatSlot2={setStatSlot2}
           setStatSlot3={setStatSlot3}
@@ -308,11 +307,11 @@ export const Generator = () => {
         <header>
           {import.meta.env.VITE_IS_TESTING && (
             <InfoBox
-              content={<p>{tl(language, "generator.testing")}</p>}
-              style={"info"}
+              content={<p>{tl(language, 'generator.testing')}</p>}
+              style={'info'}
             />
           )}
-          <div className={"tabs"}>
+          <div className={'tabs'}>
             {tabs.map((tab, index) => {
               return (
                 <button
@@ -320,7 +319,7 @@ export const Generator = () => {
                   onClick={() => {
                     setSelectedTabIndex(index);
                   }}
-                  className={index === selectedTabIndex ? "active" : ""}
+                  className={index === selectedTabIndex ? 'active' : ''}
                 >
                   {tab.name}
                 </button>
@@ -329,23 +328,23 @@ export const Generator = () => {
           </div>
         </header>
         <main>
-          <section className={"fixed-width"}>
+          <section className={'fixed-width'}>
             {tabs[selectedTabIndex].component}
             <br />
             <Footer />
           </section>
-          <section className={"preview"}>
-            <Separator text={tl(language, "generator.preview.title")} />
+          <section className={'preview'}>
+            <Separator text={tl(language, 'generator.preview.title')} />
             <div className={`${theme}-theme ${colorScheme}-scheme preview`}>
               <Widget preview={true} />
             </div>
-            <div className={"flex"}>
+            <div className={'flex'}>
               <button
                 onClick={() => {
                   generateWidgetURL();
                 }}
               >
-                {tl(language, "generator.generate.button")}
+                {tl(language, 'generator.generate.button')}
               </button>
             </div>
           </section>
@@ -354,4 +353,3 @@ export const Generator = () => {
     </LanguageContext.Provider>
   );
 };
-
