@@ -138,7 +138,6 @@ export const Widget = ({ preview }: { preview: boolean }) => {
   const [customBackgroundColor, setCustomBackgroundColor] = useState<string>();
   const [customBorderColor, setCustomBorderColor] = useState<string>();
   const [customBorderColor2, setCustomBorderColor2] = useState<string>();
-  const [saveSession, setSaveSession] = useState<boolean>();
   const overrides = useContext(SettingsContext);
 
   const translate = useCallback(
@@ -166,7 +165,6 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     const autoWidthParam = searchParams.get('auto_width');
     const showEloProgressBarParam = searchParams.get('progress');
     const showEloProgressBarOldParam = searchParams.get('eloBar');
-    const saveSessionParam = searchParams.get('save_session');
 
     /* Redirect old theme format to new theme & style format */
     if (themeParam === 'dark' || themeParam === 'normal-custom') {
@@ -199,7 +197,6 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     setShowEloSuffix(!showEloSuffixParam || showEloSuffixParam === 'true');
     setShowStatistics(showStatisticsParam === 'true');
     setUseBannerAsBackground(useBannerAsBackgroundParam === 'true');
-    setSaveSession(saveSessionParam === 'true');
     setShowEloProgressBar(
       (showEloProgressBarParam || showEloProgressBarOldParam) === 'true'
     );
