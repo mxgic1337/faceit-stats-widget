@@ -28,6 +28,7 @@
   "generator.settings.refresh_delay.quick": "{{0}}s (Szybko)",
   "generator.settings.refresh_delay.normal": "{{0}}s",
   "generator.settings.refresh_delay.slow": "{{0}}s (Wolno)",
+  "generator.settings.save_session": "Zapisuj statystyki na dwie godziny od zamknięcia widżetu",
   "generator.theme.title": "Styl",
   "generator.theme.custom_css.title": "URL własnego motywu (CSS)",
   "generator.theme.custom_css.apply": "Kliknij Enter by zastosować.",
