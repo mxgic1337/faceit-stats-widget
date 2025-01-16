@@ -1,5 +1,7 @@
 export const API_KEY = import.meta.env.VITE_FACEIT_API_KEY;
 
+export const SAMPLE_PLAYER_ID = '24180323-d946-4bb7-a334-be3e96fcac05';
+
 /** Competition ID of official matches */
 export const OFFICIAL_COMPETITION_ID = 'f4148ddd-bce8-41b8-9131-ee83afcdd6dd';
 
@@ -224,6 +226,27 @@ export function getPlayerID(username: string): Promise<string | undefined> {
       }
       const v4PlayersResponse = (await response.json()) as V4PlayersResponse;
       resolve(v4PlayersResponse.player_id);
+    });
+  });
+}
+
+export function getPlayerProfile(
+  username: string
+): Promise<V4PlayersResponse | undefined> {
+  return new Promise<V4PlayersResponse | undefined>((resolve) => {
+    fetch(
+      `https://open.faceit.com/data/v4/players${username.length > 12 ? `/${username}` : `?nickname=${username}`}`,
+      {
+        headers: HEADERS,
+      }
+    ).then(async (response) => {
+      if (!response.ok) {
+        console.error(await response.text());
+        resolve(undefined);
+        return;
+      }
+      const v4PlayersResponse = (await response.json()) as V4PlayersResponse;
+      resolve(v4PlayersResponse);
     });
   });
 }

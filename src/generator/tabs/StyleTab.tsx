@@ -103,12 +103,18 @@ export const StyleTab = ({
                 {Math.round(settings.backgroundOpacity * 100)}%
               </p>
             </div>
-            <InfoBox
-              style={'info'}
-              content={
-                <p>{tl('generator.theme.banner_as_background.warning')}</p>
-              }
-            />
+            {!settings.playerBanner && (
+              <InfoBox
+                style={'warn'}
+                content={
+                  <p>
+                    {tl('generator.theme.banner_as_background.no_banner', [
+                      settings.username,
+                    ])}
+                  </p>
+                }
+              />
+            )}
           </>
         )}
       </div>

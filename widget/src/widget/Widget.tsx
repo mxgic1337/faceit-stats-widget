@@ -12,7 +12,11 @@ import {
   languages,
   tl,
 } from '../../../src/translations/translations.ts';
-import { getPlayerID, getPlayerStats } from '../utils/faceit_util.ts';
+import {
+  getPlayerID,
+  getPlayerStats,
+  SAMPLE_PLAYER_ID,
+} from '../utils/faceit_util.ts';
 
 import fc1 from '../../../src/assets/levels/faceit1.svg';
 import fc2 from '../../../src/assets/levels/faceit2.svg';
@@ -323,7 +327,6 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     const saveSession = searchParams.get('save_session') === 'true';
 
     const playerId = searchParams.get('player_id');
-    const samplePlayerId = '24180323-d946-4bb7-a334-be3e96fcac05';
     if (playerId === null) {
       const username = searchParams.get('player');
       if (username !== null) {
@@ -332,7 +335,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
         });
         return;
       }
-      navigate(`?player_id=${samplePlayerId}`);
+      navigate(`?player_id=${SAMPLE_PLAYER_ID}`);
       return;
     }
     const getStats = (firstTime?: boolean) => {
@@ -508,7 +511,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
       {useBannerAsBackground && (
         <style>{`
                 .wrapper {
-                    --background-url: url("${preview ? sampleBanner : banner}") !important;
+                    --background-url: url("${preview ? overrides?.playerBanner : banner}") !important;
                     ${backgroundOpacity ? `--background-opacity: ${backgroundOpacity} !important;` : ''}
                 }
             `}</style>

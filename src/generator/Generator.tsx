@@ -3,7 +3,11 @@ import { Widget } from '../../widget/src/widget/Widget.tsx';
 import { Separator } from '../components/generator/Separator.tsx';
 import { Language, languages, tl } from '../translations/translations.ts';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { getPlayerID } from '../../widget/src/utils/faceit_util.ts';
+import {
+  getPlayerID,
+  getPlayerProfile,
+  SAMPLE_PLAYER_ID,
+} from '../../widget/src/utils/faceit_util.ts';
 import { MainTab } from './tabs/MainTab.tsx';
 import { StyleTab } from './tabs/StyleTab.tsx';
 import { StatisticsTab, StatisticType } from './tabs/StatisticsTab.tsx';
@@ -15,6 +19,8 @@ interface Settings {
   customCSS: string;
   autoWidth: boolean;
   username: string;
+  playerId: string;
+  playerBanner: string | undefined;
   onlyOfficialMatchesCount: boolean;
   showRanking: boolean;
   showRankingOnlyWhenChallenger: boolean;
@@ -49,7 +55,9 @@ export const Generator = () => {
   const [customCSS, setCustomCSS] = useState<string>('https://example.com');
   const [generatedURL, setGeneratedURL] = useState<string | undefined>();
   const [autoWidth, setAutoWidth] = useState<boolean>(true);
-  const [username, setUsername] = useState<string>('Player');
+  const [username, setUsername] = useState<string>('');
+  const [playerId, setPlayerId] = useState<string>(SAMPLE_PLAYER_ID);
+  const [playerBanner, setPlayerBanner] = useState<string | undefined>();
   const [onlyOfficialMatchesCount, setOnlyOfficialMatchesCount] =
     useState<boolean>(true);
   const [showRanking, setShowRanking] = useState<boolean>(true);
@@ -104,6 +112,17 @@ export const Generator = () => {
   );
 
   useEffect(() => {
+    getPlayerProfile(SAMPLE_PLAYER_ID).then((res) => {
+      if (res) {
+        setUsername(res.nickname);
+        setPlayerBanner(res.cover_image);
+      } else {
+        alert(tl('generator.alert.player_not_found', ['?']));
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     document.getElementsByTagName('html')[0].classList.add(`generator`);
     return () => {
       document.getElementsByTagName('html')[0].classList.remove(`generator`);
@@ -115,61 +134,52 @@ export const Generator = () => {
   }, []);
 
   const generateWidgetURL = useCallback(() => {
-    getPlayerID(username)
-      .then((id) => {
-        if (!id) {
-          alert(tl(language, 'generator.alert.player_not_found', [username]));
-          return;
-        }
+    let params: { [key: string]: string | number | boolean | string[] } = {
+      player_id: playerId,
+      lang: language.id,
+      progress: showEloProgressBar,
+      avg: showStatistics,
+      suffix: showEloSuffix,
+      diff: showEloDiff,
+      scheme: colorScheme,
+      theme: theme,
+      ranking: showRanking ? (showRankingOnlyWhenChallenger ? 2 : 1) : 0,
+      banner: useBannerAsBackground,
+      refresh: refreshInterval,
+      name: showUsername,
+      auto_width: autoWidth,
+      only_official: onlyOfficialMatchesCount,
+      stats: [statSlot1, statSlot2, statSlot3, statSlot4],
+      save_session: saveSession,
+    };
 
-        let params: { [key: string]: string | number | boolean | string[] } = {
-          player_id: id,
-          lang: language.id,
-          progress: showEloProgressBar,
-          avg: showStatistics,
-          suffix: showEloSuffix,
-          diff: showEloDiff,
-          scheme: colorScheme,
-          theme: theme,
-          ranking: showRanking ? (showRankingOnlyWhenChallenger ? 2 : 1) : 0,
-          banner: useBannerAsBackground,
-          refresh: refreshInterval,
-          name: showUsername,
-          auto_width: autoWidth,
-          only_official: onlyOfficialMatchesCount,
-          stats: [statSlot1, statSlot2, statSlot3, statSlot4],
-          save_session: saveSession,
-        };
+    if (useBannerAsBackground && adjustBackgroundOpacity) {
+      params = {
+        ...params,
+        banner_opacity: backgroundOpacity,
+      };
+    }
 
-        if (useBannerAsBackground && adjustBackgroundOpacity) {
-          params = {
-            ...params,
-            banner_opacity: backgroundOpacity,
-          };
-        }
+    if (theme === 'custom') {
+      params = {
+        ...params,
+        css: customCSS,
+      };
+    }
 
-        if (theme === 'custom') {
-          params = {
-            ...params,
-            css: customCSS,
-          };
-        }
+    if (colorScheme === 'custom') {
+      params = {
+        ...params,
+        color: customTextColor.substring(1),
+        'bg-color': customBackgroundColor.substring(1),
+        border1: customBorderColor1.substring(1),
+        border2: customBorderColor2.substring(1),
+      };
+    }
 
-        if (colorScheme === 'custom') {
-          params = {
-            ...params,
-            color: customTextColor.substring(1),
-            'bg-color': customBackgroundColor.substring(1),
-            border1: customBorderColor1.substring(1),
-            border2: customBorderColor2.substring(1),
-          };
-        }
-
-        setGeneratedURL(
-          `${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`
-        );
-      })
-      .catch();
+    setGeneratedURL(
+      `${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`
+    );
   }, [
     customBackgroundColor,
     customBorderColor1,
@@ -185,6 +195,8 @@ export const Generator = () => {
     showRankingOnlyWhenChallenger,
     theme,
     username,
+    playerId,
+    playerBanner,
     colorScheme,
     useBannerAsBackground,
     adjustBackgroundOpacity,
@@ -218,6 +230,8 @@ export const Generator = () => {
         <MainTab
           key={'main'}
           setUsername={setUsername}
+          setPlayerId={setPlayerId}
+          setPlayerBanner={setPlayerBanner}
           setAutoWidth={setAutoWidth}
           setShowUsername={setShowUsername}
           setLanguage={setLanguage}
@@ -274,6 +288,7 @@ export const Generator = () => {
           customCSS,
           autoWidth,
           username,
+          playerId,
           onlyOfficialMatchesCount,
           showRanking,
           showRankingOnlyWhenChallenger,
