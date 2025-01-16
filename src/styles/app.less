@@ -339,7 +339,6 @@ dialog {
   }
 
   &[open] {
-    display: flex;
     opacity: 1;
     transform: translate(-50%, -50%);
   }
@@ -349,17 +348,6 @@ dialog {
 
     .content {
       width: 400px;
-      margin-right: 12px;
-    }
-
-    .generated-preview {
-      display: flex;
-      align-items: center;
-      width: 450px;
-      height: 180px;
-      border: none;
-      padding-left: 12px;
-      margin: 6px 0;
     }
   }
 }
@@ -372,6 +360,7 @@ dialog {
 
 .flex {
   display: flex;
+
   & > * {
     margin-right: 6px;
 

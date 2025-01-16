@@ -138,6 +138,7 @@ export const Generator = () => {
           auto_width: autoWidth,
           only_official: onlyOfficialMatchesCount,
           stats: [statSlot1, statSlot2, statSlot3, statSlot4],
+          save_session: saveSession,
         };
 
         if (useBannerAsBackground && adjustBackgroundOpacity) {

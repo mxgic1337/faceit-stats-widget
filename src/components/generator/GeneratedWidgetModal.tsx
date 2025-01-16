@@ -56,13 +56,6 @@ export const GeneratedWidgetModal = ({
           </button>
         </div>
       </div>
-      <div>
-        <iframe
-          src={url}
-          className={'generated-preview'}
-          title={'Generated widget preview'}
-        ></iframe>
-      </div>
     </dialog>
   );
 };

@@ -2,6 +2,7 @@
 
 .compact-theme:extend(.normal-theme all) {
   --auto-width: 350px;
+
   .widget {
     padding: 8px 10px !important;
 
@@ -86,7 +87,7 @@
       margin: 6px auto auto auto;
       width: 100%;
       border-radius: 5px;
-      background: @background;
+      background: var(--background);
 
       .progress {
         border-radius: 5px;
@@ -96,6 +97,6 @@
     }
 
     border-radius: 12px;
-    background: @background;
+    background: var(--background);
   }
 }

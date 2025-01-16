@@ -138,6 +138,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
   const [customBackgroundColor, setCustomBackgroundColor] = useState<string>();
   const [customBorderColor, setCustomBorderColor] = useState<string>();
   const [customBorderColor2, setCustomBorderColor2] = useState<string>();
+  const [saveSession, setSaveSession] = useState<boolean>();
   const overrides = useContext(SettingsContext);
 
   const translate = useCallback(
@@ -165,6 +166,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     const autoWidthParam = searchParams.get('auto_width');
     const showEloProgressBarParam = searchParams.get('progress');
     const showEloProgressBarOldParam = searchParams.get('eloBar');
+    const saveSessionParam = searchParams.get('save_session');
 
     /* Redirect old theme format to new theme & style format */
     if (themeParam === 'dark' || themeParam === 'normal-custom') {
@@ -197,6 +199,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     setShowEloSuffix(!showEloSuffixParam || showEloSuffixParam === 'true');
     setShowStatistics(showStatisticsParam === 'true');
     setUseBannerAsBackground(useBannerAsBackgroundParam === 'true');
+    setSaveSession(saveSessionParam === 'true');
     setShowEloProgressBar(
       (showEloProgressBarParam || showEloProgressBarOldParam) === 'true'
     );
@@ -319,7 +322,8 @@ export const Widget = ({ preview }: { preview: boolean }) => {
       return;
     }
 
-    const startDate = new Date();
+    let startDate = new Date();
+    const saveSession = searchParams.get('save_session') === 'true';
 
     const playerId = searchParams.get('player_id');
     const samplePlayerId = '24180323-d946-4bb7-a334-be3e96fcac05';
@@ -334,7 +338,6 @@ export const Widget = ({ preview }: { preview: boolean }) => {
       navigate(`?player_id=${samplePlayerId}`);
       return;
     }
-
     const getStats = (firstTime?: boolean) => {
       getPlayerStats(
         playerId,
@@ -346,7 +349,49 @@ export const Widget = ({ preview }: { preview: boolean }) => {
         setBanner(player.banner);
 
         if (!player || !player.elo || !player.level) return;
-        if (firstTime) setStartingElo(player.elo);
+        if (firstTime) {
+          if (saveSession) {
+            let expired = false;
+            const sessionStart = localStorage.getItem('fcw_session_start');
+            const startingElo = localStorage.getItem(
+              'fcw_session_starting-elo'
+            );
+            const startingDate = localStorage.getItem(
+              'fcw_sssion_starting-date'
+            );
+            if (!sessionStart) {
+              expired = true;
+            } else {
+              const sessionStartDate = new Date(sessionStart);
+              if (new Date() > sessionStartDate) {
+                expired = true;
+              }
+            }
+            if (expired) {
+              console.log('Session expired. Saving new data...');
+              localStorage.setItem(
+                'fcw_session_starting-elo',
+                String(player.elo)
+              );
+              localStorage.setItem(
+                'fcw_session_starting-date',
+                new Date().toString()
+              );
+            }
+            const currentDate = new Date();
+            currentDate.setTime(currentDate.getTime() + 1000 * 60 * 60 * 2);
+            localStorage.setItem('fcw_session_start', currentDate.toString());
+            if (startingElo && startingDate) {
+              console.log('Loaded starting ELO and date from session.');
+              setStartingElo(Number(startingElo));
+              startDate = new Date(startingDate);
+            } else {
+              setStartingElo(player.elo);
+            }
+          } else {
+            setStartingElo(player.elo);
+          }
+        }
 
         setElo(player.elo);
         setLevel(player.level);
