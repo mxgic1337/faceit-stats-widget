@@ -38,6 +38,7 @@ interface Settings {
   customTextColor: string;
   customBackgroundColor: string;
   language: Language;
+  widgetLanguage: Language | undefined;
   statSlot1: StatisticType;
   statSlot2: StatisticType;
   statSlot3: StatisticType;
@@ -81,6 +82,7 @@ export const Generator = () => {
     languages.find((language) => language.id === localStorage.fcw_lang) ||
       languages[0]
   );
+  const [widgetLanguage, setWidgetLanguage] = useState<Language | undefined>();
   const [saveSession, setSaveSession] = useState<boolean>(false);
 
   const [customBorderColor1, setCustomBorderColor1] =
@@ -154,7 +156,7 @@ export const Generator = () => {
         | string[];
     } = {
       player_id: playerId,
-      lang: language.id,
+      lang: widgetLanguage ? widgetLanguage.id : language.id,
       progress: showEloProgressBar,
       avg: showStatistics,
       suffix: showEloSuffix,
@@ -205,6 +207,7 @@ export const Generator = () => {
     customCSS,
     customTextColor,
     language,
+    widgetLanguage,
     showStatistics,
     showEloDiff,
     showEloProgressBar,
@@ -261,6 +264,7 @@ export const Generator = () => {
           setAutoWidth={setAutoWidth}
           setShowUsername={setShowUsername}
           setLanguage={setLanguage}
+          setWidgetLanguage={setWidgetLanguage}
           setShowEloSuffix={setShowEloSuffix}
           setShowStatistics={setShowStatistics}
           setShowRanking={setShowRanking}
@@ -333,6 +337,7 @@ export const Generator = () => {
           colorScheme,
           theme,
           language,
+          widgetLanguage,
           statSlot1,
           statSlot2,
           statSlot3,

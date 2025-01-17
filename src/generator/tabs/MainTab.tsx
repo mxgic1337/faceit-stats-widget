@@ -9,6 +9,7 @@ import { InfoBox } from '../../components/InfoBox.tsx';
 type Props = {
   playerExists: boolean | undefined;
   setLanguage: Dispatch<Language>;
+  setWidgetLanguage: Dispatch<Language | undefined>;
   setUsername: Dispatch<string>;
   setPlayerId: Dispatch<string>;
   setPlayerBanner: Dispatch<string | undefined>;
@@ -28,6 +29,7 @@ type Props = {
 export const MainTab = ({
   playerExists,
   setLanguage,
+  setWidgetLanguage,
   setAutoWidth,
   setUsername,
   setShowUsername,
@@ -69,28 +71,58 @@ export const MainTab = ({
           />
         )}
       </div>
-      <div className={'setting'}>
-        <p>{tl('generator.settings.language')}</p>
-        <select
-          value={settings.language.id}
-          onChange={(event) => {
-            const language =
-              languages.find(
-                (language) => language.id === event.target.value
-              ) || languages[0];
-            setLanguage(language);
-            localStorage.setItem('fcw_lang', language.id);
-            navigate(`?lang=${language.id}`);
-          }}
-        >
-          {languages.map((language) => {
-            return (
-              <option key={language.id} value={language.id}>
-                {language.name}
-              </option>
-            );
-          })}
-        </select>
+      <div className={'setting flex'}>
+        <div>
+          <p>{tl('generator.settings.language')}</p>
+          <select
+            value={settings.language.id}
+            onChange={(event) => {
+              const language =
+                languages.find(
+                  (language) => language.id === event.target.value
+                ) || languages[0];
+              setLanguage(language);
+              localStorage.setItem('fcw_lang', language.id);
+              navigate(`?lang=${language.id}`);
+            }}
+          >
+            {languages.map((language) => {
+              return (
+                <option key={language.id} value={language.id}>
+                  {language.name}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div>
+          <p>{tl('generator.settings.widget_language')}</p>
+          <select
+            value={settings.widgetLanguage?.id}
+            onChange={(event) => {
+              if (event.target.value === 'default') {
+                setWidgetLanguage(undefined);
+                return;
+              }
+              const language =
+                languages.find(
+                  (language) => language.id === event.target.value
+                ) || languages[0];
+              setWidgetLanguage(language);
+            }}
+          >
+            <option key={'default'} value={'default'}>
+              {tl('generator.settings.widget_language.default')}
+            </option>
+            {languages.map((language) => {
+              return (
+                <option key={language.id} value={language.id}>
+                  {language.name}
+                </option>
+              );
+            })}
+          </select>
+        </div>
       </div>
       <div className={'setting'}>
         <p>{tl('generator.settings.refresh_delay')}</p>

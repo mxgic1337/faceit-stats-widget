@@ -281,7 +281,9 @@ export const Widget = ({ preview }: { preview: boolean }) => {
       overrides.showRanking ? RankingState.SHOW : RankingState.DISABLED
     );
     setUseBannerAsBackground(overrides.useBannerAsBackground as boolean);
-    setLanguage(overrides.language);
+    setLanguage(
+      overrides.widgetLanguage ? overrides.widgetLanguage : overrides.language
+    );
     setCustomColorScheme(overrides.colorScheme === 'custom');
     setCustomColor(overrides.customTextColor);
     setCustomBackgroundColor(overrides.customBackgroundColor);
