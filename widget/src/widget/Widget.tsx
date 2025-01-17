@@ -386,8 +386,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
             const currentDate = new Date();
             currentDate.setTime(currentDate.getTime() + 1000 * 60 * 60 * 2);
             localStorage.setItem('fcw_session_end', currentDate.toString());
-            console.log(startingElo);
-            if (startingElo) {
+            if (startingElo && !expired) {
               setStartingElo(Number(startingElo));
             } else {
               setStartingElo(player.elo);
