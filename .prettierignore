@@ -1,0 +1,6 @@
+.git/
+.github/
+.idea/
+package.json
+pnpm-lock.yml
+.env

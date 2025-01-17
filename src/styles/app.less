@@ -10,6 +10,7 @@
 @border: #2c2c2c;
 @border-focus: #5d5d5d;
 @active: #fafafa;
+@success: #11ed86;
 
 @text: #fafafa;
 @disabled: #575757;
@@ -37,13 +38,15 @@ body {
   background: @background;
 }
 
-input, select, button {
+input,
+select,
+button {
   border: 1px solid @border;
   background: @background-input;
   padding: 6px;
   border-radius: 6px;
   outline: none;
-  transition: .2s;
+  transition: 0.2s;
   width: 100%;
   box-sizing: border-box;
   margin: 6px 0;
@@ -70,7 +73,7 @@ button {
   }
 
   button:last-child {
-    margin-right: 0
+    margin-right: 0;
   }
 }
 
@@ -143,7 +146,8 @@ header {
   box-sizing: border-box;
 }
 
-header, footer {
+header,
+footer {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -232,12 +236,12 @@ section.preview {
     border: 1px solid @border;
     border-radius: 6px;
     margin-right: 4px;
-    transition: .1s;
+    transition: 0.1s;
   }
 
   .check.checked {
     background: #113118;
-    border: 1px solid #00FF5F;
+    border: 1px solid #00ff5f;
   }
 }
 
@@ -308,11 +312,11 @@ section.preview {
 }
 
 .box.info {
-  .info-box(@info)
+  .info-box(@info);
 }
 
 .box.warn {
-  .info-box(@warn)
+  .info-box(@warn);
 }
 
 dialog {
@@ -323,7 +327,7 @@ dialog {
   opacity: 0;
   padding: 16px;
 
-  transition: .25s;
+  transition: 0.25s;
 
   text-align: center;
 
@@ -336,7 +340,6 @@ dialog {
   }
 
   &[open] {
-    display: flex;
     opacity: 1;
     transform: translate(-50%, -50%);
   }
@@ -346,17 +349,6 @@ dialog {
 
     .content {
       width: 400px;
-      margin-right: 12px;
-    }
-
-    .generated-preview {
-      display: flex;
-      align-items: center;
-      width: 450px;
-      height: 180px;
-      border: none;
-      padding-left: 12px;
-      margin: 6px 0;
     }
   }
 }
@@ -369,6 +361,7 @@ dialog {
 
 .flex {
   display: flex;
+
   & > * {
     margin-right: 6px;
 
@@ -379,5 +372,27 @@ dialog {
 
   & > div {
     flex: 1;
+  }
+}
+
+.separator {
+  height: 21px;
+}
+
+.badge {
+  color: lighten(@success, 30%) !important;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.85em;
+  border: 1px solid @success;
+  background-color: fade(@success, 5%);
+  margin-left: 0.4em;
+
+  &.help {
+    padding: 2px;
+    font-weight: bold;
+    color: fade(@subtext, 50%) !important;
+    border: none;
+    background: none;
   }
 }

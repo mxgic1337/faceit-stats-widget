@@ -1,10 +1,5 @@
-@background: #121212;
-@border-1: #595959;
-@border-2: #8d8d8d;
-@border-rotation: 0deg;
-
 .normal-theme {
-  --auto-width: 400px;
+  --auto-width: 500px;
 
   &.auto-width {
     width: fit-content;
@@ -27,7 +22,11 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background: linear-gradient(var(--border-rotation), var(--border-1), var(--border-2));
+    background: linear-gradient(
+      var(--border-rotation),
+      var(--border-1),
+      var(--border-2)
+    );
     border-radius: 12px;
     padding: 1px;
 
@@ -47,7 +46,7 @@
       .progress {
         border-radius: 5px;
         height: 5px;
-        transition: .5s;
+        transition: 0.5s;
       }
     }
 
@@ -69,8 +68,9 @@
 
         .elo {
           p {
-            font-size: .85em;
+            font-size: 0.85em;
           }
+
           .username-hidden {
             font-size: 1.1em;
 
@@ -85,7 +85,7 @@
         text-align: center;
 
         small {
-          font-size: .6em;
+          font-size: 0.6em;
         }
 
         .stats {
@@ -109,7 +109,7 @@
         background-size: cover;
         background-position: center;
         filter: blur(2px);
-        opacity: var(--background-opacity, .1);
+        opacity: var(--background-opacity, 0.1);
       }
     }
 
@@ -157,7 +157,7 @@
         p:first-child {
           color: var(--subtext) !important;
           font-weight: normal;
-          font-size: .7em;
+          font-size: 0.7em;
           margin-right: 8px;
         }
 
