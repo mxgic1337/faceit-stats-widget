@@ -1,11 +1,19 @@
 import packageJSON from '../../package.json';
+import { useContext } from 'react';
+import { LanguageContext } from '../generator/Generator.tsx';
 
 export const Footer = () => {
+  const tl = useContext(LanguageContext);
+
+  if (!tl) {
+    return null;
+  }
+
   return (
     <footer>
       <div>
         <small>
-          This project is not affiliated with{' '}
+          {tl('generator.footer.not_affiliated')}{' '}
           <a href={'https://faceit.com'} target={'_blank'}>
             FACEIT
           </a>
@@ -32,7 +40,7 @@ export const Footer = () => {
             href={'https://github.com/mxgic1337/faceit-stats-widget/issues/new'}
             target={'_blank'}
           >
-            Report an issue
+            {tl('generator.footer.issues')}
           </a>
         </small>
       </div>

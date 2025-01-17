@@ -25,7 +25,9 @@ export const Checkbox = ({
       <p>
         {text}
         {experimental && (
-          <span className={'badge'}>{tl('generator.experimental')}</span>
+          <span className={'badge'} title={tl('generator.experimental.help')}>
+            {tl('generator.experimental')}
+          </span>
         )}
         {helpTitle && (
           <span className={'badge help'} title={helpTitle}>
