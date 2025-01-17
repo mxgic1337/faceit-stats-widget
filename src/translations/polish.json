@@ -41,7 +41,6 @@
   "generator.theme.color_scheme": "Motyw widżetu",
   "generator.theme.style": "Styl widżetu",
   "generator.theme.banner_as_background": "Użyj baneru profilu jako tła",
-  "generator.theme.banner_as_background.warning": "Podgląd pokazuje przykładowy baner. Poprawny baner wyświetli się dopiero po wygenerowaniu widżetu.",
   "generator.theme.banner_as_background.no_banner": "Gracz {{0}} nie ma ustawionego baneru profilu.",
   "generator.theme.banner_as_background.adjust_opacity": "Dostosuj przezroczystość baneru",
   "generator.generate.title": "Wygeneruj widżet",

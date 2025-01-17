@@ -1,10 +1,10 @@
 import { Language, languages } from '../../translations/translations.ts';
-import { Checkbox } from '../../components/generator/Checkbox.tsx';
+import { Checkbox } from '../../components/Checkbox.tsx';
 import { Dispatch, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Separator } from '../../components/generator/Separator.tsx';
+import { Separator } from '../../components/Separator.tsx';
 import { LanguageContext, SettingsContext } from '../Generator.tsx';
-import { InfoBox } from '../../components/generator/InfoBox.tsx';
+import { InfoBox } from '../../components/InfoBox.tsx';
 
 type Props = {
   playerExists: boolean | undefined;

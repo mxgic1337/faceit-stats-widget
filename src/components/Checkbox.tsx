@@ -1,5 +1,5 @@
 import { Dispatch, useContext } from 'react';
-import { LanguageContext } from '../../generator/Generator.tsx';
+import { LanguageContext } from '../generator/Generator.tsx';
 export const Checkbox = ({
   text,
   state,

@@ -1,15 +1,15 @@
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { Widget } from '../../widget/src/widget/Widget.tsx';
-import { Separator } from '../components/generator/Separator.tsx';
+import { Separator } from '../components/Separator.tsx';
 import { Language, languages, tl } from '../translations/translations.ts';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getPlayerProfile } from '../../widget/src/utils/faceit_util.ts';
 import { MainTab } from './tabs/MainTab.tsx';
 import { StyleTab } from './tabs/StyleTab.tsx';
 import { StatisticsTab, StatisticType } from './tabs/StatisticsTab.tsx';
-import { GeneratedWidgetModal } from '../components/generator/GeneratedWidgetModal.tsx';
-import { InfoBox } from '../components/generator/InfoBox.tsx';
-import { Footer } from '../components/generator/Footer.tsx';
+import { GeneratedWidgetModal } from '../components/GeneratedWidgetModal.tsx';
+import { InfoBox } from '../components/InfoBox.tsx';
+import { Footer } from '../components/Footer.tsx';
 
 interface Settings {
   customCSS: string;

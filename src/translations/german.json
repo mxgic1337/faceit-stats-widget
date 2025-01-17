@@ -39,7 +39,6 @@
   "generator.theme.color_scheme": "Widget Thema",
   "generator.theme.style": "Widget Stil",
   "generator.theme.banner_as_background": "Profilbanner als Hintergrund benutzen",
-  "generator.theme.banner_as_background.warning": "Die Vorschau zeigt ein Beispielbanner. Korrektes Banner wird zeigen nach der Generierung das Widget.",
   "generator.theme.banner_as_background.adjust_opacity": "Deckkraft des Hintergrunds anpassen",
   "generator.generate.title": "Erzeugen",
   "generator.generate.button": "Erzeugen",

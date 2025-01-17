@@ -1,7 +1,7 @@
-import { InfoBox } from '../../components/generator/InfoBox.tsx';
+import { InfoBox } from '../../components/InfoBox.tsx';
 import { Dispatch, useContext } from 'react';
-import { Statistic } from '../../components/generator/Statistic.tsx';
-import { Separator } from '../../components/generator/Separator.tsx';
+import { Statistic } from '../../components/Statistic.tsx';
+import { Separator } from '../../components/Separator.tsx';
 import { LanguageContext, SettingsContext } from '../Generator.tsx';
 
 export enum StatisticType {

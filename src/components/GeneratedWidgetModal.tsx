@@ -1,4 +1,4 @@
-import { Language, tl } from '../../translations/translations.ts';
+import { Language, tl } from '../translations/translations.ts';
 import { Dispatch, useEffect, useRef } from 'react';
 
 export const GeneratedWidgetModal = ({

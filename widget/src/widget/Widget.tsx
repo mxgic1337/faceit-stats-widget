@@ -1,4 +1,4 @@
-import { Statistic } from '../../../src/components/widget/Statistic.tsx';
+import { Statistic } from '../components/Statistic.tsx';
 import {
   useCallback,
   useContext,

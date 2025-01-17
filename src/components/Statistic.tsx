@@ -1,5 +1,5 @@
-import { Language, tl } from '../../translations/translations.ts';
-import { StatisticType } from '../../generator/tabs/StatisticsTab.tsx';
+import { Language, tl } from '../translations/translations.ts';
+import { StatisticType } from '../generator/tabs/StatisticsTab.tsx';
 import { Dispatch } from 'react';
 
 export const Statistic = ({

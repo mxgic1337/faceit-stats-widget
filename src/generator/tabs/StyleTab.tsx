@@ -1,9 +1,9 @@
 import { colorSchemes, themes } from '../../../widget/src/widget/Widget.tsx';
-import { ColorPicker } from '../../components/generator/ColorPicker.tsx';
+import { ColorPicker } from '../../components/ColorPicker.tsx';
 import { Dispatch, useContext, useRef } from 'react';
-import { Checkbox } from '../../components/generator/Checkbox.tsx';
-import { InfoBox } from '../../components/generator/InfoBox.tsx';
-import { Separator } from '../../components/generator/Separator.tsx';
+import { Checkbox } from '../../components/Checkbox.tsx';
+import { InfoBox } from '../../components/InfoBox.tsx';
+import { Separator } from '../../components/Separator.tsx';
 import { LanguageContext, SettingsContext } from '../Generator.tsx';
 
 type Props = {
