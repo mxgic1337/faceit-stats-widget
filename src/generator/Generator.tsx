@@ -3,11 +3,7 @@ import { Widget } from '../../widget/src/widget/Widget.tsx';
 import { Separator } from '../components/generator/Separator.tsx';
 import { Language, languages, tl } from '../translations/translations.ts';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import {
-  getPlayerID,
-  getPlayerProfile,
-  SAMPLE_PLAYER_ID,
-} from '../../widget/src/utils/faceit_util.ts';
+import { getPlayerProfile } from '../../widget/src/utils/faceit_util.ts';
 import { MainTab } from './tabs/MainTab.tsx';
 import { StyleTab } from './tabs/StyleTab.tsx';
 import { StatisticsTab, StatisticType } from './tabs/StatisticsTab.tsx';
@@ -19,7 +15,9 @@ interface Settings {
   customCSS: string;
   autoWidth: boolean;
   username: string;
-  playerId: string;
+  playerId: string | undefined;
+  playerElo: number;
+  playerLevel: number;
   playerBanner: string | undefined;
   onlyOfficialMatchesCount: boolean;
   showRanking: boolean;
@@ -52,11 +50,14 @@ export const LanguageContext = createContext<
 >(null);
 export const SettingsContext = createContext<Settings | null>(null);
 export const Generator = () => {
+  const [playerExists, setPlayerExists] = useState<boolean>(true);
   const [customCSS, setCustomCSS] = useState<string>('https://example.com');
   const [generatedURL, setGeneratedURL] = useState<string | undefined>();
   const [autoWidth, setAutoWidth] = useState<boolean>(true);
-  const [username, setUsername] = useState<string>('');
-  const [playerId, setPlayerId] = useState<string>(SAMPLE_PLAYER_ID);
+  const [username, setUsername] = useState<string>('paszaBiceps');
+  const [playerId, setPlayerId] = useState<string>();
+  const [playerElo, setPlayerElo] = useState<number>(100);
+  const [playerLevel, setPlayerLevel] = useState<number>(1);
   const [playerBanner, setPlayerBanner] = useState<string | undefined>();
   const [onlyOfficialMatchesCount, setOnlyOfficialMatchesCount] =
     useState<boolean>(true);
@@ -112,15 +113,24 @@ export const Generator = () => {
   );
 
   useEffect(() => {
-    getPlayerProfile(SAMPLE_PLAYER_ID).then((res) => {
-      if (res) {
-        setUsername(res.nickname);
-        setPlayerBanner(res.cover_image);
-      } else {
-        alert(tl('generator.alert.player_not_found', ['?']));
-      }
-    });
-  }, []);
+    const timeout = setTimeout(() => {
+      getPlayerProfile(username).then((res) => {
+        if (res && res.games.cs2) {
+          setPlayerBanner(res.cover_image);
+          setPlayerElo(res.games.cs2.faceit_elo);
+          setPlayerLevel(res.games.cs2.skill_level);
+          setPlayerExists(true);
+        } else {
+          setPlayerElo(100);
+          setPlayerLevel(1);
+          setPlayerExists(false);
+        }
+      });
+    }, 500);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [username]);
 
   useEffect(() => {
     document.getElementsByTagName('html')[0].classList.add(`generator`);
@@ -134,7 +144,14 @@ export const Generator = () => {
   }, []);
 
   const generateWidgetURL = useCallback(() => {
-    let params: { [key: string]: string | number | boolean | string[] } = {
+    let params: {
+      [key: string]:
+        | string
+        | (string | undefined)
+        | number
+        | boolean
+        | string[];
+    } = {
       player_id: playerId,
       lang: language.id,
       progress: showEloProgressBar,
@@ -213,7 +230,14 @@ export const Generator = () => {
   ]);
 
   const jsonToQuery = useCallback(
-    (params: { [key: string]: string | number | boolean | string[] }) => {
+    (params: {
+      [key: string]:
+        | string
+        | (string | undefined)
+        | number
+        | boolean
+        | string[];
+    }) => {
       return `?${Object.entries(params)
         .map((param) => {
           return `${param[0]}=${param[1]}`;
@@ -229,6 +253,7 @@ export const Generator = () => {
       component: (
         <MainTab
           key={'main'}
+          playerExists={playerExists}
           setUsername={setUsername}
           setPlayerId={setPlayerId}
           setPlayerBanner={setPlayerBanner}
@@ -289,6 +314,9 @@ export const Generator = () => {
           autoWidth,
           username,
           playerId,
+          playerElo,
+          playerLevel,
+          playerBanner,
           onlyOfficialMatchesCount,
           showRanking,
           showRankingOnlyWhenChallenger,

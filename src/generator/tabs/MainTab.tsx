@@ -1,12 +1,13 @@
 import { Language, languages } from '../../translations/translations.ts';
 import { Checkbox } from '../../components/generator/Checkbox.tsx';
-import { Dispatch, useContext, useState, useRef, useEffect } from 'react';
+import { Dispatch, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Separator } from '../../components/generator/Separator.tsx';
 import { LanguageContext, SettingsContext } from '../Generator.tsx';
-import { getPlayerProfile } from '../../../widget/src/utils/faceit_util.ts';
+import { InfoBox } from '../../components/generator/InfoBox.tsx';
 
 type Props = {
+  playerExists: boolean | undefined;
   setLanguage: Dispatch<Language>;
   setUsername: Dispatch<string>;
   setPlayerId: Dispatch<string>;
@@ -25,11 +26,10 @@ type Props = {
 };
 
 export const MainTab = ({
+  playerExists,
   setLanguage,
-  setUsername,
-  setPlayerId,
-  setPlayerBanner,
   setAutoWidth,
+  setUsername,
   setShowUsername,
   setShowEloSuffix,
   setShowEloDiff,
@@ -41,15 +41,9 @@ export const MainTab = ({
   setRefreshInterval,
   setSaveSession,
 }: Props) => {
-  const [changingUsername, setChangingUsername] = useState<boolean>(false);
-  const [usernameInputValue, setUsernameInputValue] = useState<string>('');
   const navigate = useNavigate();
   const tl = useContext(LanguageContext);
   const settings = useContext(SettingsContext);
-
-  useEffect(() => {
-    setUsernameInputValue(settings?.username || '?');
-  }, [settings]);
 
   if (!settings || !tl) {
     return null;
@@ -60,44 +54,20 @@ export const MainTab = ({
       <Separator text={tl('generator.settings.title')} />
       <div className={'setting'}>
         <p>{tl('generator.settings.faceit_name')}</p>
-        <div className={'flex'}>
-          <input
-            max={12}
-            value={usernameInputValue}
-            disabled={!changingUsername}
-            onChange={(e) => {
-              if (e.target.value.length > 12) return;
-              setUsernameInputValue(e.target.value);
-            }}
+        <input
+          max={12}
+          value={settings.username}
+          onChange={(e) => {
+            if (e.target.value.length > 12) return;
+            setUsername(e.target.value);
+          }}
+        />
+        {!playerExists && (
+          <InfoBox
+            content={tl('generator.settings.player_not_found')}
+            style={'warn'}
           />
-          <button
-            style={{ width: '250px' }}
-            onClick={() => {
-              if (changingUsername) {
-                // TODO: Get player info from FACEIT
-                getPlayerProfile(usernameInputValue).then((res) => {
-                  if (res) {
-                    setUsername(res.nickname);
-                    setPlayerBanner(res.cover_image);
-                    setChangingUsername(false);
-                  } else {
-                    alert(
-                      tl('generator.alert.player_not_found', [
-                        usernameInputValue,
-                      ])
-                    );
-                  }
-                });
-              } else {
-                setChangingUsername(true);
-              }
-            }}
-          >
-            {changingUsername
-              ? tl('generator.settings.save_username')
-              : tl('generator.settings.change_username')}
-          </button>
-        </div>
+        )}
       </div>
       <div className={'setting'}>
         <p>{tl('generator.settings.language')}</p>

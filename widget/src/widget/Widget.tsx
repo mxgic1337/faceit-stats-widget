@@ -33,7 +33,6 @@ import fcChallenger1 from '../../../src/assets/levels/challenger_1.svg';
 import fcChallenger2 from '../../../src/assets/levels/challenger_2.svg';
 import fcChallenger3 from '../../../src/assets/levels/challenger_3.svg';
 
-import sampleBanner from '../../../src/assets/sample_banner.png';
 import { StatisticType } from '../../../src/generator/tabs/StatisticsTab.tsx';
 
 import '../styles/themes/normal.less';
@@ -105,7 +104,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
   const [language, setLanguage] = useState<Language>(languages[0]);
   const [startingElo, setStartingElo] = useState<number>(100);
   const [elo, setElo] = useState(100);
-  const [ranking, setRanking] = useState(999);
+  const [ranking, setRanking] = useState(1337);
   const [kills, setKills] = useState(0);
   const [deaths, setDeaths] = useState(0);
   const [hsPercent, setHSPercent] = useState(0);
@@ -269,6 +268,9 @@ export const Widget = ({ preview }: { preview: boolean }) => {
       overrides.statSlot4,
     ]);
     setShowUsername(overrides.showUsername as boolean);
+    setElo(overrides.playerElo);
+    setLevel(overrides.playerLevel);
+    setCurrentEloDistribution(getEloDistribution(overrides.playerLevel, 1001));
     setShowEloDiff(overrides.showEloDiff as boolean);
     setShowEloSuffix(overrides.showEloSuffix as boolean);
     setBackgroundOpacity(overrides.backgroundOpacity as number);
@@ -291,7 +293,6 @@ export const Widget = ({ preview }: { preview: boolean }) => {
 
   /** Returns a path to a level icon */
   const getIcon = useCallback(() => {
-    if (preview) return levelIcons[10];
     if (level === 10 && ranking <= 1000) {
       if (ranking === 1) return levelIcons[11];
       else if (ranking === 2) return levelIcons[12];
@@ -299,12 +300,11 @@ export const Widget = ({ preview }: { preview: boolean }) => {
       return levelIcons[10]; /* Challenger */
     }
     return levelIcons[level - 1];
-  }, [level, ranking, preview]);
+  }, [level, ranking]);
 
   /** Returns a color, min ELO and max ELO of a level */
   const getEloDistribution = useCallback(
     (level: number, ranking: number) => {
-      if (preview) return eloDistribution[10];
       if (level === 10 && ranking <= 1000) {
         if (ranking === 1) return eloDistribution[11];
         else if (ranking === 2) return eloDistribution[12];
@@ -476,7 +476,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
 
   /** Returns player ELO text */
   const getElo = useCallback(() => {
-    const currentElo = preview ? 2001 : elo;
+    const currentElo = elo;
     let diff = 0;
 
     if (!preview) {
@@ -568,7 +568,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
                 className={'progress'}
                 style={{
                   width:
-                    preview || level === 10
+                    level === 10
                       ? '100%'
                       : `${((elo - (currentEloDistribution[1] as number)) / ((currentEloDistribution[2] as number) - (currentEloDistribution[1] as number))) * 100}%`,
                   background: currentEloDistribution[0],
