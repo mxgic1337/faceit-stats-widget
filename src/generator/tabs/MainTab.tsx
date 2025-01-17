@@ -157,12 +157,14 @@ export const MainTab = ({
           text={tl('generator.settings.auto_width')}
           state={settings.autoWidth}
           setState={setAutoWidth}
+          helpTitle={tl('generator.settings.auto_width.help')}
         />
         <Checkbox
           text={tl('generator.settings.save_session')}
           state={settings.saveSession}
           setState={setSaveSession}
           experimental={true}
+          helpTitle={tl('generator.settings.save_session.help')}
         />
         <Checkbox
           text={tl('generator.settings.only_official_matches')}

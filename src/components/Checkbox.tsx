@@ -5,11 +5,13 @@ export const Checkbox = ({
   state,
   setState,
   experimental,
+  helpTitle,
 }: {
   text: string;
   state: boolean;
   setState: Dispatch<boolean>;
   experimental?: boolean;
+  helpTitle?: string;
 }) => {
   const tl = useContext(LanguageContext);
 
@@ -24,6 +26,11 @@ export const Checkbox = ({
         {text}
         {experimental && (
           <span className={'badge'}>{tl('generator.experimental')}</span>
+        )}
+        {helpTitle && (
+          <span className={'badge help'} title={helpTitle}>
+            ?
+          </span>
         )}
       </p>
     </div>

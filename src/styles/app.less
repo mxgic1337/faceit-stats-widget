@@ -385,5 +385,14 @@ dialog {
   border-radius: 6px;
   font-size: 0.85em;
   border: 1px solid @success;
+  background-color: fade(@success, 5%);
   margin-left: 0.4em;
+
+  &.help {
+    padding: 2px;
+    font-weight: bold;
+    color: fade(@subtext, 50%) !important;
+    border: none;
+    background: none;
+  }
 }
