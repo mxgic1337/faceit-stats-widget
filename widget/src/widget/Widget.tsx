@@ -320,10 +320,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
 
   /* Update player stats */
   useEffect(() => {
-    if (preview) {
-      setCurrentEloDistribution(eloDistribution[10]);
-      return;
-    }
+    if (preview) return;
 
     let startDate = new Date();
     const savedStartDate = localStorage.getItem('fcw_session_start');
@@ -375,6 +372,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
               expired = true;
             }
             if (expired) {
+              /* Save saved session data */
               console.log('Session expired. Saving new data...');
               localStorage.setItem(
                 'fcw_session_starting-elo',
@@ -386,6 +384,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
             const currentDate = new Date();
             currentDate.setTime(currentDate.getTime() + 1000 * 60 * 60 * 2);
             localStorage.setItem('fcw_session_end', currentDate.toString());
+            /* Load saved session ELO */
             if (startingElo && !expired) {
               setStartingElo(Number(startingElo));
             } else {
