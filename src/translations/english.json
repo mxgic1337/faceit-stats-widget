@@ -20,6 +20,8 @@
   "generator.settings.title": "Settings",
   "generator.settings.faceit_name": "FACEIT Username",
   "generator.settings.language": "Language",
+  "generator.settings.widget_language": "Widget language",
+  "generator.settings.widget_language.default": "Default",
   "generator.settings.show_username": "Show username",
   "generator.settings.auto_width": "Automatically set widget width",
   "generator.settings.auto_width.help": "Automatically sets the recommended width.",

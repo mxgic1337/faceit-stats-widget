@@ -19,6 +19,8 @@
   "generator.settings.title": "Ustawienia",
   "generator.settings.faceit_name": "Nazwa użytkownika FACEIT",
   "generator.settings.language": "Język",
+  "generator.settings.widget_language": "Język widżetu",
+  "generator.settings.widget_language.default": "Domyślny",
   "generator.settings.show_username": "Wyświetlaj nazwę użytkownika",
   "generator.settings.auto_width": "Automatycznie ustaw szerokość widżetu",
   "generator.settings.auto_width.help": "Automatycznie ustawia zalecaną szerokość widżetu.",
