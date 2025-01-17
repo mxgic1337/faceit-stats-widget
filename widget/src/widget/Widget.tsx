@@ -273,7 +273,9 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     setCurrentEloDistribution(getEloDistribution(overrides.playerLevel, 1001));
     setShowEloDiff(overrides.showEloDiff as boolean);
     setShowEloSuffix(overrides.showEloSuffix as boolean);
-    setBackgroundOpacity(overrides.backgroundOpacity as number);
+    if (overrides.adjustBackgroundOpacity)
+      setBackgroundOpacity(overrides.backgroundOpacity as number);
+    else setBackgroundOpacity(undefined);
     setShowStatistics(overrides.showStatistics as boolean);
     setRankingState(
       overrides.showRanking ? RankingState.SHOW : RankingState.DISABLED
@@ -324,9 +326,14 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     }
 
     let startDate = new Date();
+    const savedStartDate = localStorage.getItem('fcw_session_start');
+    const savedPlayerId = localStorage.getItem('fcw_session_player-id');
     const saveSession = searchParams.get('save_session') === 'true';
-
     const playerId = searchParams.get('player_id');
+    if (saveSession && savedStartDate && savedPlayerId === playerId) {
+      console.log('Loaded starting date from session.');
+      startDate = new Date(savedStartDate);
+    }
     if (playerId === null) {
       const username = searchParams.get('player');
       if (username !== null) {
@@ -352,20 +359,20 @@ export const Widget = ({ preview }: { preview: boolean }) => {
         if (firstTime) {
           if (saveSession) {
             let expired = false;
-            const sessionStart = localStorage.getItem('fcw_session_start');
+            const sessionEnd = localStorage.getItem('fcw_session_end');
             const startingElo = localStorage.getItem(
               'fcw_session_starting-elo'
             );
-            const startingDate = localStorage.getItem(
-              'fcw_sssion_starting-date'
-            );
-            if (!sessionStart) {
+            if (!sessionEnd) {
               expired = true;
             } else {
-              const sessionStartDate = new Date(sessionStart);
-              if (new Date() > sessionStartDate) {
+              const sessionEndDate = new Date(sessionEnd);
+              if (new Date() > sessionEndDate) {
                 expired = true;
               }
+            }
+            if (playerId !== savedPlayerId) {
+              expired = true;
             }
             if (expired) {
               console.log('Session expired. Saving new data...');
@@ -373,18 +380,15 @@ export const Widget = ({ preview }: { preview: boolean }) => {
                 'fcw_session_starting-elo',
                 String(player.elo)
               );
-              localStorage.setItem(
-                'fcw_session_starting-date',
-                new Date().toString()
-              );
+              localStorage.setItem('fcw_session_start', new Date().toString());
+              localStorage.setItem('fcw_session_player-id', playerId);
             }
             const currentDate = new Date();
             currentDate.setTime(currentDate.getTime() + 1000 * 60 * 60 * 2);
-            localStorage.setItem('fcw_session_start', currentDate.toString());
-            if (startingElo && startingDate) {
-              console.log('Loaded starting ELO and date from session.');
+            localStorage.setItem('fcw_session_end', currentDate.toString());
+            console.log(startingElo);
+            if (startingElo) {
               setStartingElo(Number(startingElo));
-              startDate = new Date(startingDate);
             } else {
               setStartingElo(player.elo);
             }

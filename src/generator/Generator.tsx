@@ -116,6 +116,7 @@ export const Generator = () => {
     const timeout = setTimeout(() => {
       getPlayerProfile(username).then((res) => {
         if (res && res.games.cs2) {
+          setPlayerId(res.player_id);
           setPlayerBanner(res.cover_image);
           setPlayerElo(res.games.cs2.faceit_elo);
           setPlayerLevel(res.games.cs2.skill_level);
