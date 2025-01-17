@@ -1,6 +1,6 @@
 # FACEIT Stats Widget
 
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/mxgic1337/faceit-stats-widget/build-test.yml?style=flat-square) ![Version](https://img.shields.io/github/package-json/v/mxgic1337/faceit-stats-widget?style=flat-square)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/mxgic1337/faceit-stats-widget/build-test.yml?style=flat-square&logo=github&logoColor=%23fff) ![Latest release version](https://img.shields.io/github/v/release/mxgic1337/faceit-stats-widget?display_name=tag&style=flat-square&logo=github&logoColor=%23fff) ![package.json version](https://img.shields.io/github/package-json/v/mxgic1337/faceit-stats-widget?style=flat-square&logo=nodedotjs&logoColor=%23fff)
 
 Widget for **[OBS Studio](https://obsproject.com/)** that displays **[FACEIT](https://faceit.com)** stats. (ELO, level,
 ELO gain/loss, average stats)
