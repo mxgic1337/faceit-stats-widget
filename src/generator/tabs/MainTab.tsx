@@ -162,6 +162,7 @@ export const MainTab = ({
           text={tl('generator.settings.save_session')}
           state={settings.saveSession}
           setState={setSaveSession}
+          experimental={true}
         />
         <Checkbox
           text={tl('generator.settings.only_official_matches')}

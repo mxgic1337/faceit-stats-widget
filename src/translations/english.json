@@ -11,6 +11,7 @@
   "widget.kd": "K/D",
   "widget.deaths": "Deaths",
   "generator.testing": "You are currently using a beta version. This version is not finished and might have some bugs.",
+  "generator.experimental": "Experimental",
   "generator.save_current_configuration": "Save current configuration",
   "generator.alert.player_not_found": "Player {{0}} was not found.",
   "generator.settings.title": "Settings",

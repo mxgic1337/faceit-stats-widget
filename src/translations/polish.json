@@ -10,6 +10,7 @@
   "widget.kd": "K/D",
   "widget.deaths": "Śmierci",
   "generator.testing": "Używasz wersji beta. Ta wersja nie jest skończona i może zawierać błędy.",
+  "generator.experimental": "Eksperymentalne",
   "generator.save_current_configuration": "Zapisz aktualną konfigurację",
   "generator.alert.player_not_found": "Nie znaleziono gracza {{0}}.",
   "generator.settings.title": "Ustawienia",
