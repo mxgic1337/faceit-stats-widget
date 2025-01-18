@@ -1,6 +1,11 @@
-import { createContext, useCallback, useEffect, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { Widget } from '../../widget/src/widget/Widget.tsx';
-import { Separator } from '../components/Separator.tsx';
 import { Language, languages, tl } from '../translations/translations.ts';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getPlayerProfile } from '../../widget/src/utils/faceit_util.ts';
@@ -10,6 +15,9 @@ import { StatisticsTab, StatisticType } from './tabs/StatisticsTab.tsx';
 import { GeneratedWidgetModal } from '../components/GeneratedWidgetModal.tsx';
 import { InfoBox } from '../components/InfoBox.tsx';
 import { Footer } from '../components/Footer.tsx';
+import nukePreview from '../assets/previews/nuke.png';
+import miragePreview from '../assets/previews/mirage.png';
+import ancientPreview from '../assets/previews/ancient.png';
 
 interface Settings {
   customCSS: string;
@@ -82,6 +90,7 @@ export const Generator = () => {
     languages.find((language) => language.id === localStorage.fcw_lang) ||
       languages[0]
   );
+  const [previewBackground, setPreviewBackground] = useState<string>('ancient');
   const [widgetLanguage, setWidgetLanguage] = useState<Language | undefined>();
   const [saveSession, setSaveSession] = useState<boolean>(false);
 
@@ -309,6 +318,10 @@ export const Generator = () => {
     },
   ];
 
+  const previews = useMemo<string[]>(() => {
+    return ['nuke', 'mirage', 'ancient'];
+  }, []);
+
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   return (
@@ -384,18 +397,43 @@ export const Generator = () => {
             <Footer />
           </section>
           <section className={'preview'}>
-            <Separator text={tl(language, 'generator.preview.title')} />
-            <div className={`${theme}-theme ${colorScheme}-scheme preview`}>
-              <Widget preview={true} />
-            </div>
-            <div className={'flex'}>
-              <button
-                onClick={() => {
-                  generateWidgetURL();
+            <div className={'settings'}>
+              <h4 style={{ marginBottom: '6px' }}>
+                {tl(language, 'generator.preview.title')}
+              </h4>
+              <style>{`
+		      div.preview.nuke {--preview-background: url(${nukePreview})}
+		      div.preview.mirage {--preview-background: url(${miragePreview})}
+		      div.preview.ancient {--preview-background: url(${ancientPreview})}
+		      `}</style>
+              <div
+                className={`${theme}-theme ${colorScheme}-scheme preview ${previewBackground}`}
+              >
+                <Widget preview={true} />
+              </div>
+              <select
+                value={previewBackground}
+                onChange={(e) => {
+                  setPreviewBackground(e.target.value);
                 }}
               >
-                {tl(language, 'generator.generate.button')}
-              </button>
+                {previews.map((preview) => {
+                  return (
+                    <option key={preview} value={preview}>
+                      {translate(`generator.preview.${preview}`)}
+                    </option>
+                  );
+                })}
+              </select>
+              <div className={'flex'}>
+                <button
+                  onClick={() => {
+                    generateWidgetURL();
+                  }}
+                >
+                  {tl(language, 'generator.generate.button')}
+                </button>
+              </div>
             </div>
           </section>
         </main>

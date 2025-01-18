@@ -5,7 +5,7 @@ export const InfoBox = ({
   style,
 }: {
   content: ReactNode;
-  style: 'info' | 'warn';
+  style: 'info' | 'warn' | 'severe';
 }) => {
   return <div className={`box ${style}`}>{content}</div>;
 };

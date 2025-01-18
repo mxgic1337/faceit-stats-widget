@@ -5,19 +5,20 @@
 
 @import '../../widget/src/styles/color_schemes';
 
-@background: #111;
-@background-input: #1c1c1c;
-@border: #2c2c2c;
-@border-focus: #5d5d5d;
-@active: #fafafa;
-@success: #11ed86;
-
+@base: #1e1e2e;
+@mantle: #181825;
+@surface0: #313244;
+@surface1: #45475a;
 @text: #fafafa;
-@disabled: #575757;
-@subtext: #bebebe;
+@green: #a6e3a1;
 
-@info: #5ba6e5;
-@warn: #d7a141;
+@text: #cdd6f4;
+@subtext0: #a6adc8;
+@overlay0: #6c7086;
+
+@blue: #89b4fa;
+@peach: #fab387;
+@red: #f38ba8;
 
 * {
   padding: 0;
@@ -35,14 +36,14 @@
 }
 
 body {
-  background: @background;
+  background: @base;
 }
 
 input,
 select,
 button {
-  border: 1px solid @border;
-  background: @background-input;
+  border: 1px solid @surface0;
+  background: @base;
   padding: 6px;
   border-radius: 6px;
   outline: none;
@@ -52,7 +53,7 @@ button {
   margin: 6px 0;
 
   &:focus {
-    border: 1px solid @border-focus;
+    border: 1px solid @surface1;
   }
 }
 
@@ -60,7 +61,7 @@ button {
   cursor: pointer;
 
   &:hover {
-    border: 1px solid @border-focus;
+    border: 1px solid @surface1;
   }
 }
 
@@ -81,7 +82,6 @@ main {
   margin: auto;
   display: flex;
 
-  padding: 12px;
   border-radius: 6px;
   width: 70%;
   height: 100vh;
@@ -95,8 +95,8 @@ main {
   hr {
     margin: 6px 12px;
     border: none;
-    border-right: 1px solid @border;
-    border-bottom: 1px solid @border;
+    border-right: 1px solid @surface0;
+    border-bottom: 1px solid @surface0;
   }
 
   input {
@@ -108,8 +108,8 @@ main {
   }
 
   button:disabled {
-    color: @disabled;
-    border: 1px solid @border;
+    color: @overlay0;
+    border: 1px solid @surface0;
     cursor: not-allowed;
   }
 }
@@ -137,6 +137,27 @@ main {
 
 .setting {
   margin: 6px 0;
+
+  &.generate {
+    max-width: 500px;
+  }
+
+  &.stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 6px;
+
+    .setting {
+      margin: 0 !important;
+    }
+  }
+}
+
+.settings {
+  padding: 12px 16px;
+  margin: 12px 0;
+  border-radius: 12px;
+  background-color: @mantle;
 }
 
 header {
@@ -157,7 +178,7 @@ footer {
 footer {
   flex-direction: row;
   justify-content: space-between;
-  border-top: 1px solid @border;
+  border-top: 1px solid @surface0;
   padding: 12px;
   margin-bottom: 6px;
 
@@ -171,17 +192,18 @@ footer {
     }
 
     small {
-      color: @subtext;
+      color: @subtext0;
     }
   }
 }
 
 a {
-  color: @text;
+  color: @blue;
   text-decoration: none;
 
-  &:hover {
-    color: darken(@text, 10%);
+  &:hover,
+  &:focus {
+    color: darken(@blue, 5%);
   }
 }
 
@@ -190,12 +212,21 @@ section {
 }
 
 section.preview {
-  margin-left: 16px;
+  margin-left: 8px;
   display: flex;
-  min-width: 450px;
-  max-width: 450px;
+  min-width: 490px;
+  max-width: 490px;
   flex-direction: column;
   justify-content: flex-start;
+}
+
+div.preview {
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--preview-background);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
 @media only screen and (max-width: 820px) {
@@ -207,17 +238,23 @@ section.preview {
     flex-direction: column-reverse;
 
     section.preview {
-      min-width: 0;
+      min-width: 100%;
       max-width: 100%;
       width: 100%;
       margin-left: 0;
+      margin-bottom: 102px;
       box-sizing: border-box;
       max-height: 231px;
     }
 
     div.preview {
       width: 100%;
+      box-sizing: border-box;
     }
+  }
+
+  header {
+    width: 100%;
   }
 }
 
@@ -233,15 +270,16 @@ section.preview {
     min-height: @size;
     max-width: @size;
     max-height: @size;
-    border: 1px solid @border;
+    border: 1px solid @surface0;
     border-radius: 6px;
+    background-color: @base;
     margin-right: 4px;
     transition: 0.1s;
   }
 
   .check.checked {
-    background: #113118;
-    border: 1px solid #00ff5f;
+    background: fade(@green, 10%);
+    border: 1px solid @green;
   }
 }
 
@@ -268,55 +306,54 @@ section.preview {
   }
 }
 
-.setting.generate {
-  max-width: 500px;
-}
-
 .width-100 {
   width: 100%;
 }
 
 .tabs {
   display: flex;
+  border-radius: 8px;
+  padding: 6px;
+  background-color: @mantle;
 
   button {
     border: none;
-    border-radius: 0;
-    border-bottom: 1px solid @border;
-    background: none;
+    border-radius: 8px;
+    margin: 3px;
+    background-color: @base;
 
     &:hover {
-      border: none;
-      border-radius: 0;
-      border-bottom: 1px solid @border-focus;
+      background-color: @surface0;
     }
 
     &.active {
-      border-bottom: 1px solid @active;
       font-weight: bold;
+      background-color: @surface0;
     }
   }
 }
 
 .info-box(@color) {
   padding: 6px 10px;
-  border: 1px solid @border;
-  border-radius: 6px;
-  border-top: 3px solid @color;
-  background: fade(@color, 2%);
+  border-left: 3px solid @color;
+  background: fade(@color, 5%);
   margin: 6px 0;
 
   p {
-    color: lighten(@color, 30%);
+    color: @text;
   }
 }
 
 .box.info {
-  .info-box(@info);
+  .info-box(@blue);
 }
 
 .box.warn {
-  .info-box(@warn);
+  .info-box(@peach);
+}
+
+.box.severe {
+  .info-box(@red);
 }
 
 dialog {
@@ -331,9 +368,9 @@ dialog {
 
   text-align: center;
 
-  border: 1px solid @border;
+  border: 1px solid @surface0;
   border-radius: 12px;
-  background: @background;
+  background: @base;
 
   &::backdrop {
     background: fade(#000, 50%);
@@ -351,12 +388,6 @@ dialog {
       width: 400px;
     }
   }
-}
-
-.stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 6px;
 }
 
 .flex {
@@ -380,18 +411,18 @@ dialog {
 }
 
 .badge {
-  color: lighten(@success, 30%) !important;
+  color: @green !important;
   padding: 2px 6px;
   border-radius: 6px;
   font-size: 0.85em;
-  border: 1px solid @success;
-  background-color: fade(@success, 5%);
+  border: 1px solid @green;
+  background-color: fade(@green, 5%);
   margin-left: 0.4em;
 
   &.help {
     padding: 2px;
     font-weight: bold;
-    color: fade(@subtext, 50%) !important;
+    color: fade(@subtext0, 50%) !important;
     border: none;
     background: none;
   }
