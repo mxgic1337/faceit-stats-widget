@@ -39,6 +39,7 @@
   "generator.settings.save_session": "Store statistics for two hours after closing the widget",
   "generator.settings.save_session.help": "If enabled, the player stats (ELO difference, matches won/lost) will reset after two hours of inactivity. If disabled, player stats will reset instantly after closing the widget.",
   "generator.settings.player_not_found": "This player does not exist or has never played Counter-Strike 2 on FACEIT.",
+  "generator.settings.adjust_style": "Adjust widget style",
   "generator.theme.title": "Style",
   "generator.theme.custom_css.title": "Custom CSS URL",
   "generator.theme.custom_css.apply": "Press Enter to apply.",

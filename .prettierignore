@@ -4,3 +4,5 @@
 package.json
 pnpm-lock.yml
 .env
+*.md
+LICENSE

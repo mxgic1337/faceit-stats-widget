@@ -113,6 +113,8 @@ export const Generator = () => {
     StatisticType.WINRATIO
   );
 
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -283,6 +285,7 @@ export const Generator = () => {
           setRefreshInterval={setRefreshInterval}
           setOnlyOfficialMatchesCount={setOnlyOfficialMatchesCount}
           setSaveSession={setSaveSession}
+          setSelectedTabIndex={setSelectedTabIndex}
         />
       ),
     },
@@ -321,8 +324,6 @@ export const Generator = () => {
   const previews = useMemo<string[]>(() => {
     return ['nuke', 'mirage', 'ancient'];
   }, []);
-
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   return (
     <LanguageContext.Provider value={translate}>
