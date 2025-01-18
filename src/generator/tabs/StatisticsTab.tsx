@@ -1,7 +1,6 @@
 import { InfoBox } from '../../components/InfoBox.tsx';
 import { Dispatch, useContext } from 'react';
 import { Statistic } from '../../components/Statistic.tsx';
-import { Separator } from '../../components/Separator.tsx';
 import { LanguageContext, SettingsContext } from '../Generator.tsx';
 
 export enum StatisticType {
@@ -32,8 +31,7 @@ export const StatisticsTab = ({
     return null;
   }
   return (
-    <>
-      <Separator text={tl('generator.stats.title')} />
+    <div className={'settings'}>
       <div className={'setting stats'}>
         {!settings.showStatistics && (
           <InfoBox
@@ -66,6 +64,6 @@ export const StatisticsTab = ({
           setStatSlot={setStatSlot4}
         />
       </div>
-    </>
+    </div>
   );
 };

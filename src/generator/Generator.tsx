@@ -1,6 +1,5 @@
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { Widget } from '../../widget/src/widget/Widget.tsx';
-import { Separator } from '../components/Separator.tsx';
 import { Language, languages, tl } from '../translations/translations.ts';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getPlayerProfile } from '../../widget/src/utils/faceit_util.ts';
@@ -384,18 +383,22 @@ export const Generator = () => {
             <Footer />
           </section>
           <section className={'preview'}>
-            <Separator text={tl(language, 'generator.preview.title')} />
-            <div className={`${theme}-theme ${colorScheme}-scheme preview`}>
-              <Widget preview={true} />
-            </div>
-            <div className={'flex'}>
-              <button
-                onClick={() => {
-                  generateWidgetURL();
-                }}
-              >
-                {tl(language, 'generator.generate.button')}
-              </button>
+            <div className={'settings'}>
+              <h4 style={{ marginBottom: '6px' }}>
+                {tl(language, 'generator.preview.title')}
+              </h4>
+              <div className={`${theme}-theme ${colorScheme}-scheme preview`}>
+                <Widget preview={true} />
+              </div>
+              <div className={'flex'}>
+                <button
+                  onClick={() => {
+                    generateWidgetURL();
+                  }}
+                >
+                  {tl(language, 'generator.generate.button')}
+                </button>
+              </div>
             </div>
           </section>
         </main>
