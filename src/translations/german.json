@@ -10,7 +10,7 @@
   "widget.ranking": "Rangfolge",
   "widget.kd": "K/D",
   "widget.deaths": "Todesfälle",
-  "generator.testing": "Sie verwenden derzeit eine Beta-Version. Diese Version ist noch nicht fertig und kann noch einige Fehler enthalten.",
+  "generator.testing": "Sie verwenden derzeit eine experimentelle Version. Diese Version ist noch nicht fertig und kann noch einige Fehler enthalten.",
   "generator.experimental": "Experimentell",
   "generator.experimental.help": "Diese Option ist experimentell und funktioniert möglicherweise nicht richtig.",
   "generator.footer.issues": "Fehler melden",
