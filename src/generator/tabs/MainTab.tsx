@@ -23,6 +23,7 @@ type Props = {
   setOnlyOfficialMatchesCount: Dispatch<boolean>;
   setRefreshInterval: Dispatch<number>;
   setSaveSession: Dispatch<boolean>;
+  setSelectedTabIndex: Dispatch<number>;
 };
 
 export const MainTab = ({
@@ -41,6 +42,7 @@ export const MainTab = ({
   setOnlyOfficialMatchesCount,
   setRefreshInterval,
   setSaveSession,
+  setSelectedTabIndex,
 }: Props) => {
   const navigate = useNavigate();
   const tl = useContext(LanguageContext);
@@ -183,6 +185,14 @@ export const MainTab = ({
               setState={setShowRankingOnlyWhenChallenger}
             />
           )}
+          <button
+            onClick={() => {
+              setSelectedTabIndex(1);
+            }}
+            style={{ marginTop: '12px' }}
+          >
+            {tl('generator.settings.adjust_style')}
+          </button>
         </div>
       </div>
       <div className={'settings'}>
