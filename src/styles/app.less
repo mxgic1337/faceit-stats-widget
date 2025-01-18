@@ -200,10 +200,19 @@ section {
 section.preview {
   margin-left: 8px;
   display: flex;
-  min-width: 450px;
-  max-width: 450px;
+  min-width: 490px;
+  max-width: 490px;
   flex-direction: column;
   justify-content: flex-start;
+}
+
+div.preview {
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--preview-background);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: auto;
 }
 
 @media only screen and (max-width: 820px) {
@@ -248,6 +257,7 @@ section.preview {
     max-height: @size;
     border: 1px solid @surface0;
     border-radius: 6px;
+    background-color: @base;
     margin-right: 4px;
     transition: 0.1s;
   }
