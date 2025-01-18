@@ -184,11 +184,12 @@ footer {
 }
 
 a {
-  color: @text;
+  color: @blue;
   text-decoration: none;
 
-  &:hover {
-    color: darken(@text, 10%);
+  &:hover,
+  &:focus {
+    color: darken(@blue, 5%);
   }
 }
 
