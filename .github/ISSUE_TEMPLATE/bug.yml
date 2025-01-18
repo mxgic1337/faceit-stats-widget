@@ -1,0 +1,22 @@
+name: Bug Report
+description: Report a bug.
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: version
+    attributes:
+      label: Select a version
+      description: In which version the issue happened?
+      options:
+        - Stable
+        - Experimental
+      default: 0
+    validations:
+      required: true
+  - type: textarea
+    id: describe
+    attributes:
+      label: Describe your issue
+      description: Describe what happened. If possible, please attach a screenshot.
+    validations:
+      required: true
