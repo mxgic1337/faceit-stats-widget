@@ -226,7 +226,7 @@ div.preview {
   background: var(--preview-background);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: auto;
+  background-size: cover;
 }
 
 @media only screen and (max-width: 820px) {
@@ -238,17 +238,18 @@ div.preview {
     flex-direction: column-reverse;
 
     section.preview {
-      min-width: 0;
+      min-width: 100%;
       max-width: 100%;
       width: 100%;
       margin-left: 0;
-      margin-bottom: 20px;
+      margin-bottom: 102px;
       box-sizing: border-box;
       max-height: 231px;
     }
 
     div.preview {
       width: 100%;
+      box-sizing: border-box;
     }
   }
 
