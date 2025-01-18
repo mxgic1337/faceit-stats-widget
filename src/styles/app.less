@@ -137,6 +137,20 @@ main {
 
 .setting {
   margin: 6px 0;
+
+  &.generate {
+    max-width: 500px;
+  }
+
+  &.stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 6px;
+
+    .setting {
+      margin: 0 !important;
+    }
+  }
 }
 
 .settings {
@@ -291,10 +305,6 @@ div.preview {
   }
 }
 
-.setting.generate {
-  max-width: 500px;
-}
-
 .width-100 {
   width: 100%;
 }
@@ -377,12 +387,6 @@ dialog {
       width: 400px;
     }
   }
-}
-
-.stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 6px;
 }
 
 .flex {
