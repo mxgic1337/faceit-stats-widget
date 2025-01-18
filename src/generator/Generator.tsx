@@ -7,7 +7,6 @@ import {
 } from 'react';
 import { Widget } from '../../widget/src/widget/Widget.tsx';
 import { Language, languages, tl } from '../translations/translations.ts';
-import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getPlayerProfile } from '../../widget/src/utils/faceit_util.ts';
 import { MainTab } from './tabs/MainTab.tsx';
 import { StyleTab } from './tabs/StyleTab.tsx';
@@ -79,7 +78,7 @@ export const Generator = () => {
   const [showStatistics, setShowStatistics] = useState<boolean>(true);
   const [showEloProgressBar, setShowEloProgressBar] = useState<boolean>(true);
   const [useBannerAsBackground, setUseBannerAsBackground] =
-    useState<boolean>(false);
+    useState<boolean>(true);
   const [adjustBackgroundOpacity, setAdjustBackgroundOpacity] =
     useState<boolean>(false);
   const [backgroundOpacity, setBackgroundOpacity] = useState<number>(0.15);
@@ -88,6 +87,7 @@ export const Generator = () => {
   const [theme, setTheme] = useState<string>('normal');
   const [language, setLanguage] = useState<Language>(
     languages.find((language) => language.id === localStorage.fcw_lang) ||
+      languages.find((language) => language.id === navigator.language) ||
       languages[0]
   );
   const [previewBackground, setPreviewBackground] = useState<string>('ancient');
@@ -114,9 +114,6 @@ export const Generator = () => {
   );
 
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
 
   const translate = useCallback(
     (text: string, args?: string[]) => {
@@ -151,10 +148,6 @@ export const Generator = () => {
     return () => {
       document.getElementsByTagName('html')[0].classList.remove(`generator`);
     };
-  }, []);
-
-  useEffect(() => {
-    if (!searchParams.get('lang')) navigate(`?lang=${language.id}`);
   }, []);
 
   const generateWidgetURL = useCallback(() => {
