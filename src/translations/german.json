@@ -20,6 +20,8 @@
   "generator.settings.title": "Einstellungen",
   "generator.settings.faceit_name": "FACEIT Benutzername",
   "generator.settings.language": "Sprache",
+  "generator.settings.widget_language": "Widget Sprache",
+  "generator.settings.widget_language.default": "Standard",
   "generator.settings.show_username": "Nutzername anzeigen",
   "generator.settings.auto_width": "Automatisch eingestellt widget breite",
   "generator.settings.show_elo_suffix": "ELO Suffix anzeigen",
