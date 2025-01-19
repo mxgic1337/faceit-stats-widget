@@ -364,7 +364,14 @@ export const Generator = () => {
         <header>
           {import.meta.env.VITE_IS_TESTING && (
             <InfoBox
-              content={<p>{tl(language, 'generator.testing')}</p>}
+              content={
+                <p>
+                  {translate('generator.testing')}{' '}
+                  <a href="https://widget.mxgic1337.xyz">
+                    {translate('generator.testing.stable')}
+                  </a>
+                </p>
+              }
               style={'info'}
             />
           )}
