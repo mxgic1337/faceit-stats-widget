@@ -217,6 +217,10 @@ export const MainTab = ({
           />
         </div>
       </div>
+      <hr />
+      <p style={{ marginTop: '16px' }} className={'subtext'}>
+        {tl('generator.description')}
+      </p>
     </>
   );
 };

@@ -11,6 +11,8 @@
   "widget.kd": "K/D",
   "widget.deaths": "Deaths",
   "generator.testing": "You are currently using an experimental version. This version is not finished and might have some bugs.",
+  "generator.testing.stable": "Stable version",
+  "generator.description": "FACEIT Stats Widget is a free and open-source widget for OBS Studio that displays FACEIT ELO and player stats on your stream. It it easy to set up and has a lot of customization options.",
   "generator.experimental": "Experimental",
   "generator.experimental.help": "This option is experimental and it might not work correctly.",
   "generator.footer.issues": "Report an issue",
