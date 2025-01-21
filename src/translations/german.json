@@ -1,4 +1,5 @@
 {
+  "meta.description": "Ein anpassbares FACEIT ELO-Widget für OBS Studio, das den Level anzeigt, ELO und andere Statistiken zu deinem Stream!",
   "widget.wins": "Gewinnt",
   "widget.losses": "Verluste",
   "widget.elo": "{{0}} ELO",
