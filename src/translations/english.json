@@ -1,4 +1,5 @@
 {
+  "meta.description": "A customizable FACEIT ELO widget for OBS Studio that displays level, ELO and other stats on your stream!",
   "widget.wins": "wins",
   "widget.losses": "losses",
   "widget.elo": "{{0}} ELO",
