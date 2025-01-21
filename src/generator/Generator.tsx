@@ -128,7 +128,7 @@ export const Generator = () => {
 
   useLayoutEffect(() => {
     const description = document.getElementsByName('description');
-    description[0].content = translate('meta.description');
+    (description[0] as HTMLMetaElement).content = translate('meta.description');
   }, [language]);
 
   useEffect(() => {
