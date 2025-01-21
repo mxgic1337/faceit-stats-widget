@@ -2,6 +2,7 @@ import {
   createContext,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useState,
 } from 'react';
@@ -17,6 +18,7 @@ import { Footer } from '../components/Footer.tsx';
 import nukePreview from '../assets/previews/nuke.png';
 import miragePreview from '../assets/previews/mirage.png';
 import ancientPreview from '../assets/previews/ancient.png';
+import { useSearchParams } from 'react-router-dom';
 
 interface Settings {
   customCSS: string;
@@ -85,8 +87,10 @@ export const Generator = () => {
   const [refreshInterval, setRefreshInterval] = useState<number>(30);
   const [colorScheme, setColorScheme] = useState<string>('dark');
   const [theme, setTheme] = useState<string>('normal');
+  const [searchParams] = useSearchParams();
   const [language, setLanguage] = useState<Language>(
-    languages.find((language) => language.id === localStorage.fcw_lang) ||
+    languages.find((language) => language.id === searchParams.get('lang')) ||
+      languages.find((language) => language.id === localStorage.fcw_lang) ||
       languages.find((language) => language.id === navigator.language) ||
       languages[0]
   );
@@ -121,6 +125,11 @@ export const Generator = () => {
     },
     [language]
   );
+
+  useLayoutEffect(() => {
+    const description = document.getElementsByName('description');
+    (description[0] as HTMLMetaElement).content = translate('meta.description');
+  }, [language]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {

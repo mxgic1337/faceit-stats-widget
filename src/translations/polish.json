@@ -1,4 +1,5 @@
 {
+  "meta.description": "Widżet FACEIT do OBS Studio wyświetlający twoje statystyki na twoim streamie!",
   "widget.wins": "winy",
   "widget.losses": "lossy",
   "widget.elo": "{{0}} ELO",
