@@ -22,6 +22,14 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
+      - name: Format code
+        run: pnpm format
+      - name: Commit
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "style: formatted code"
+          commit_author: github-actions <41898282+github-actions[bot]@users.noreply.github.com>
+          branch: ${{ github.head_ref }}
       - name: Build
         run: VITE_FACEIT_API_KEY=${{ secrets.VITE_FACEIT_API_KEY }} VITE_IS_TESTING=true pnpm run build
       - name: Deploy
