@@ -9,7 +9,35 @@ on:
   pull_request:
 
 jobs:
+  format:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Format code
+        run: pnpm format
+      - name: Commit
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "style: formatted code"
+          commit_author: github-actions <41898282+github-actions[bot]@users.noreply.github.com>
+          branch: ${{ github.head_ref }}
   build:
+    needs: format
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
