@@ -1,4 +1,4 @@
-import { colorSchemes, themes } from '../../../widget/src/widget/Widget.tsx';
+import { colorSchemes, styles } from '../../../widget/src/widget/Widget.tsx';
 import { ColorPicker } from '../../components/ColorPicker.tsx';
 import { Dispatch, useContext, useRef } from 'react';
 import { Checkbox } from '../../components/Checkbox.tsx';
@@ -63,7 +63,7 @@ export const StyleTab = ({
                 value={settings.theme}
                 onChange={(e) => setTheme(e.target.value)}
               >
-                {themes.map((theme) => {
+                {styles.map((theme) => {
                   if (theme.hidden) return;
                   return (
                     <option key={theme.id} value={theme.id}>
