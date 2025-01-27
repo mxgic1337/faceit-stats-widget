@@ -75,8 +75,8 @@
   "scheme.dark": "Dunkel",
   "scheme.faceit": "Dunkel FACEIT",
   "scheme.custom": "Brauch Thema",
-  "theme.normal": "Normale",
-  "theme.compact": "Kompakt",
-  "theme.classic": "Klassisch",
-  "theme.custom": "Brauch CSS"
+  "style.normal": "Normale",
+  "style.compact": "Kompakt",
+  "style.classic": "Klassisch",
+  "style.custom": "Brauch CSS"
 }

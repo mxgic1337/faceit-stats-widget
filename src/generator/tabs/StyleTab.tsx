@@ -1,4 +1,4 @@
-import { colorSchemes, themes } from '../../../widget/src/widget/Widget.tsx';
+import { colorSchemes, styles } from '../../../widget/src/widget/Widget.tsx';
 import { ColorPicker } from '../../components/ColorPicker.tsx';
 import { Dispatch, useContext, useRef } from 'react';
 import { Checkbox } from '../../components/Checkbox.tsx';
@@ -6,7 +6,7 @@ import { InfoBox } from '../../components/InfoBox.tsx';
 import { LanguageContext, SettingsContext } from '../Generator.tsx';
 
 type Props = {
-  setTheme: Dispatch<string>;
+  setStyle: Dispatch<string>;
   setCustomBorderColor1: Dispatch<string>;
   setCustomBorderColor2: Dispatch<string>;
   setCustomTextColor: Dispatch<string>;
@@ -19,7 +19,7 @@ type Props = {
 };
 
 export const StyleTab = ({
-  setTheme,
+  setStyle,
   setColorScheme,
   setCustomBorderColor1,
   setCustomBorderColor2,
@@ -60,14 +60,17 @@ export const StyleTab = ({
             <div>
               <p>{tl('generator.theme.style')}</p>
               <select
-                value={settings.theme}
-                onChange={(e) => setTheme(e.target.value)}
+                value={settings.style}
+                onChange={(e) => setStyle(e.target.value)}
               >
-                {themes.map((theme) => {
-                  if (theme.hidden) return;
+                {styles.map((style) => {
+                  if (style.hidden) return;
                   return (
-                    <option key={theme.id} value={theme.id}>
-                      {tl(`theme.${theme.id}`)}
+                    <option key={style.id} value={style.id}>
+                      {tl(`style.${style.id}`)}{' '}
+                      {style.experimental
+                        ? `(${tl('generator.experimental')})`
+                        : ''}
                     </option>
                   );
                 })}
@@ -143,9 +146,17 @@ export const StyleTab = ({
           </div>
         )}
 
-        {settings.theme === 'custom' && (
+        {settings.style === 'custom' && (
           <div className={'setting'}>
-            <p>{tl('generator.theme.custom_css.title')}</p>
+            <p>
+              {tl('generator.theme.custom_css.title')}{' '}
+              <span
+                className={'badge'}
+                title={tl('generator.experimental.help')}
+              >
+                {tl('generator.experimental')}
+              </span>
+            </p>
             <input
               defaultValue={settings.customCSS}
               ref={customCSSInputRef}

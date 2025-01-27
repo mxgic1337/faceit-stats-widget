@@ -42,11 +42,15 @@ import '../styles/themes/classic.less';
 import '../styles/color_schemes.less';
 import { SettingsContext } from '../../../src/generator/Generator.tsx';
 
-export const themes: { id: string; hidden?: boolean }[] = [
+export const styles: {
+  id: string;
+  hidden?: boolean;
+  experimental?: boolean;
+}[] = [
   { id: 'normal' },
   { id: 'compact' },
   { id: 'classic' },
-  { id: 'custom', hidden: true },
+  { id: 'custom', experimental: true },
 ];
 
 export const colorSchemes: string[] = [
@@ -100,6 +104,7 @@ enum RankingState {
 }
 
 export const Widget = ({ preview }: { preview: boolean }) => {
+  const [style, setStyle] = useState<string>();
   const [level, setLevel] = useState(1);
   const [language, setLanguage] = useState<Language>(languages[0]);
   const [startingElo, setStartingElo] = useState<number>(100);
@@ -131,6 +136,8 @@ export const Widget = ({ preview }: { preview: boolean }) => {
   >(eloDistribution[0]);
   const [rankingState, setRankingState] = useState<RankingState>(0);
 
+  const [customCSS, setCustomCSS] = useState<string | undefined>();
+
   const [showEloDiff, setShowEloDiff] = useState<boolean>();
   const [showEloSuffix, setShowEloSuffix] = useState<boolean>();
   const [showStatistics, setShowStatistics] = useState<boolean>();
@@ -154,7 +161,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
   useLayoutEffect(() => {
     if (preview) return;
     const languageParam = searchParams.get('lang');
-    let themeParam = searchParams.get('theme');
+    let styleParam = searchParams.get('style') || searchParams.get('theme');
     let colorSchemeParam = searchParams.get('scheme');
     const showUsernameParam = searchParams.get('name');
     const onlyOfficialParam = searchParams.get('only_official');
@@ -168,22 +175,23 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     const autoWidthParam = searchParams.get('auto_width');
     const showEloProgressBarParam = searchParams.get('progress');
     const showEloProgressBarOldParam = searchParams.get('eloBar');
+    const customCSSParam = searchParams.get('css');
 
-    /* Redirect old theme format to new theme & style format */
-    if (themeParam === 'dark' || themeParam === 'normal-custom') {
-      themeParam = 'normal';
+    /* Redirect old theme format to new style & color scheme format */
+    if (styleParam === 'dark' || styleParam === 'normal-custom') {
+      styleParam = 'normal';
       colorSchemeParam = 'dark';
     } else if (
-      (themeParam === 'compact' && !colorSchemeParam) ||
-      themeParam === 'compact-custom'
+      (styleParam === 'compact' && !colorSchemeParam) ||
+      styleParam === 'compact-custom'
     ) {
-      themeParam = 'compact';
-      if (themeParam === 'compact-custom') {
+      styleParam = 'compact';
+      if (styleParam === 'compact-custom') {
         colorSchemeParam = 'custom';
       } else {
         colorSchemeParam = 'dark';
       }
-    } else if (themeParam === 'classic' && !colorSchemeParam) {
+    } else if (styleParam === 'classic' && !colorSchemeParam) {
       colorSchemeParam = 'faceit';
     }
 
@@ -224,17 +232,22 @@ export const Widget = ({ preview }: { preview: boolean }) => {
       setCustomBorderColor2(`#${searchParams.get('border2')}`);
     }
 
-    let theme = themeParam;
+    let style = styleParam;
     let scheme = colorSchemeParam;
 
-    if (!themes.find((theme1) => theme1.id === theme)) {
-      theme = 'normal';
+    if (!style || !styles.find((style1) => style1.id === style)) {
+      style = 'normal';
     }
     if (!colorSchemes.find((scheme1) => scheme1 === scheme)) {
       scheme = 'dark';
     }
 
-    document.getElementsByTagName('html')[0].classList.add(`${theme}-theme`);
+    if (style === 'custom' && customCSSParam) {
+      setCustomCSS(customCSSParam);
+    }
+
+    setStyle(style);
+    document.getElementsByTagName('html')[0].classList.add(`${style}-theme`);
     document.getElementsByTagName('html')[0].classList.add(`${scheme}-scheme`);
     if (autoWidthParam === 'true') {
       document.getElementsByTagName('html')[0].classList.add(`auto-width`);
@@ -248,7 +261,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     return () => {
       document
         .getElementsByTagName('html')[0]
-        .classList.remove(`${theme}-theme`);
+        .classList.remove(`${style}-theme`);
       document
         .getElementsByTagName('html')[0]
         .classList.remove(`${scheme}-scheme`);
@@ -290,6 +303,8 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     setCustomBorderColor(overrides.customBorderColor1);
     setCustomBorderColor2(overrides.customBorderColor2);
     setShowEloProgressBar(overrides.showEloProgressBar);
+    setCustomCSS(overrides.customCSS);
+    setStyle(overrides.style);
   }, [overrides]);
 
   const [searchParams] = useSearchParams();
@@ -437,23 +452,19 @@ export const Widget = ({ preview }: { preview: boolean }) => {
 
   /* Custom CSS */
   useEffect(() => {
-    if (searchParams.get('theme') !== 'custom') return;
-
-    const cssPath =
-      overrides?.customCSS || searchParams.get('css') || undefined;
-    if (!cssPath) return;
+    if (style !== 'custom' || !customCSS) return;
 
     const head = document.head;
     const link = document.createElement('link');
     link.type = 'text/css';
     link.rel = 'stylesheet';
-    link.href = cssPath;
+    link.href = customCSS;
 
     head.appendChild(link);
     return () => {
       head.removeChild(link);
     };
-  }, [overrides]);
+  }, [overrides, customCSS, style]);
 
   /** Returns player statistic */
   const getStat = useCallback(

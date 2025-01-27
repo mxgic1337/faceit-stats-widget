@@ -75,8 +75,8 @@
   "scheme.dark": "Ciemny",
   "scheme.faceit": "Ciemny FACEIT",
   "scheme.custom": "Własny motyw",
-  "theme.normal": "Normalny",
-  "theme.compact": "Kompaktowy",
-  "theme.classic": "Klasyczny",
-  "theme.custom": "Własny CSS"
+  "style.normal": "Normalny",
+  "style.compact": "Kompaktowy",
+  "style.classic": "Klasyczny",
+  "style.custom": "Własny CSS"
 }

@@ -83,8 +83,8 @@
   "scheme.ctp-macchiato": "Catppuccin Macchiato",
   "scheme.ctp-mocha": "Catppuccin Mocha",
   "scheme.custom": "Custom theme",
-  "theme.normal": "Normal",
-  "theme.compact": "Compact",
-  "theme.classic": "Classic",
-  "theme.custom": "Custom CSS"
+  "style.normal": "Normal",
+  "style.compact": "Compact",
+  "style.classic": "Classic",
+  "style.custom": "Custom CSS"
 }
