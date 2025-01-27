@@ -7,7 +7,11 @@ import {
   useState,
 } from 'react';
 import { Widget } from '../../widget/src/widget/Widget.tsx';
-import { Language, languages, tl } from '../translations/translations.ts';
+import {
+  Language,
+  languages,
+  tl as translate,
+} from '../translations/translations.ts';
 import { getPlayerProfile } from '../../widget/src/utils/faceit_util.ts';
 import { MainTab } from './tabs/MainTab.tsx';
 import { StyleTab } from './tabs/StyleTab.tsx';
@@ -41,7 +45,7 @@ interface Settings {
   backgroundOpacity: number;
   refreshInterval: number;
   colorScheme: string;
-  theme: string;
+  style: string;
   customBorderColor1: string;
   customBorderColor2: string;
   customTextColor: string;
@@ -86,7 +90,7 @@ export const Generator = () => {
   const [backgroundOpacity, setBackgroundOpacity] = useState<number>(0.15);
   const [refreshInterval, setRefreshInterval] = useState<number>(30);
   const [colorScheme, setColorScheme] = useState<string>('dark');
-  const [theme, setTheme] = useState<string>('normal');
+  const [style, setStyle] = useState<string>('normal');
   const [searchParams] = useSearchParams();
   const [language, setLanguage] = useState<Language>(
     languages.find((language) => language.id === searchParams.get('lang')) ||
@@ -119,16 +123,16 @@ export const Generator = () => {
 
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
-  const translate = useCallback(
+  const tl = useCallback(
     (text: string, args?: string[]) => {
-      return tl(language, text, args);
+      return translate(language, text, args);
     },
     [language]
   );
 
   useLayoutEffect(() => {
     const description = document.getElementsByName('description');
-    (description[0] as HTMLMetaElement).content = translate('meta.description');
+    (description[0] as HTMLMetaElement).content = tl('meta.description');
   }, [language]);
 
   useEffect(() => {
@@ -175,7 +179,7 @@ export const Generator = () => {
       suffix: showEloSuffix,
       diff: showEloDiff,
       scheme: colorScheme,
-      theme: theme,
+      style,
       ranking: showRanking ? (showRankingOnlyWhenChallenger ? 2 : 1) : 0,
       banner: useBannerAsBackground,
       refresh: refreshInterval,
@@ -193,7 +197,7 @@ export const Generator = () => {
       };
     }
 
-    if (theme === 'custom') {
+    if (style === 'custom') {
       params = {
         ...params,
         css: customCSS,
@@ -227,7 +231,7 @@ export const Generator = () => {
     showEloSuffix,
     showRanking,
     showRankingOnlyWhenChallenger,
-    theme,
+    style,
     username,
     playerId,
     playerBanner,
@@ -266,7 +270,7 @@ export const Generator = () => {
 
   const tabs = [
     {
-      name: tl(language, 'generator.settings.title'),
+      name: tl('generator.settings.title'),
       component: (
         <MainTab
           key={'main'}
@@ -292,7 +296,7 @@ export const Generator = () => {
       ),
     },
     {
-      name: tl(language, 'generator.theme.title'),
+      name: tl('generator.theme.title'),
       component: (
         <StyleTab
           key={'style'}
@@ -301,7 +305,7 @@ export const Generator = () => {
           setCustomBackgroundColor={setCustomBackgroundColor}
           setCustomTextColor={setCustomTextColor}
           setCustomCSS={setCustomCSS}
-          setTheme={setTheme}
+          setStyle={setStyle}
           setUseBannerAsBackground={setUseBannerAsBackground}
           setAdjustBackgroundOpacity={setAdjustBackgroundOpacity}
           setBackgroundOpacity={setBackgroundOpacity}
@@ -310,7 +314,7 @@ export const Generator = () => {
       ),
     },
     {
-      name: tl(language, 'generator.stats.title'),
+      name: tl('generator.stats.title'),
       component: (
         <StatisticsTab
           key={'stats'}
@@ -328,7 +332,7 @@ export const Generator = () => {
   }, []);
 
   return (
-    <LanguageContext.Provider value={translate}>
+    <LanguageContext.Provider value={tl}>
       <SettingsContext.Provider
         value={{
           customCSS,
@@ -351,7 +355,7 @@ export const Generator = () => {
           backgroundOpacity,
           refreshInterval,
           colorScheme,
-          theme,
+          style: style,
           language,
           widgetLanguage,
           statSlot1,
@@ -375,9 +379,9 @@ export const Generator = () => {
             <InfoBox
               content={
                 <p>
-                  {translate('generator.testing')}{' '}
+                  {tl('generator.testing')}{' '}
                   <a href="https://widget.mxgic1337.xyz">
-                    {translate('generator.testing.stable')}
+                    {tl('generator.testing.stable')}
                   </a>
                 </p>
               }
@@ -409,7 +413,7 @@ export const Generator = () => {
           <section className={'preview'}>
             <div className={'settings'}>
               <h4 style={{ marginBottom: '6px' }}>
-                {tl(language, 'generator.preview.title')}
+                {translate(language, 'generator.preview.title')}
               </h4>
               <style>{`
 		      div.preview.nuke {--preview-background: url(${nukePreview})}
@@ -417,9 +421,13 @@ export const Generator = () => {
 		      div.preview.ancient {--preview-background: url(${ancientPreview})}
 		      `}</style>
               <div
-                className={`${theme}-theme ${colorScheme}-scheme preview ${previewBackground}`}
+                className={`${style}-theme ${colorScheme}-scheme preview ${previewBackground}`}
               >
-                <Widget preview={true} />
+                {(style !== 'custom' ||
+                  (style === 'custom' &&
+                    customCSS !== 'https://example.com')) && (
+                  <Widget preview={true} />
+                )}
               </div>
               <select
                 value={previewBackground}
@@ -430,7 +438,7 @@ export const Generator = () => {
                 {previews.map((preview) => {
                   return (
                     <option key={preview} value={preview}>
-                      {translate(`generator.preview.${preview}`)}
+                      {tl(`generator.preview.${preview}`)}
                     </option>
                   );
                 })}
@@ -441,7 +449,7 @@ export const Generator = () => {
                     generateWidgetURL();
                   }}
                 >
-                  {tl(language, 'generator.generate.button')}
+                  {tl('generator.generate.button')}
                 </button>
               </div>
             </div>

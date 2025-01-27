@@ -42,11 +42,15 @@ import '../styles/themes/classic.less';
 import '../styles/color_schemes.less';
 import { SettingsContext } from '../../../src/generator/Generator.tsx';
 
-export const styles: { id: string; hidden?: boolean }[] = [
+export const styles: {
+  id: string;
+  hidden?: boolean;
+  experimental?: boolean;
+}[] = [
   { id: 'normal' },
   { id: 'compact' },
   { id: 'classic' },
-  { id: 'custom' },
+  { id: 'custom', experimental: true },
 ];
 
 export const colorSchemes: string[] = [
@@ -173,7 +177,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     const showEloProgressBarOldParam = searchParams.get('eloBar');
     const customCSSParam = searchParams.get('css');
 
-    /* Redirect old theme format to new theme & style format */
+    /* Redirect old theme format to new style & color scheme format */
     if (styleParam === 'dark' || styleParam === 'normal-custom') {
       styleParam = 'normal';
       colorSchemeParam = 'dark';
@@ -231,7 +235,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     let style = styleParam;
     let scheme = colorSchemeParam;
 
-    if (!style || !styles.find((theme1) => theme1.id === style)) {
+    if (!style || !styles.find((style1) => style1.id === style)) {
       style = 'normal';
     }
     if (!colorSchemes.find((scheme1) => scheme1 === scheme)) {
@@ -300,7 +304,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     setCustomBorderColor2(overrides.customBorderColor2);
     setShowEloProgressBar(overrides.showEloProgressBar);
     setCustomCSS(overrides.customCSS);
-    setStyle(overrides.theme);
+    setStyle(overrides.style);
   }, [overrides]);
 
   const [searchParams] = useSearchParams();
