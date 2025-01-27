@@ -145,7 +145,15 @@ export const StyleTab = ({
 
         {settings.theme === 'custom' && (
           <div className={'setting'}>
-            <p>{tl('generator.theme.custom_css.title')}</p>
+            <p>
+              {tl('generator.theme.custom_css.title')}{' '}
+              <span
+                className={'badge'}
+                title={tl('generator.experimental.help')}
+              >
+                {tl('generator.experimental')}
+              </span>
+            </p>
             <input
               defaultValue={settings.customCSS}
               ref={customCSSInputRef}
