@@ -40,7 +40,8 @@ export default [
       parser: tsParser,
     },
 
-    rules: {},
+    rules: {
+      'react-hooks/exhaustive-deps': 'off',
+    },
   },
 ];
-
