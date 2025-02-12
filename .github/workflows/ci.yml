@@ -1,12 +1,5 @@
-name: Build check
-on:
-  push:
-    branches:
-      - '*'
-      - '*/*'
-      - '**'
-      - '!main'
-  pull_request:
+name: CI 
+on: ['pull_request']
 
 jobs:
   build:
@@ -26,5 +19,7 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
+      - name: Lint
+        run: pnpm lint
       - name: Build
         run: pnpm run build
