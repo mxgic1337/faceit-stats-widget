@@ -22,7 +22,7 @@ export const Footer = () => {
         <small>
           <a
             href={
-              'https://github.com/mxgic1337/faceit-stats-widget/blob/master/LICENSE'
+              'https://github.com/mxgic1337/faceit-stats-widget/blob/main/LICENSE'
             }
             target={'_blank'}
           >
