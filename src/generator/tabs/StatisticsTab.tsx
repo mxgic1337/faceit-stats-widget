@@ -31,39 +31,50 @@ export const StatisticsTab = ({
     return null;
   }
   return (
-    <div className={'settings'}>
-      <div className={'setting stats'}>
-        {!settings.showStatistics && (
-          <InfoBox
-            content={<p>{tl('generator.stats.disabled')}</p>}
-            style={'warn'}
+    <>
+      <div className={'settings'}>
+        <div className={'setting stats'}>
+          {!settings.showStatistics && (
+            <InfoBox
+              content={<p>{tl('generator.stats.disabled')}</p>}
+              style={'warn'}
+            />
+          )}
+          <Statistic
+            slot={'1'}
+            statSlot={settings.statSlot1}
+            setStatSlot={setStatSlot1}
           />
-        )}
-        <Statistic
-          slot={'1'}
-          language={settings.language}
-          statSlot={settings.statSlot1}
-          setStatSlot={setStatSlot1}
-        />
-        <Statistic
-          slot={'2'}
-          language={settings.language}
-          statSlot={settings.statSlot2}
-          setStatSlot={setStatSlot2}
-        />
-        <Statistic
-          slot={'3'}
-          language={settings.language}
-          statSlot={settings.statSlot3}
-          setStatSlot={setStatSlot3}
-        />
-        <Statistic
-          slot={'4'}
-          language={settings.language}
-          statSlot={settings.statSlot4}
-          setStatSlot={setStatSlot4}
-        />
+          <Statistic
+            slot={'2'}
+            statSlot={settings.statSlot2}
+            setStatSlot={setStatSlot2}
+          />
+          <Statistic
+            slot={'3'}
+            statSlot={settings.statSlot3}
+            setStatSlot={setStatSlot3}
+          />
+          <Statistic
+            slot={'4'}
+            statSlot={settings.statSlot4}
+            setStatSlot={setStatSlot4}
+          />
+        </div>
       </div>
-    </div>
+      <div className={'settings'}>
+        <div className={'setting'}>
+          <p>{tl('generator.stats.match_count')}</p>
+          <select>
+            <option value="20">
+              {tl('generator.stats.match_count.count', ['20'])}
+            </option>
+            <option value="30">
+              {tl('generator.stats.match_count.count', ['30'])}
+            </option>
+          </select>
+        </div>
+      </div>
+    </>
   );
 };

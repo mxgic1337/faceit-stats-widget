@@ -144,7 +144,7 @@ export function getPlayerStats(
         }
 
         fetch(
-          `https://open.faceit.com/data/v4/players/${v4PlayersResponse.player_id}/games/cs2/stats?limit=20`,
+          `https://open.faceit.com/data/v4/players/${v4PlayersResponse.player_id}/games/cs2/stats?limit=30`,
           {
             headers: HEADERS,
           }
@@ -154,7 +154,7 @@ export function getPlayerStats(
             resolve(undefined);
             return;
           }
-          /* Average stats from last 20 matches */
+          /* Average stats from last 30 matches */
 
           const v4StatsResponse = (await response.json()) as V4StatsResponse;
 
