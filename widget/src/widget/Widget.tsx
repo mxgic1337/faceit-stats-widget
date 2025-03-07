@@ -148,7 +148,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
   const [customBackgroundColor, setCustomBackgroundColor] = useState<string>();
   const [customBorderColor, setCustomBorderColor] = useState<string>();
   const [customBorderColor2, setCustomBorderColor2] = useState<string>();
-  const [avgMatchCount, setAvgMatchCount] = useState();
+  const [avgMatchCount, setAvgMatchCount] = useState<number>();
   const overrides = useContext(SettingsContext);
 
   const translate = useCallback(
