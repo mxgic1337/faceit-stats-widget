@@ -90,7 +90,7 @@ export const Generator = () => {
     useState<boolean>(false);
   const [backgroundOpacity, setBackgroundOpacity] = useState<number>(0.15);
   const [refreshInterval, setRefreshInterval] = useState<number>(30);
-  const [averageStatsMatchCount, _setAverageStatsMatchCount] =
+  const [averageStatsMatchCount, setAverageStatsMatchCount] =
     useState<number>(30);
   const [colorScheme, setColorScheme] = useState<string>('dark');
   const [style, setStyle] = useState<string>('normal');
@@ -191,6 +191,7 @@ export const Generator = () => {
       only_official: onlyOfficialMatchesCount,
       stats: [statSlot1, statSlot2, statSlot3, statSlot4],
       save_session: saveSession,
+      avg_matches: averageStatsMatchCount,
     };
 
     if (useBannerAsBackground && adjustBackgroundOpacity) {
@@ -326,6 +327,7 @@ export const Generator = () => {
           setStatSlot2={setStatSlot2}
           setStatSlot3={setStatSlot3}
           setStatSlot4={setStatSlot4}
+          setAverageStatsMatchCount={setAverageStatsMatchCount}
         />
       ),
     },

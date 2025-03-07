@@ -17,6 +17,7 @@ interface Props {
   setStatSlot2: Dispatch<StatisticType>;
   setStatSlot3: Dispatch<StatisticType>;
   setStatSlot4: Dispatch<StatisticType>;
+  setAverageStatsMatchCount: Dispatch<number>;
 }
 
 export const StatisticsTab = ({
@@ -24,6 +25,7 @@ export const StatisticsTab = ({
   setStatSlot2,
   setStatSlot3,
   setStatSlot4,
+  setAverageStatsMatchCount,
 }: Props) => {
   const tl = useContext(LanguageContext);
   const settings = useContext(SettingsContext);
@@ -65,7 +67,12 @@ export const StatisticsTab = ({
       <div className={'settings'}>
         <div className={'setting'}>
           <p>{tl('generator.stats.match_count')}</p>
-          <select>
+          <select
+            value={settings.averageStatsMatchCount}
+            onChange={(e) => {
+              setAverageStatsMatchCount(parseInt(e.currentTarget.value));
+            }}
+          >
             <option value="20">
               {tl('generator.stats.match_count.count', ['20'])}
             </option>

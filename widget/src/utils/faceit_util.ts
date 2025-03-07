@@ -85,6 +85,7 @@ const HEADERS = {
 
 export function getPlayerStats(
   id: string,
+  matchCount: number,
   startDate: Date,
   onlyOfficial: boolean
 ): Promise<FaceitPlayer | undefined> {
@@ -144,7 +145,7 @@ export function getPlayerStats(
         }
 
         fetch(
-          `https://open.faceit.com/data/v4/players/${v4PlayersResponse.player_id}/games/cs2/stats?limit=30`,
+          `https://open.faceit.com/data/v4/players/${v4PlayersResponse.player_id}/games/cs2/stats?limit=${matchCount}`,
           {
             headers: HEADERS,
           }
@@ -154,7 +155,7 @@ export function getPlayerStats(
             resolve(undefined);
             return;
           }
-          /* Average stats from last 30 matches */
+          /* Average stats from last 20/30 matches */
 
           const v4StatsResponse = (await response.json()) as V4StatsResponse;
 

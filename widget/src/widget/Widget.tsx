@@ -148,6 +148,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
   const [customBackgroundColor, setCustomBackgroundColor] = useState<string>();
   const [customBorderColor, setCustomBorderColor] = useState<string>();
   const [customBorderColor2, setCustomBorderColor2] = useState<string>();
+  const [avgMatchCount, setAvgMatchCount] = useState();
   const overrides = useContext(SettingsContext);
 
   const translate = useCallback(
@@ -176,6 +177,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     const showEloProgressBarParam = searchParams.get('progress');
     const showEloProgressBarOldParam = searchParams.get('eloBar');
     const customCSSParam = searchParams.get('css');
+    const avgMatchesParam = searchParams.get('avg_matches');
 
     /* Redirect old theme format to new style & color scheme format */
     if (styleParam === 'dark' || styleParam === 'normal-custom') {
@@ -201,6 +203,10 @@ export const Widget = ({ preview }: { preview: boolean }) => {
 
     if (!onlyOfficialParam) {
       searchParams.set('only_official', 'true');
+    }
+
+    if (avgMatchesParam) {
+      setAvgMatchCount(avgMatchesParam === '30' ? 30 : 20);
     }
 
     setShowUsername(!showUsernameParam || showUsernameParam === 'true');
@@ -337,7 +343,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
 
   /* Update player stats */
   useEffect(() => {
-    if (preview) return;
+    if (preview || !avgMatchCount) return;
 
     let startDate = new Date();
     const savedStartDate = localStorage.getItem('fcw_session_start');
@@ -362,6 +368,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     const getStats = (firstTime?: boolean) => {
       getPlayerStats(
         playerId,
+        avgMatchCount,
         startDate,
         searchParams.get('only_official') === 'true'
       ).then((player) => {
@@ -448,7 +455,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [avgMatchCount]);
 
   /* Custom CSS */
   useEffect(() => {
