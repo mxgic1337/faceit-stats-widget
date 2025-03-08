@@ -33,6 +33,7 @@ jobs:
         with:
           commit_message: "style: formatted code"
           commit_author: github-actions <41898282+github-actions[bot]@users.noreply.github.com>
+          create_branch: true
           branch: style/${{ github.sha }}
       - name: Create Pull Request
         uses: actions/github-script@v6
