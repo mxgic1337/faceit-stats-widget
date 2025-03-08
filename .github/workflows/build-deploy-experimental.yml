@@ -6,6 +6,9 @@ on:
 
 jobs:
   build:
+    environment:
+      name: Experimental
+      url: 'https://widget-git.mxgic1337.xyz/'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

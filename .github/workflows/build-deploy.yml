@@ -5,6 +5,9 @@ on:
 
 jobs:
   build:
+    environment:
+      name: Stable
+      url: 'https://widget.mxgic1337.xyz/'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
