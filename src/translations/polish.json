@@ -63,6 +63,8 @@
   "generator.stats.title": "Statystyki",
   "generator.stats.slot": "Miejsce {{0}}",
   "generator.stats.disabled": "Statystyki są wyłączone. Możesz je włączyć w zakładce \"Ustawienia\".",
+  "generator.stats.match_count": "Pobieraj statystyki z ostatnich:",
+  "generator.stats.match_count.count": "{{0}} meczów",
   "modals.generated.title": "Wygenerowano widżet",
   "modals.buttons.copy": "Kopiuj",
   "modals.buttons.close": "Zamknij",

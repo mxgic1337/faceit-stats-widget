@@ -57,6 +57,7 @@ interface Settings {
   statSlot3: StatisticType;
   statSlot4: StatisticType;
   saveSession: boolean;
+  averageStatsMatchCount: number;
 }
 
 export const LanguageContext = createContext<
@@ -89,6 +90,8 @@ export const Generator = () => {
     useState<boolean>(false);
   const [backgroundOpacity, setBackgroundOpacity] = useState<number>(0.15);
   const [refreshInterval, setRefreshInterval] = useState<number>(30);
+  const [averageStatsMatchCount, setAverageStatsMatchCount] =
+    useState<number>(30);
   const [colorScheme, setColorScheme] = useState<string>('dark');
   const [style, setStyle] = useState<string>('normal');
   const [searchParams] = useSearchParams();
@@ -188,6 +191,7 @@ export const Generator = () => {
       only_official: onlyOfficialMatchesCount,
       stats: [statSlot1, statSlot2, statSlot3, statSlot4],
       save_session: saveSession,
+      avg_matches: averageStatsMatchCount,
     };
 
     if (useBannerAsBackground && adjustBackgroundOpacity) {
@@ -248,6 +252,7 @@ export const Generator = () => {
     statSlot3,
     statSlot4,
     saveSession,
+    averageStatsMatchCount,
   ]);
 
   const jsonToQuery = useCallback(
@@ -322,6 +327,7 @@ export const Generator = () => {
           setStatSlot2={setStatSlot2}
           setStatSlot3={setStatSlot3}
           setStatSlot4={setStatSlot4}
+          setAverageStatsMatchCount={setAverageStatsMatchCount}
         />
       ),
     },
@@ -367,6 +373,7 @@ export const Generator = () => {
           customBorderColor1,
           customBorderColor2,
           saveSession,
+          averageStatsMatchCount,
         }}
       >
         <GeneratedWidgetModal
