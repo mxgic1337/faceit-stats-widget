@@ -66,7 +66,7 @@
   "generator.stats.disabled": "Statistics are disabled. You can enable them in the \"Settings\" tab.",
   "generator.stats.match_count": "Get statistics from last:",
   "generator.stats.match_count.count": "{{0}} matches",
-	"generator.preview.nuke": "Nuke",
+  "generator.preview.nuke": "Nuke",
   "generator.preview.mirage": "Mirage",
   "generator.preview.ancient": "Ancient",
   "modals.generated.title": "Widget generated",
