@@ -148,6 +148,9 @@ export const Widget = ({ preview }: { preview: boolean }) => {
   const [customBackgroundColor, setCustomBackgroundColor] = useState<string>();
   const [customBorderColor, setCustomBorderColor] = useState<string>();
   const [customBorderColor2, setCustomBorderColor2] = useState<string>();
+
+  const [widgetOpacity, setWidgetOpacity] = useState<number>(1);
+
   const [avgMatchCount, setAvgMatchCount] = useState<number>();
   const overrides = useContext(SettingsContext);
 
@@ -178,6 +181,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     const showEloProgressBarOldParam = searchParams.get('eloBar');
     const customCSSParam = searchParams.get('css');
     const avgMatchesParam = searchParams.get('avg_matches');
+    const opacityParam = searchParams.get('opacity');
 
     /* Redirect old theme format to new style & color scheme format */
     if (styleParam === 'dark' || styleParam === 'normal-custom') {
@@ -203,6 +207,10 @@ export const Widget = ({ preview }: { preview: boolean }) => {
 
     if (!onlyOfficialParam) {
       searchParams.set('only_official', 'true');
+    }
+
+    if (opacityParam) {
+      setWidgetOpacity(parseFloat(opacityParam));
     }
 
     if (avgMatchesParam) {
@@ -309,6 +317,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     setCustomBorderColor(overrides.customBorderColor1);
     setCustomBorderColor2(overrides.customBorderColor2);
     setShowEloProgressBar(overrides.showEloProgressBar);
+    setWidgetOpacity(overrides.widgetOpacity);
     setCustomCSS(overrides.customCSS);
     setStyle(overrides.style);
   }, [overrides]);
@@ -533,10 +542,15 @@ export const Widget = ({ preview }: { preview: boolean }) => {
       {useBannerAsBackground && (
         <style>{`
                 .wrapper {
-                    --background-url: url("${preview ? overrides?.playerBanner : banner}") !important;
-                    ${backgroundOpacity ? `--background-opacity: ${backgroundOpacity} !important;` : ''}
+                    --banner-url: url("${preview ? overrides?.playerBanner : banner}") !important;
+                    ${backgroundOpacity ? `--banner-opacity: ${backgroundOpacity} !important;` : ''}
                 }
             `}</style>
+      )}
+      {widgetOpacity !== 1 && (
+        <style>{`.wrapper {
+					--background-opacity: ${widgetOpacity} !important;
+				}`}</style>
       )}
       <div className={'wrapper'}>
         <div className={`widget ${useBannerAsBackground ? 'banner' : ''}`}>

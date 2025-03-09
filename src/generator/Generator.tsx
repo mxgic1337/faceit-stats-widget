@@ -58,6 +58,7 @@ interface Settings {
   statSlot4: StatisticType;
   saveSession: boolean;
   averageStatsMatchCount: number;
+  widgetOpacity: number;
 }
 
 export const LanguageContext = createContext<
@@ -95,6 +96,7 @@ export const Generator = () => {
   const [colorScheme, setColorScheme] = useState<string>('dark');
   const [style, setStyle] = useState<string>('normal');
   const [searchParams] = useSearchParams();
+  const [widgetOpacity, setWidgetOpacity] = useState<number>(1);
   const [language, setLanguage] = useState<Language>(
     languages.find((language) => language.id === searchParams.get('lang')) ||
       languages.find((language) => language.id === localStorage.fcw_lang) ||
@@ -183,6 +185,7 @@ export const Generator = () => {
       diff: showEloDiff,
       scheme: colorScheme,
       style,
+      opacity: widgetOpacity,
       ranking: showRanking ? (showRankingOnlyWhenChallenger ? 2 : 1) : 0,
       banner: useBannerAsBackground,
       refresh: refreshInterval,
@@ -253,6 +256,7 @@ export const Generator = () => {
     statSlot4,
     saveSession,
     averageStatsMatchCount,
+    widgetOpacity,
   ]);
 
   const jsonToQuery = useCallback(
@@ -315,6 +319,7 @@ export const Generator = () => {
           setAdjustBackgroundOpacity={setAdjustBackgroundOpacity}
           setBackgroundOpacity={setBackgroundOpacity}
           setColorScheme={setColorScheme}
+          setWidgetOpacity={setWidgetOpacity}
         />
       ),
     },
@@ -374,6 +379,7 @@ export const Generator = () => {
           customBorderColor2,
           saveSession,
           averageStatsMatchCount,
+          widgetOpacity,
         }}
       >
         <GeneratedWidgetModal
