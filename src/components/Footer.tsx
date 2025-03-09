@@ -52,7 +52,20 @@ export const Footer = () => {
           </a>{' '}
           2025
         </small>
-        <small>v{packageJSON.version}</small>
+        <small>
+          {import.meta.env.VITE_COMMIT && (
+            <span>
+              <a
+                href={`https://github.com/mxgic1337/faceit-stats-widget/commit/${import.meta.env.VITE_COMMIT}`}
+                target={'_blank'}
+              >
+                {import.meta.env.VITE_COMMIT.substring(0, 7)}
+              </a>{' '}
+              &bull;{' '}
+            </span>
+          )}
+          v{packageJSON.version}
+        </small>
       </div>
     </footer>
   );
