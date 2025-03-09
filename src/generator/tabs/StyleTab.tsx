@@ -16,6 +16,7 @@ type Props = {
   setUseBannerAsBackground: Dispatch<boolean>;
   setAdjustBackgroundOpacity: Dispatch<boolean>;
   setBackgroundOpacity: Dispatch<number>;
+  setWidgetOpacity: Dispatch<number>;
 };
 
 export const StyleTab = ({
@@ -29,6 +30,7 @@ export const StyleTab = ({
   setAdjustBackgroundOpacity,
   setBackgroundOpacity,
   setCustomCSS,
+  setWidgetOpacity,
 }: Props) => {
   const customCSSInputRef = useRef<HTMLInputElement>(null);
   const tl = useContext(LanguageContext);
@@ -119,6 +121,26 @@ export const StyleTab = ({
               )}
             </>
           )}
+        </div>
+
+        <div className={'setting'}>
+          <p>{tl('generator.theme.adjust_opacity')}</p>
+          <div className={'flex'} style={{ alignItems: 'center' }}>
+            <input
+              type={'range'}
+              value={settings.widgetOpacity}
+              min={0.3}
+              max={1}
+              step={0.01}
+              onChange={(event) => {
+                setWidgetOpacity(parseFloat(event.currentTarget.value));
+              }}
+            />
+
+            <p style={{ width: '50px', textAlign: 'right' }}>
+              {Math.round(settings.widgetOpacity * 100)}%
+            </p>
+          </div>
         </div>
 
         {settings.colorScheme === 'custom' && (
