@@ -215,6 +215,8 @@ export const Widget = ({ preview }: { preview: boolean }) => {
 
     if (avgMatchesParam) {
       setAvgMatchCount(avgMatchesParam === '30' ? 30 : 20);
+    } else {
+      setAvgMatchCount(30);
     }
 
     setShowUsername(!showUsernameParam || showUsernameParam === 'true');
