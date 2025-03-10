@@ -50,7 +50,7 @@ export const styles: {
   { id: 'normal' },
   { id: 'compact' },
   { id: 'classic' },
-  { id: 'custom', experimental: true },
+  { id: 'custom', experimental: true, hidden: true },
 ];
 
 export const colorSchemes: string[] = [
