@@ -50,7 +50,7 @@ export const styles: {
   { id: 'normal' },
   { id: 'compact' },
   { id: 'classic' },
-  { id: 'custom', experimental: true },
+  { id: 'custom', experimental: true, hidden: true },
 ];
 
 export const colorSchemes: string[] = [
@@ -215,6 +215,8 @@ export const Widget = ({ preview }: { preview: boolean }) => {
 
     if (avgMatchesParam) {
       setAvgMatchCount(avgMatchesParam === '30' ? 30 : 20);
+    } else {
+      setAvgMatchCount(30);
     }
 
     setShowUsername(!showUsernameParam || showUsernameParam === 'true');

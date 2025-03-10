@@ -23,13 +23,16 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: calc(var(--border-width));
 
     &::after {
       content: '';
       position: absolute;
-      left: calc(var(--border-width) * -1);
-      width: 100%;
-      height: 100%;
+      z-index: 2;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background: linear-gradient(
         var(--border-rotation),
         var(--border-1),

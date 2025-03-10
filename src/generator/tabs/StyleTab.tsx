@@ -79,6 +79,9 @@ export const StyleTab = ({
               </select>
             </div>
           </div>
+
+          {/* Banner background settings */}
+
           <Checkbox
             text={tl('generator.theme.banner_as_background')}
             state={settings.useBannerAsBackground}
@@ -123,50 +126,7 @@ export const StyleTab = ({
           )}
         </div>
 
-        <div className={'setting'}>
-          <p>{tl('generator.theme.adjust_opacity')}</p>
-          <div className={'flex'} style={{ alignItems: 'center' }}>
-            <input
-              type={'range'}
-              value={settings.widgetOpacity}
-              min={0.3}
-              max={1}
-              step={0.01}
-              onChange={(event) => {
-                setWidgetOpacity(parseFloat(event.currentTarget.value));
-              }}
-            />
-
-            <p style={{ width: '50px', textAlign: 'right' }}>
-              {Math.round(settings.widgetOpacity * 100)}%
-            </p>
-          </div>
-        </div>
-
-        {settings.colorScheme === 'custom' && (
-          <div className={'setting'}>
-            <ColorPicker
-              text={tl('generator.theme.border_color_1')}
-              color={settings.customBorderColor1}
-              setColor={setCustomBorderColor1}
-            />
-            <ColorPicker
-              text={tl('generator.theme.border_color_2')}
-              color={settings.customBorderColor2}
-              setColor={setCustomBorderColor2}
-            />
-            <ColorPicker
-              text={tl('generator.theme.text_color')}
-              color={settings.customTextColor}
-              setColor={setCustomTextColor}
-            />
-            <ColorPicker
-              text={tl('generator.theme.background_color')}
-              color={settings.customBackgroundColor}
-              setColor={setCustomBackgroundColor}
-            />
-          </div>
-        )}
+        {/* Custom CSS */}
 
         {settings.style === 'custom' && (
           <div className={'setting'}>
@@ -190,6 +150,58 @@ export const StyleTab = ({
             <small>{tl('generator.theme.custom_css.apply')}</small>
           </div>
         )}
+      </div>
+
+      {/* Custom color scheme settings */}
+
+      {settings.colorScheme === 'custom' && (
+        <div className={'settings'}>
+          <div className={'setting'}>
+            <ColorPicker
+              text={tl('generator.theme.border_color_1')}
+              color={settings.customBorderColor1}
+              setColor={setCustomBorderColor1}
+            />
+            <ColorPicker
+              text={tl('generator.theme.border_color_2')}
+              color={settings.customBorderColor2}
+              setColor={setCustomBorderColor2}
+            />
+            <ColorPicker
+              text={tl('generator.theme.text_color')}
+              color={settings.customTextColor}
+              setColor={setCustomTextColor}
+            />
+            <ColorPicker
+              text={tl('generator.theme.background_color')}
+              color={settings.customBackgroundColor}
+              setColor={setCustomBackgroundColor}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Background opacity settings */}
+      <div className={'settings'}>
+        <div className={'setting'}>
+          <p>{tl('generator.theme.adjust_opacity')}</p>
+          <div className={'flex'} style={{ alignItems: 'center' }}>
+            <input
+              type={'range'}
+              value={settings.widgetOpacity}
+              min={0.3}
+              max={1}
+              step={0.01}
+              onChange={(event) => {
+                setWidgetOpacity(parseFloat(event.currentTarget.value));
+              }}
+            />
+
+            <p style={{ width: '50px', textAlign: 'right' }}>
+              {Math.round(settings.widgetOpacity * 100)}%
+            </p>
+          </div>
+        </div>
       </div>
     </>
   );
