@@ -56,6 +56,7 @@
   "generator.theme.banner_as_background.no_banner": "Player {{0}} has no profile banner set.",
   "generator.theme.banner_as_background.adjust_opacity": "Adjust banner opacity",
   "generator.theme.adjust_opacity": "Widget background opacity",
+  "generator.theme.adjust_opacity.requirements": "Requires OBS Studio version 31.0.0 or newer.",
   "generator.generate.title": "Generate",
   "generator.generate.button": "Generate",
   "generator.generate.open_in_browser.button": "Open in Browser",

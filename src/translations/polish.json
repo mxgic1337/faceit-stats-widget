@@ -55,6 +55,7 @@
   "generator.theme.banner_as_background.no_banner": "Gracz {{0}} nie ma ustawionego baneru profilu.",
   "generator.theme.banner_as_background.adjust_opacity": "Dostosuj przezroczystość baneru",
   "generator.theme.adjust_opacity": "Przezroczystość tła widżetu",
+  "generator.theme.adjust_opacity.requirements": "Wymaga OBS Studio w wersji 31.0.0 lub nowszej.",
   "generator.generate.title": "Wygeneruj widżet",
   "generator.generate.button": "Wygeneruj",
   "generator.generate.open_in_browser.button": "Otwórz w przeglądarce",

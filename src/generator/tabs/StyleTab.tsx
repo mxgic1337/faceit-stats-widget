@@ -185,6 +185,7 @@ export const StyleTab = ({
       <div className={'settings'}>
         <div className={'setting'}>
           <p>{tl('generator.theme.adjust_opacity')}</p>
+
           <div className={'flex'} style={{ alignItems: 'center' }}>
             <input
               type={'range'}
@@ -201,6 +202,9 @@ export const StyleTab = ({
               {Math.round(settings.widgetOpacity * 100)}%
             </p>
           </div>
+          <small style={{ fontStyle: 'italic' }}>
+            {tl('generator.theme.adjust_opacity.requirements')}
+          </small>
         </div>
       </div>
     </>

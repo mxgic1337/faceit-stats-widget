@@ -152,6 +152,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
   const [widgetOpacity, setWidgetOpacity] = useState<number>(1);
 
   const [avgMatchCount, setAvgMatchCount] = useState<number>();
+  const [compatibilityMode, setCompatibilityMode] = useState<boolean>();
   const overrides = useContext(SettingsContext);
 
   const translate = useCallback(
@@ -182,6 +183,17 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     const customCSSParam = searchParams.get('css');
     const avgMatchesParam = searchParams.get('avg_matches');
     const opacityParam = searchParams.get('opacity');
+
+    const userAgent = window.navigator.userAgent;
+    const chromeVersion = userAgent
+      .split(' ')
+      .find((version) => version.startsWith('Chrome/'));
+    if (
+      chromeVersion &&
+      parseInt(chromeVersion.split('/')[1].split('.')[0]) < 120
+    ) {
+      setCompatibilityMode(true);
+    }
 
     /* Redirect old theme format to new style & color scheme format */
     if (styleParam === 'dark' || styleParam === 'normal-custom') {
@@ -554,14 +566,14 @@ export const Widget = ({ preview }: { preview: boolean }) => {
 					--background-opacity: ${widgetOpacity} !important;
 				}`}</style>
       )}
-      <div className={'wrapper'}>
+      <div className={`wrapper${compatibilityMode ? ' compatibility' : ''}`}>
         <div className={`widget ${useBannerAsBackground ? 'banner' : ''}`}>
           <div className={'player-stats'}>
             <div className={'level'}>
               <img src={getIcon()} alt={`Level ${preview ? 10 : level}`} />
               <div className={'elo'}>
                 {showUsername && (
-                  <h2>{username || overrides?.username || '?'}</h2>
+                  <h2>{username || overrides?.username || '?'} </h2>
                 )}
                 <p className={showUsername ? '' : 'username-hidden'}>
                   {(rankingState === RankingState.SHOW ||
