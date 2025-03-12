@@ -2,6 +2,21 @@ name: Bug Report
 description: Report a bug.
 labels: ["bug"]
 body:
+  - type: textarea
+    id: describe
+    attributes:
+      label: Describe your issue
+      description: Describe what happened. If possible, please attach a screenshot.
+    validations:
+      required: true
+  - type: input
+    id: obs-version
+    attributes:
+      label: Streaming software version
+      description: What version of OBS (or other streaming software) are you using?
+      placeholder: "OBS Studio 31.0.1"
+    validations:
+      required: true
   - type: dropdown
     id: version
     attributes:
@@ -11,12 +26,5 @@ body:
         - Stable
         - Experimental
       default: 0
-    validations:
-      required: true
-  - type: textarea
-    id: describe
-    attributes:
-      label: Describe your issue
-      description: Describe what happened. If possible, please attach a screenshot.
     validations:
       required: true
