@@ -1,0 +1,15 @@
+generator:
+- all:
+  - changed-files:
+    - any-glob-to-any-file: 'src/**/*'
+    - all-globs-to-all-files: '!src/translations/*'
+
+widget:
+- all:
+  - changed-files:
+    - any-glob-to-any-file: 'widget/src/**/*'
+
+translation:
+- all:
+  - changed-files:
+    - any-glob-to-any-file: 'src/translations/*'
