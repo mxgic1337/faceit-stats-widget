@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 
 /* Color scheme mixin */
-.scheme(@text, @subtext, @background, @border1, @border2, @borderRotation, @wins, @losses, @bg-opacity: 0.1) {
+#scheme(@text, @subtext, @background, @border1, @border2, @borderRotation, @wins, @losses, @bg-opacity: 0.1) {
   --text: @text;
   --subtext: @subtext;
   --background: @background;
@@ -19,27 +19,57 @@
   --banner-opacity: @bg-opacity;
 }
 
+#scheme-levels(@white: #EEE, @green: #1CE400, @yellow: #FFC800, @orange: #FF6309, @red: #FE1F00, @challenger: #e80128, @top1: #d9a441, @top2: #c7d0d5, @top3: #bf7145) {
+  /* Levels 1-10 */
+  --faceit-level-1: @white;
+
+  --faceit-level-2: @green;
+  --faceit-level-3: @green;
+
+  --faceit-level-4: @yellow;
+  --faceit-level-5: @yellow;
+  --faceit-level-6: @yellow;
+  --faceit-level-7: @yellow;
+
+  --faceit-level-8: @orange;
+  --faceit-level-9: @orange;
+
+  --faceit-level-10: @red;
+
+  /* Challenger */
+  --faceit-level-11: @challenger;
+  --faceit-level-12: @top1; /* Top 1 */
+  --faceit-level-13: @top2; /* Top 2 */
+  --faceit-level-14: @top3; /* Top 3 */
+}
+
 .dark-scheme,
 .custom-scheme {
-  .scheme(#fff, #dcdcdc, #121212, #595959, #8d8d8d, 0deg, #00ff5f, #ff2222);
+  #scheme(#fff, #dcdcdc, #121212, #595959, #8d8d8d, 0deg, #00ff5f, #ff2222);
+  #scheme-levels();
 }
 
 .faceit-scheme {
-  .scheme(#fff, #dcdcdc, #181818, #2d2d2d, #383838, -45deg, #00ff5f, #ff2222);
+  #scheme(#fff, #dcdcdc, #181818, #2d2d2d, #383838, -45deg, #00ff5f, #ff2222);
+  #scheme-levels();
 }
 
 .ctp-latte-scheme {
-  .scheme(#4c4f69, #6c6f85, #eff1f5, #acb0be, #acb0be, 0deg, #40a02b, #d20f39, 0.25);
+  #scheme(#4c4f69, #6c6f85, #eff1f5, #acb0be, #acb0be, 0deg, #40a02b, #d20f39, 0.25);
+  #scheme-levels(#eff1f5, #40a02b, #df8e1d, #fe640b, #d20f39, #d20f39, #df8e1d, #bcc0cc, #fe640b);
 }
 
 .ctp-frappe-scheme {
-  .scheme(#c6d0f5, #a5adce, #303446, #8caaee, #8caaee, 0deg, #a6d189, #e78284, 0.15);
+  #scheme(#c6d0f5, #a5adce, #303446, #8caaee, #8caaee, 0deg, #a6d189, #e78284, 0.15);
+  #scheme-levels(#c6d0f5, #a6d189, #e5c890, #ef9f76, #e78284, #e78284, #e5c890, #a5adce, #ef9f76);
 }
 
 .ctp-macchiato-scheme {
-  .scheme(#cad3f5, #a5adcb, #24273a, #c6a0f6, #c6a0f6, 0deg, #a6e3a1, #f38ba8, 0.15);
+  #scheme(#cad3f5, #a5adcb, #24273a, #c6a0f6, #c6a0f6, 0deg, #a6e3a1, #f38ba8, 0.15);
+  #scheme-levels(#cad3f5, #a6da95, #eed49f, #f5a97f, #ed8796, #ed8796, #eed49f, #a5adcb, #f5a97f);
 }
 
 .ctp-mocha-scheme {
-  .scheme(#cdd6f4, #a6adc8, #1e1e2e, #cba6f7, #cba6f7, 0deg, #a6e3a1, #f38ba8);
+  #scheme(#cdd6f4, #a6adc8, #1e1e2e, #cba6f7, #cba6f7, 0deg, #a6e3a1, #f38ba8);
+  #scheme-levels(#cdd6f4, #a6e3a1, #f9e2af, #fab387, #f38ba8, #f38ba8, #f9e2af, #a6adc8, #fab387);
 }

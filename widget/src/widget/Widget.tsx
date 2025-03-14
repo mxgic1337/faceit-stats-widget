@@ -5,6 +5,7 @@ import {
   useEffect,
   useLayoutEffect,
   useState,
+  CSSProperties,
 } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
@@ -17,21 +18,17 @@ import {
   getPlayerStats,
   SAMPLE_PLAYER_ID,
 } from '../utils/faceit_util.ts';
-
-import fc1 from '../../../src/assets/levels/faceit1.svg';
-import fc2 from '../../../src/assets/levels/faceit2.svg';
-import fc3 from '../../../src/assets/levels/faceit3.svg';
-import fc4 from '../../../src/assets/levels/faceit4.svg';
-import fc5 from '../../../src/assets/levels/faceit5.svg';
-import fc6 from '../../../src/assets/levels/faceit6.svg';
-import fc7 from '../../../src/assets/levels/faceit7.svg';
-import fc8 from '../../../src/assets/levels/faceit8.svg';
-import fc9 from '../../../src/assets/levels/faceit9.svg';
-import fc10 from '../../../src/assets/levels/faceit10.svg';
-import fcChallenger from '../../../src/assets/levels/challenger.svg';
-import fcChallenger1 from '../../../src/assets/levels/challenger_1.svg';
-import fcChallenger2 from '../../../src/assets/levels/challenger_2.svg';
-import fcChallenger3 from '../../../src/assets/levels/challenger_3.svg';
+import { Level1 } from '../components/levels/Level1.tsx';
+import { Level2 } from '../components/levels/Level2.tsx';
+import { Level3 } from '../components/levels/Level3.tsx';
+import { Level4 } from '../components/levels/Level4.tsx';
+import { Level5 } from '../components/levels/Level5.tsx';
+import { Level6 } from '../components/levels/Level6.tsx';
+import { Level7 } from '../components/levels/Level7.tsx';
+import { Level8 } from '../components/levels/Level8.tsx';
+import { Level9 } from '../components/levels/Level9.tsx';
+import { Level10 } from '../components/levels/Level10.tsx';
+import { Challenger } from '../components/levels/Challenger.tsx';
 
 import { StatisticType } from '../../../src/generator/tabs/StatisticsTab.tsx';
 
@@ -64,20 +61,20 @@ export const colorSchemes: string[] = [
 ];
 
 const levelIcons = [
-  fc1,
-  fc2,
-  fc3,
-  fc4,
-  fc5,
-  fc6,
-  fc7,
-  fc8,
-  fc9,
-  fc10,
-  fcChallenger,
-  fcChallenger1,
-  fcChallenger2,
-  fcChallenger3 /* Challenger (Top 1000, Top 1, Top 2, Top 3) */,
+  <Level1 />,
+  <Level2 />,
+  <Level3 />,
+  <Level4 />,
+  <Level5 />,
+  <Level6 />,
+  <Level7 />,
+  <Level8 />,
+  <Level9 />,
+  <Level10 />,
+  <Challenger />,
+  <Challenger />,
+  <Challenger />,
+  <Challenger />,
 ];
 
 const eloDistribution = [
@@ -132,8 +129,8 @@ export const Widget = ({ preview }: { preview: boolean }) => {
     number | undefined
   >();
   const [currentEloDistribution, setCurrentEloDistribution] = useState<
-    (string | number)[]
-  >(eloDistribution[0]);
+    [number, (string | number)[]]
+  >([1, eloDistribution[0]]);
   const [rankingState, setRankingState] = useState<RankingState>(0);
 
   const [customCSS, setCustomCSS] = useState<string | undefined>();
@@ -352,14 +349,14 @@ export const Widget = ({ preview }: { preview: boolean }) => {
 
   /** Returns a color, min ELO and max ELO of a level */
   const getEloDistribution = useCallback(
-    (level: number, ranking: number) => {
+    (level: number, ranking: number): [number, (string | number)[]] => {
       if (level === 10 && ranking <= 1000) {
-        if (ranking === 1) return eloDistribution[11];
-        else if (ranking === 2) return eloDistribution[12];
-        else if (ranking === 3) return eloDistribution[13];
-        return eloDistribution[10]; /* Challenger */
+        if (ranking === 1) return [12, eloDistribution[11]];
+        else if (ranking === 2) return [13, eloDistribution[12]];
+        else if (ranking === 3) return [14, eloDistribution[13]];
+        return [11, eloDistribution[10]]; /* Challenger */
       }
-      return eloDistribution[level - 1];
+      return [level, eloDistribution[level - 1]];
     },
     [preview]
   );
@@ -566,11 +563,19 @@ export const Widget = ({ preview }: { preview: boolean }) => {
 					--background-opacity: ${widgetOpacity} !important;
 				}`}</style>
       )}
-      <div className={`wrapper${compatibilityMode ? ' compatibility' : ''}`}>
+      <div
+        className={`wrapper${compatibilityMode ? ' compatibility' : ''}`}
+        style={
+          {
+            '--faceit-level': `var(--faceit-level-${currentEloDistribution[0]})`,
+          } as CSSProperties
+        }
+      >
         <div className={`widget ${useBannerAsBackground ? 'banner' : ''}`}>
           <div className={'player-stats'}>
             <div className={'level'}>
-              <img src={getIcon()} alt={`Level ${preview ? 10 : level}`} />
+              {getIcon()}
+
               <div className={'elo'}>
                 {showUsername && (
                   <h2>{username || overrides?.username || '?'} </h2>
@@ -620,8 +625,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
                   width:
                     level === 10
                       ? '100%'
-                      : `${((elo - (currentEloDistribution[1] as number)) / ((currentEloDistribution[2] as number) - (currentEloDistribution[1] as number))) * 100}%`,
-                  background: currentEloDistribution[0],
+                      : `${((elo - (currentEloDistribution[1][1] as number)) / ((currentEloDistribution[1][2] as number) - (currentEloDistribution[1][1] as number))) * 100}%`,
                 }}
               ></div>
             </div>
