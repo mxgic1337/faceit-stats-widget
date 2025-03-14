@@ -15,7 +15,6 @@
     padding: 0;
     margin: 0;
     font-family: 'DM Sans', sans-serif;
-    color: var(--text) !important;
   }
 
   .wrapper {
@@ -24,6 +23,13 @@
     flex-direction: column;
     justify-content: center;
     padding: calc(var(--border-width));
+
+    p,
+    span,
+    h2,
+    small {
+      color: var(--text);
+    }
 
     &::after {
       content: '';
@@ -67,6 +73,7 @@
         border-radius: 5px;
         height: 5px;
         transition: 0.5s;
+        background: var(--faceit-level);
       }
     }
 
@@ -79,11 +86,15 @@
         display: flex;
         align-items: center;
 
-        img {
+        svg {
           @size: 70px;
           width: @size;
           height: @size;
           margin-right: 12px;
+
+          * {
+            color: var(--faceit-level);
+          }
         }
 
         .elo {
