@@ -55,7 +55,7 @@
   "generator.theme.banner_as_background.no_banner": "Spieler {{0}} es gibt keine Profilbanner eingerichtet.",
   "generator.theme.banner_as_background.adjust_opacity": "Deckkraft des Hintergrunds anpassen",
   "generator.generate.title": "Erzeugen",
-  "generator.theme.adjust_opacity": "Widget background opacity",
+  "generator.theme.adjust_opacity": "Opazität des Widget-Hintergrunds",
   "generator.theme.adjust_opacity.requirements": "Erfordert OBS Studio version 31.0.0 oder neuere.",
   "generator.generate.button": "Erzeugen",
   "generator.generate.open_in_browser.button": "Öffnen im Browser",
