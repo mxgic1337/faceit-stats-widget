@@ -3,7 +3,10 @@ export const API_KEY = import.meta.env.VITE_FACEIT_API_KEY;
 export const SAMPLE_PLAYER_ID = '24180323-d946-4bb7-a334-be3e96fcac05';
 
 /** Competition ID of official matches */
-export const OFFICIAL_COMPETITION_ID = 'f4148ddd-bce8-41b8-9131-ee83afcdd6dd';
+export const OFFICIAL_COMPETITION_IDS = [
+  'f4148ddd-bce8-41b8-9131-ee83afcdd6dd' /* EU Queue */,
+  '3aced33b-f21c-450c-91d5-10535164e0ab' /* NA Queue*/,
+];
 
 /** Info about player returned by API v4 */
 interface V4PlayersResponse {
@@ -122,7 +125,10 @@ export function getPlayerStats(
 
         for (const match of v4HistoryResponse.items) {
           /* Count only official matches */
-          if (onlyOfficial && match.competition_id !== OFFICIAL_COMPETITION_ID)
+          if (
+            onlyOfficial &&
+            !OFFICIAL_COMPETITION_IDS.includes(match.competition_id)
+          )
             continue;
           if (match.finished_at < startDate.getTime() / 1000) continue;
           /* Player's team name */
