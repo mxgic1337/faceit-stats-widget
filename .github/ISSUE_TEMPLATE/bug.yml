@@ -17,6 +17,14 @@ body:
       placeholder: "OBS Studio 31.0.1"
     validations:
       required: true
+  - type: input
+    id: widget-url
+    attributes:
+      label: Widget URL
+      description: If the issue occurs in the widget, please add your generated link here. (Optional)
+      placeholder: "https://widget.mxgic1337.xyz/widget/?player_id=24180323-d946-4bb7-a334-be3e96fcac05"
+    validations:
+      required: false
   - type: dropdown
     id: version
     attributes:
