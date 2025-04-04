@@ -190,7 +190,7 @@ export const StyleTab = ({
             <input
               type={'range'}
               value={settings.widgetOpacity}
-              min={0.3}
+              min={0}
               max={1}
               step={0.01}
               onChange={(event) => {

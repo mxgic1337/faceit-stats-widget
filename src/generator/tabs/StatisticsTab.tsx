@@ -35,13 +35,13 @@ export const StatisticsTab = ({
   return (
     <>
       <div className={'settings'}>
+        {!settings.showStatistics && (
+          <InfoBox
+            content={<p>{tl('generator.stats.disabled')}</p>}
+            style={'warn'}
+          />
+        )}
         <div className={'setting stats'}>
-          {!settings.showStatistics && (
-            <InfoBox
-              content={<p>{tl('generator.stats.disabled')}</p>}
-              style={'warn'}
-            />
-          )}
           <Statistic
             slot={'1'}
             statSlot={settings.statSlot1}
