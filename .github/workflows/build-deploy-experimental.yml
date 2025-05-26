@@ -11,6 +11,9 @@ jobs:
       name: Experimental
       url: 'https://widget-git.mxgic1337.xyz/'
     runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-exprerimental 
+      cancel-in-progress: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
