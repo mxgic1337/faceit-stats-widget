@@ -101,27 +101,38 @@ export function getPlayerStats(
         resolve(undefined);
         return;
       }
+
       const v4PlayersResponse = (await response.json()) as V4PlayersResponse;
       if (!v4PlayersResponse.games.cs2) {
         console.error('This player never played CS2 on FACEIT.');
         resolve(undefined);
         return;
       }
-      fetch(
+
+      let playerId: string = v4PlayersResponse.player_id;
+      let username: string = v4PlayersResponse.nickname;
+      let banner: string | undefined = v4PlayersResponse.cover_image;
+      let level: number = v4PlayersResponse.games.cs2?.skill_level || 1;
+      let elo: number = v4PlayersResponse.games.cs2?.faceit_elo || 100;
+      let ranking: number | undefined = undefined;
+      let wins: number = 0;
+      let losses: number = 0;
+      let kills: number = 0;
+      let hspercent: number = 0;
+      let deaths: number = 0;
+      let wrWins: number = 0;
+
+      let matchesLength: number = 0;
+
+      const matchHistory = await fetch(
         `https://open.faceit.com/data/v4/players/${v4PlayersResponse.player_id}/history?game=cs2&limit=100`,
         {
           headers: HEADERS,
         }
-      ).then(async (response) => {
-        if (!response.ok) {
-          console.error(await response.text());
-          resolve(undefined);
-          return;
-        }
-        const v4HistoryResponse = (await response.json()) as V4HistoryResponse;
+      )
 
-        let wins = 0;
-        let losses = 0;
+      if (matchHistory.ok) {
+        const v4HistoryResponse = (await matchHistory.json()) as V4HistoryResponse;
 
         for (const match of v4HistoryResponse.items) {
           /* Count only official matches */
@@ -149,74 +160,65 @@ export function getPlayerStats(
             losses++;
           }
         }
+      }
 
-        fetch(
-          `https://open.faceit.com/data/v4/players/${v4PlayersResponse.player_id}/games/cs2/stats?limit=${matchCount}`,
-          {
-            headers: HEADERS,
+      const matchStats = await fetch(
+        `https://open.faceit.com/data/v4/players/${v4PlayersResponse.player_id}/games/cs2/stats?limit=${matchCount}`,
+        {
+          headers: HEADERS,
+        }
+      );
+
+      if (matchStats.ok) {
+        /* Average stats from last 20/30 matches */
+
+        const v4StatsResponse = (await matchStats.json()) as V4StatsResponse;
+        matchesLength = v4StatsResponse.items.length;
+
+        for (const match of v4StatsResponse.items) {
+          kills += parseInt(match.stats['Kills']);
+          deaths += parseInt(match.stats['Deaths']);
+          hspercent += parseFloat(match.stats['Headshots %']);
+          if (match.stats['Result'] === '1') {
+            wrWins++;
           }
-        ).then(async (response) => {
-          if (!response.ok) {
-            console.error(await response.text());
-            resolve(undefined);
-            return;
-          }
-          /* Average stats from last 20/30 matches */
+        }
+      }
 
-          const v4StatsResponse = (await response.json()) as V4StatsResponse;
+      const rankingResponse = await fetch(
+        `https://open.faceit.com/data/v4/rankings/games/cs2/regions/${v4PlayersResponse.games.cs2?.region}/players/${v4PlayersResponse.player_id}`,
+        {
+          headers: HEADERS,
+        }
+      )
 
-          let kills = 0;
-          let deaths = 0;
-          let hspercent = 0;
-          let wrWins = 0;
+      if (rankingResponse.ok) {
+        const v4RankingResponse =
+          (await rankingResponse.json()) as V4RankingResponse;
+        const rankingItem = v4RankingResponse.items.find(
+          (item) => item.player_id === v4PlayersResponse.player_id
+        );
+        ranking = rankingItem ? rankingItem.position : undefined;
+      }
 
-          for (const match of v4StatsResponse.items) {
-            kills += parseInt(match.stats['Kills']);
-            deaths += parseInt(match.stats['Deaths']);
-            hspercent += parseFloat(match.stats['Headshots %']);
-            if (match.stats['Result'] === '1') {
-              wrWins++;
-            }
-          }
-
-          fetch(
-            `https://open.faceit.com/data/v4/rankings/games/cs2/regions/${v4PlayersResponse.games.cs2?.region}/players/${v4PlayersResponse.player_id}`,
-            {
-              headers: HEADERS,
-            }
-          ).then(async (response) => {
-            if (!response.ok) {
-              console.error(await response.text());
-              resolve(undefined);
-              return;
-            }
-            const v4RankingResponse =
-              (await response.json()) as V4RankingResponse;
-            const rankingItem = v4RankingResponse.items.find(
-              (item) => item.player_id === v4PlayersResponse.player_id
-            );
-            const ranking = rankingItem ? rankingItem.position : undefined;
-
-            resolve({
-              id: v4PlayersResponse.player_id,
-              banner: v4PlayersResponse.cover_image,
-              username: v4PlayersResponse.nickname,
-              level: v4PlayersResponse.games.cs2?.skill_level,
-              elo: v4PlayersResponse.games.cs2?.faceit_elo,
-              ranking: ranking || 999999,
-              wins,
-              losses,
-              avg: {
-                kills,
-                hspercent,
-                deaths,
-                wins: wrWins,
-                matches: v4StatsResponse.items.length,
-              },
-            });
-          });
-        });
+      resolve({
+        id: playerId,
+        banner,
+        username,
+        level,
+        elo,
+        ranking: ranking || 999999,
+        wins,
+        losses,
+        avg: {
+          kills,
+          hspercent,
+          deaths,
+          wins: wrWins,
+          matches: matchesLength,
+        },
       });
+
     });
   });
 }
