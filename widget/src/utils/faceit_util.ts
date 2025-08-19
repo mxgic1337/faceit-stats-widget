@@ -22,32 +22,11 @@ interface V4PlayersResponse {
   };
 }
 
-/** Player match history returned by API v4 */
-interface V4HistoryResponse {
-  items: {
-    competition_id: string;
-    results: {
-      score: {
-        [team: string]: number;
-      };
-      winner: string;
-    };
-    finished_at: number;
-    teams: {
-      [team: string]: {
-        players: {
-          player_id: string;
-        }[];
-      };
-    };
-  }[];
-}
-
 /** Stats returned by API v4 */
 interface V4StatsResponse {
   items: {
     stats: {
-      [stat: string]: string;
+      [stat: string]: string | number;
     };
   }[];
 }
@@ -101,122 +80,111 @@ export function getPlayerStats(
         resolve(undefined);
         return;
       }
+
       const v4PlayersResponse = (await response.json()) as V4PlayersResponse;
       if (!v4PlayersResponse.games.cs2) {
         console.error('This player never played CS2 on FACEIT.');
         resolve(undefined);
         return;
       }
-      fetch(
-        `https://open.faceit.com/data/v4/players/${v4PlayersResponse.player_id}/history?game=cs2&limit=100`,
+
+      const playerId: string = v4PlayersResponse.player_id;
+      const username: string = v4PlayersResponse.nickname;
+      const banner: string | undefined = v4PlayersResponse.cover_image;
+      const level: number = v4PlayersResponse.games.cs2?.skill_level || 1;
+      const elo: number = v4PlayersResponse.games.cs2?.faceit_elo || 100;
+      let ranking: number | undefined = undefined;
+      let wins: number = 0;
+      let losses: number = 0;
+      let kills: number = 0;
+      let hspercent: number = 0;
+      let deaths: number = 0;
+      let wrWins: number = 0;
+
+      let matchesLength: number = 0;
+
+      const matchStats = await fetch(
+        `https://open.faceit.com/data/v4/players/${playerId}/games/cs2/stats?limit=100`,
         {
           headers: HEADERS,
         }
-      ).then(async (response) => {
-        if (!response.ok) {
-          console.error(await response.text());
-          resolve(undefined);
-          return;
-        }
-        const v4HistoryResponse = (await response.json()) as V4HistoryResponse;
+      );
 
-        let wins = 0;
-        let losses = 0;
+      if (matchStats.ok) {
+        /* Average stats from last 20/30 matches */
 
-        for (const match of v4HistoryResponse.items) {
-          /* Count only official matches */
-          if (
-            onlyOfficial &&
-            !OFFICIAL_COMPETITION_IDS.includes(match.competition_id)
-          )
-            continue;
-          if (match.finished_at < startDate.getTime() / 1000) continue;
-          /* Player's team name */
-          let playerTeam: string | undefined = undefined;
-          for (const team of Object.entries(match.teams)) {
-            console.log(team[0], team[1]);
-            if (
-              team[1].players.find(
-                (player) => player.player_id === v4PlayersResponse.player_id
-              )
-            ) {
-              playerTeam = team[0];
-            }
-          }
-          if (match.results.winner === playerTeam) {
-            wins++;
-          } else {
-            losses++;
-          }
-        }
+        const v4StatsResponse = (await matchStats.json()) as V4StatsResponse;
+        matchesLength = v4StatsResponse.items.length;
+        matchesLength = matchesLength > matchCount ? matchCount : matchesLength;
+        console.log(v4StatsResponse);
 
-        fetch(
-          `https://open.faceit.com/data/v4/players/${v4PlayersResponse.player_id}/games/cs2/stats?limit=${matchCount}`,
-          {
-            headers: HEADERS,
-          }
-        ).then(async (response) => {
-          if (!response.ok) {
-            console.error(await response.text());
-            resolve(undefined);
-            return;
-          }
-          /* Average stats from last 20/30 matches */
-
-          const v4StatsResponse = (await response.json()) as V4StatsResponse;
-
-          let kills = 0;
-          let deaths = 0;
-          let hspercent = 0;
-          let wrWins = 0;
-
-          for (const match of v4StatsResponse.items) {
-            kills += parseInt(match.stats['Kills']);
-            deaths += parseInt(match.stats['Deaths']);
-            hspercent += parseFloat(match.stats['Headshots %']);
+        let i = 0;
+        for (const match of v4StatsResponse.items) {
+          const countWins = () => {
+            if (match.stats['Match Finished At'] as number < startDate.getTime()) return;
             if (match.stats['Result'] === '1') {
-              wrWins++;
+              wins++;
+            } else if (match.stats['Result'] === '0') {
+              losses++;
             }
           }
 
-          fetch(
-            `https://open.faceit.com/data/v4/rankings/games/cs2/regions/${v4PlayersResponse.games.cs2?.region}/players/${v4PlayersResponse.player_id}`,
-            {
-              headers: HEADERS,
-            }
-          ).then(async (response) => {
-            if (!response.ok) {
-              console.error(await response.text());
-              resolve(undefined);
-              return;
-            }
-            const v4RankingResponse =
-              (await response.json()) as V4RankingResponse;
-            const rankingItem = v4RankingResponse.items.find(
-              (item) => item.player_id === v4PlayersResponse.player_id
-            );
-            const ranking = rankingItem ? rankingItem.position : undefined;
+          if (
+            !onlyOfficial ||
+            OFFICIAL_COMPETITION_IDS.includes(match.stats['Competition Id'] as string)
+          ) {
+            countWins();
+          }
 
-            resolve({
-              id: v4PlayersResponse.player_id,
-              banner: v4PlayersResponse.cover_image,
-              username: v4PlayersResponse.nickname,
-              level: v4PlayersResponse.games.cs2?.skill_level,
-              elo: v4PlayersResponse.games.cs2?.faceit_elo,
-              ranking: ranking || 999999,
-              wins,
-              losses,
-              avg: {
-                kills,
-                hspercent,
-                deaths,
-                wins: wrWins,
-                matches: v4StatsResponse.items.length,
-              },
-            });
-          });
-        });
+          if (i >= matchCount) continue;
+          kills += parseInt(match.stats['Kills'] as string);
+          deaths += parseInt(match.stats['Deaths'] as string);
+          hspercent += parseFloat(match.stats['Headshots %'] as string);
+          if (match.stats['Result'] === '1') {
+            wrWins++;
+          }
+          i++;
+        }
+      } else {
+        console.error(`Failed to fetch match stats: ${matchStats.status} ${await matchStats.text()}`)
+      }
+
+      const rankingResponse = await fetch(
+        `https://open.faceit.com/data/v4/rankings/games/cs2/regions/${v4PlayersResponse.games.cs2?.region}/players/${v4PlayersResponse.player_id}`,
+        {
+          headers: HEADERS,
+        }
+      )
+
+      if (rankingResponse.ok) {
+        const v4RankingResponse =
+          (await rankingResponse.json()) as V4RankingResponse;
+        const rankingItem = v4RankingResponse.items.find(
+          (item) => item.player_id === v4PlayersResponse.player_id
+        );
+        ranking = rankingItem ? rankingItem.position : undefined;
+      } else {
+        console.error(`Failed to fetch ranking: ${rankingResponse.status} ${await rankingResponse.text()}`)
+      }
+
+      resolve({
+        id: playerId,
+        banner,
+        username,
+        level,
+        elo,
+        ranking: ranking || 999999,
+        wins,
+        losses,
+        avg: {
+          kills,
+          hspercent,
+          deaths,
+          wins: wrWins,
+          matches: matchesLength,
+        },
       });
+
     });
   });
 }
