@@ -109,11 +109,11 @@ export function getPlayerStats(
         return;
       }
 
-      let playerId: string = v4PlayersResponse.player_id;
-      let username: string = v4PlayersResponse.nickname;
-      let banner: string | undefined = v4PlayersResponse.cover_image;
-      let level: number = v4PlayersResponse.games.cs2?.skill_level || 1;
-      let elo: number = v4PlayersResponse.games.cs2?.faceit_elo || 100;
+      const playerId: string = v4PlayersResponse.player_id;
+      const username: string = v4PlayersResponse.nickname;
+      const banner: string | undefined = v4PlayersResponse.cover_image;
+      const level: number = v4PlayersResponse.games.cs2?.skill_level || 1;
+      const elo: number = v4PlayersResponse.games.cs2?.faceit_elo || 100;
       let ranking: number | undefined = undefined;
       let wins: number = 0;
       let losses: number = 0;
