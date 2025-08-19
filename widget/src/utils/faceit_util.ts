@@ -116,7 +116,6 @@ export function getPlayerStats(
         const v4StatsResponse = (await matchStats.json()) as V4StatsResponse;
         matchesLength = v4StatsResponse.items.length;
         matchesLength = matchesLength > matchCount ? matchCount : matchesLength;
-        console.log(v4StatsResponse);
 
         let i = 0;
         for (const match of v4StatsResponse.items) {
