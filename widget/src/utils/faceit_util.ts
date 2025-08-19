@@ -121,17 +121,22 @@ export function getPlayerStats(
         let i = 0;
         for (const match of v4StatsResponse.items) {
           const countWins = () => {
-            if (match.stats['Match Finished At'] as number < startDate.getTime()) return;
+            if (
+              (match.stats['Match Finished At'] as number) < startDate.getTime()
+            )
+              return;
             if (match.stats['Result'] === '1') {
               wins++;
             } else if (match.stats['Result'] === '0') {
               losses++;
             }
-          }
+          };
 
           if (
             !onlyOfficial ||
-            OFFICIAL_COMPETITION_IDS.includes(match.stats['Competition Id'] as string)
+            OFFICIAL_COMPETITION_IDS.includes(
+              match.stats['Competition Id'] as string
+            )
           ) {
             countWins();
           }
@@ -146,7 +151,9 @@ export function getPlayerStats(
           i++;
         }
       } else {
-        console.error(`Failed to fetch match stats: ${matchStats.status} ${await matchStats.text()}`)
+        console.error(
+          `Failed to fetch match stats: ${matchStats.status} ${await matchStats.text()}`
+        );
       }
 
       const rankingResponse = await fetch(
@@ -154,7 +161,7 @@ export function getPlayerStats(
         {
           headers: HEADERS,
         }
-      )
+      );
 
       if (rankingResponse.ok) {
         const v4RankingResponse =
@@ -164,7 +171,9 @@ export function getPlayerStats(
         );
         ranking = rankingItem ? rankingItem.position : undefined;
       } else {
-        console.error(`Failed to fetch ranking: ${rankingResponse.status} ${await rankingResponse.text()}`)
+        console.error(
+          `Failed to fetch ranking: ${rankingResponse.status} ${await rankingResponse.text()}`
+        );
       }
 
       resolve({
@@ -184,7 +193,6 @@ export function getPlayerStats(
           matches: matchesLength,
         },
       });
-
     });
   });
 }
