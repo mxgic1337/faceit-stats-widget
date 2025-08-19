@@ -44,11 +44,11 @@ export const styles: {
   hidden?: boolean;
   experimental?: boolean;
 }[] = [
-  { id: 'normal' },
-  { id: 'compact' },
-  { id: 'classic' },
-  { id: 'custom', experimental: true, hidden: true },
-];
+    { id: 'normal' },
+    { id: 'compact' },
+    { id: 'classic' },
+    { id: 'custom', experimental: true, hidden: true },
+  ];
 
 export const colorSchemes: string[] = [
   'dark',
@@ -584,8 +584,8 @@ export const Widget = ({ preview }: { preview: boolean }) => {
                   {(rankingState === RankingState.SHOW ||
                     (rankingState === RankingState.ONLY_WHEN_CHALLENGER &&
                       ranking <= 1000)) && (
-                    <span className={'ranking'}>#{ranking} </span>
-                  )}
+                      <span className={'ranking'}>#{ranking} </span>
+                    )}
                   {getElo()}
                 </p>
               </div>

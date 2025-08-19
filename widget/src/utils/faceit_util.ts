@@ -22,32 +22,11 @@ interface V4PlayersResponse {
   };
 }
 
-/** Player match history returned by API v4 */
-interface V4HistoryResponse {
-  items: {
-    competition_id: string;
-    results: {
-      score: {
-        [team: string]: number;
-      };
-      winner: string;
-    };
-    finished_at: number;
-    teams: {
-      [team: string]: {
-        players: {
-          player_id: string;
-        }[];
-      };
-    };
-  }[];
-}
-
 /** Stats returned by API v4 */
 interface V4StatsResponse {
   items: {
     stats: {
-      [stat: string]: string;
+      [stat: string]: string | number;
     };
   }[];
 }
@@ -124,46 +103,8 @@ export function getPlayerStats(
 
       let matchesLength: number = 0;
 
-      const matchHistory = await fetch(
-        `https://open.faceit.com/data/v4/players/${v4PlayersResponse.player_id}/history?game=cs2&limit=100`,
-        {
-          headers: HEADERS,
-        }
-      )
-
-      if (matchHistory.ok) {
-        const v4HistoryResponse = (await matchHistory.json()) as V4HistoryResponse;
-
-        for (const match of v4HistoryResponse.items) {
-          /* Count only official matches */
-          if (
-            onlyOfficial &&
-            !OFFICIAL_COMPETITION_IDS.includes(match.competition_id)
-          )
-            continue;
-          if (match.finished_at < startDate.getTime() / 1000) continue;
-          /* Player's team name */
-          let playerTeam: string | undefined = undefined;
-          for (const team of Object.entries(match.teams)) {
-            console.log(team[0], team[1]);
-            if (
-              team[1].players.find(
-                (player) => player.player_id === v4PlayersResponse.player_id
-              )
-            ) {
-              playerTeam = team[0];
-            }
-          }
-          if (match.results.winner === playerTeam) {
-            wins++;
-          } else {
-            losses++;
-          }
-        }
-      }
-
       const matchStats = await fetch(
-        `https://open.faceit.com/data/v4/players/${v4PlayersResponse.player_id}/games/cs2/stats?limit=${matchCount}`,
+        `https://open.faceit.com/data/v4/players/${playerId}/games/cs2/stats?limit=100`,
         {
           headers: HEADERS,
         }
@@ -174,15 +115,38 @@ export function getPlayerStats(
 
         const v4StatsResponse = (await matchStats.json()) as V4StatsResponse;
         matchesLength = v4StatsResponse.items.length;
+        matchesLength = matchesLength > matchCount ? matchCount : matchesLength;
+        console.log(v4StatsResponse);
 
+        let i = 0;
         for (const match of v4StatsResponse.items) {
-          kills += parseInt(match.stats['Kills']);
-          deaths += parseInt(match.stats['Deaths']);
-          hspercent += parseFloat(match.stats['Headshots %']);
+          const countWins = () => {
+            if (match.stats['Match Finished At'] as number < startDate.getTime()) return;
+            if (match.stats['Result'] === '1') {
+              wins++;
+            } else if (match.stats['Result'] === '0') {
+              losses++;
+            }
+          }
+
+          if (
+            !onlyOfficial ||
+            OFFICIAL_COMPETITION_IDS.includes(match.stats['Competition Id'] as string)
+          ) {
+            countWins();
+          }
+
+          if (i >= matchCount) continue;
+          kills += parseInt(match.stats['Kills'] as string);
+          deaths += parseInt(match.stats['Deaths'] as string);
+          hspercent += parseFloat(match.stats['Headshots %'] as string);
           if (match.stats['Result'] === '1') {
             wrWins++;
           }
+          i++;
         }
+      } else {
+        console.error(`Failed to fetch match stats: ${matchStats.status} ${await matchStats.text()}`)
       }
 
       const rankingResponse = await fetch(
@@ -199,6 +163,8 @@ export function getPlayerStats(
           (item) => item.player_id === v4PlayersResponse.player_id
         );
         ranking = rankingItem ? rankingItem.position : undefined;
+      } else {
+        console.error(`Failed to fetch ranking: ${rankingResponse.status} ${await rankingResponse.text()}`)
       }
 
       resolve({
