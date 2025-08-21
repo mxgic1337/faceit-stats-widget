@@ -55,6 +55,7 @@ interface FaceitPlayer {
     kills: number;
     hspercent: number;
     deaths: number;
+    kd: number;
     wins: number;
     matches: number;
   };
@@ -100,6 +101,7 @@ export function getPlayerStats(
       let hspercent: number = 0;
       let deaths: number = 0;
       let wrWins: number = 0;
+      let kd: number = 0;
 
       let matchesLength: number = 0;
 
@@ -143,6 +145,7 @@ export function getPlayerStats(
           if (i >= matchCount) continue;
           kills += parseInt(match.stats['Kills'] as string);
           deaths += parseInt(match.stats['Deaths'] as string);
+          kd += parseFloat(match.stats['K/D Ratio'] as string);
           hspercent += parseFloat(match.stats['Headshots %'] as string);
           if (match.stats['Result'] === '1') {
             wrWins++;
@@ -190,6 +193,7 @@ export function getPlayerStats(
           deaths,
           wins: wrWins,
           matches: matchesLength,
+          kd
         },
       });
     });

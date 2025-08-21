@@ -44,11 +44,11 @@ export const styles: {
   hidden?: boolean;
   experimental?: boolean;
 }[] = [
-  { id: 'normal' },
-  { id: 'compact' },
-  { id: 'classic' },
-  { id: 'custom', experimental: true, hidden: true },
-];
+    { id: 'normal' },
+    { id: 'compact' },
+    { id: 'classic' },
+    { id: 'custom', experimental: true, hidden: true },
+  ];
 
 export const colorSchemes: string[] = [
   'dark',
@@ -109,6 +109,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
   const [ranking, setRanking] = useState(1337);
   const [kills, setKills] = useState(0);
   const [deaths, setDeaths] = useState(0);
+  const [kdRatio, setKDRatio] = useState(0);
   const [hsPercent, setHSPercent] = useState(0);
   const [winsPercent, setWinsPercent] = useState(0);
   const [stats, setStats] = useState<StatisticType[]>([
@@ -447,6 +448,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
 
         setKills(player.avg.kills);
         setDeaths(player.avg.deaths);
+        setKDRatio(player.avg.kd);
         setHSPercent(player.avg.hspercent);
         setWinsPercent(
           Math.round((player.avg.wins / player.avg.matches) * 100)
@@ -504,7 +506,7 @@ export const Widget = ({ preview }: { preview: boolean }) => {
         case StatisticType.HSPERCENT:
           return `${preview ? '50' : Math.round(hsPercent / avgMatches)}%`;
         case StatisticType.KD:
-          return `${preview ? '2' : Math.round((kills / deaths) * 100) / 100}`;
+          return `${preview ? '2' : Math.round((kdRatio / avgMatches) * 100) / 100}`;
         case StatisticType.WINRATIO:
           return `${preview ? '50' : winsPercent}%`;
         case StatisticType.RANKING:
@@ -584,8 +586,8 @@ export const Widget = ({ preview }: { preview: boolean }) => {
                   {(rankingState === RankingState.SHOW ||
                     (rankingState === RankingState.ONLY_WHEN_CHALLENGER &&
                       ranking <= 1000)) && (
-                    <span className={'ranking'}>#{ranking} </span>
-                  )}
+                      <span className={'ranking'}>#{ranking} </span>
+                    )}
                   {getElo()}
                 </p>
               </div>
