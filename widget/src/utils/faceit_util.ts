@@ -193,7 +193,7 @@ export function getPlayerStats(
           deaths,
           wins: wrWins,
           matches: matchesLength,
-          kd
+          kd,
         },
       });
     });
