@@ -1,37 +1,11 @@
-import { colorSchemes, styles } from '../../../widget/src/widget/Widget.tsx';
+import { colorSchemes, styles } from '../../../widget/src/styles/styles';
 import { ColorPicker } from '../../components/ColorPicker.tsx';
-import { Dispatch, useContext, useRef } from 'react';
+import { useContext, useRef } from 'react';
 import { Checkbox } from '../../components/Checkbox.tsx';
 import { InfoBox } from '../../components/InfoBox.tsx';
 import { LanguageContext, SettingsContext } from '../Generator.tsx';
 
-type Props = {
-  setStyle: Dispatch<string>;
-  setCustomBorderColor1: Dispatch<string>;
-  setCustomBorderColor2: Dispatch<string>;
-  setCustomTextColor: Dispatch<string>;
-  setCustomBackgroundColor: Dispatch<string>;
-  setCustomCSS: Dispatch<string>;
-  setColorScheme: Dispatch<string>;
-  setUseBannerAsBackground: Dispatch<boolean>;
-  setAdjustBackgroundOpacity: Dispatch<boolean>;
-  setBackgroundOpacity: Dispatch<number>;
-  setWidgetOpacity: Dispatch<number>;
-};
-
-export const StyleTab = ({
-  setStyle,
-  setColorScheme,
-  setCustomBorderColor1,
-  setCustomBorderColor2,
-  setCustomTextColor,
-  setCustomBackgroundColor,
-  setUseBannerAsBackground,
-  setAdjustBackgroundOpacity,
-  setBackgroundOpacity,
-  setCustomCSS,
-  setWidgetOpacity,
-}: Props) => {
+export const StyleTab = ({ username, playerBanner }: { username: string, playerBanner?: string }) => {
   const customCSSInputRef = useRef<HTMLInputElement>(null);
   const tl = useContext(LanguageContext);
   const settings = useContext(SettingsContext);
@@ -47,8 +21,8 @@ export const StyleTab = ({
             <div>
               <p>{tl('generator.theme.color_scheme')}</p>
               <select
-                value={settings.colorScheme}
-                onChange={(e) => setColorScheme(e.target.value)}
+                value={settings.get('colorScheme') as string}
+                onChange={(e) => settings.set('colorScheme', e.target.value)}
               >
                 {colorSchemes.map((scheme) => {
                   return (
@@ -62,8 +36,8 @@ export const StyleTab = ({
             <div>
               <p>{tl('generator.theme.style')}</p>
               <select
-                value={settings.style}
-                onChange={(e) => setStyle(e.target.value)}
+                value={settings.get('style') as string}
+                onChange={(e) => settings.set('style', e.target.value)}
               >
                 {styles.map((style) => {
                   if (style.hidden) return;
@@ -84,39 +58,37 @@ export const StyleTab = ({
 
           <Checkbox
             text={tl('generator.theme.banner_as_background')}
-            state={settings.useBannerAsBackground}
-            setState={setUseBannerAsBackground}
+            setting={'useBannerAsBackground'}
           />
-          {settings.useBannerAsBackground && (
+          {settings.get('useBannerAsBackground') && (
             <>
               <Checkbox
                 text={tl('generator.theme.banner_as_background.adjust_opacity')}
-                state={settings.adjustBackgroundOpacity}
-                setState={setAdjustBackgroundOpacity}
+                setting={'adjustBackgroundOpacity'}
               />
               <div className={'flex'} style={{ alignItems: 'center' }}>
                 <input
                   type={'range'}
-                  value={settings.backgroundOpacity}
+                  value={settings.get('backgroundOpacity')}
                   min={0.01}
                   max={1}
                   step={0.01}
-                  disabled={!settings.adjustBackgroundOpacity}
+                  disabled={!settings.get('adjustBackgroundOpacity')}
                   onChange={(event) => {
-                    setBackgroundOpacity(parseFloat(event.currentTarget.value));
+                    settings.set('backgroundOpacity', parseFloat(event.currentTarget.value));
                   }}
                 />
                 <p style={{ width: '50px', textAlign: 'right' }}>
-                  {Math.round(settings.backgroundOpacity * 100)}%
+                  {Math.round(settings.get('backgroundOpacity') * 100)}%
                 </p>
               </div>
-              {!settings.playerBanner && (
+              {!playerBanner && (
                 <InfoBox
                   style={'warn'}
                   content={
                     <p>
                       {tl('generator.theme.banner_as_background.no_banner', [
-                        settings.username,
+                        username,
                       ])}
                     </p>
                   }
@@ -128,7 +100,7 @@ export const StyleTab = ({
 
         {/* Custom CSS */}
 
-        {settings.style === 'custom' && (
+        {settings.get('style') === 'custom' && (
           <div className={'setting'}>
             <p>
               {tl('generator.theme.custom_css.title')}{' '}
@@ -140,11 +112,11 @@ export const StyleTab = ({
               </span>
             </p>
             <input
-              defaultValue={settings.customCSS}
+              defaultValue={settings.get('customCSS')}
               ref={customCSSInputRef}
               onKeyDown={(e) => {
                 if (e.code !== 'Enter') return;
-                setCustomCSS(customCSSInputRef.current?.value as string);
+                settings.set('customCSS', customCSSInputRef.current?.value as string);
               }}
             />
             <small>{tl('generator.theme.custom_css.apply')}</small>
@@ -154,28 +126,24 @@ export const StyleTab = ({
 
       {/* Custom color scheme settings */}
 
-      {settings.colorScheme === 'custom' && (
+      {settings.get('colorScheme') === 'custom' && (
         <div className={'settings'}>
           <div className={'setting'}>
             <ColorPicker
               text={tl('generator.theme.border_color_1')}
-              color={settings.customBorderColor1}
-              setColor={setCustomBorderColor1}
+              setting={'customBorderColor1'}
             />
             <ColorPicker
               text={tl('generator.theme.border_color_2')}
-              color={settings.customBorderColor2}
-              setColor={setCustomBorderColor2}
+              setting={'customBorderColor2'}
             />
             <ColorPicker
               text={tl('generator.theme.text_color')}
-              color={settings.customTextColor}
-              setColor={setCustomTextColor}
+              setting={'customTextColor'}
             />
             <ColorPicker
               text={tl('generator.theme.background_color')}
-              color={settings.customBackgroundColor}
-              setColor={setCustomBackgroundColor}
+              setting={'customBackgroundColor'}
             />
           </div>
         </div>
@@ -189,17 +157,17 @@ export const StyleTab = ({
           <div className={'flex'} style={{ alignItems: 'center' }}>
             <input
               type={'range'}
-              value={settings.widgetOpacity}
+              value={settings.get('widgetOpacity')}
               min={0}
               max={1}
               step={0.01}
               onChange={(event) => {
-                setWidgetOpacity(parseFloat(event.currentTarget.value));
+                settings.set('widgetOpacity', parseFloat(event.currentTarget.value));
               }}
             />
 
             <p style={{ width: '50px', textAlign: 'right' }}>
-              {Math.round(settings.widgetOpacity * 100)}%
+              {Math.round(settings.get('widgetOpacity') * 100)}%
             </p>
           </div>
           <small style={{ fontStyle: 'italic' }}>

@@ -1,18 +1,19 @@
 import { StatisticType } from '../generator/tabs/StatisticsTab.tsx';
 import { Dispatch, useContext } from 'react';
-import { LanguageContext } from '../generator/Generator.tsx';
+import { LanguageContext, SettingsContext } from '../generator/Generator.tsx';
+import { SettingKey } from '../settings/manager.ts';
 
 export const Statistic = ({
   slot,
-  statSlot,
-  setStatSlot,
+  setting,
 }: {
   slot: string;
-  statSlot: StatisticType;
-  setStatSlot: Dispatch<StatisticType>;
+  setting: SettingKey;
 }) => {
+  const settings = useContext(SettingsContext)
   const tl = useContext(LanguageContext);
-  if (!tl) {
+
+  if (!tl || !settings) {
     return null;
   }
 
@@ -21,9 +22,9 @@ export const Statistic = ({
       <div className={'setting'}>
         <p>{tl('generator.stats.slot', [slot])}</p>
         <select
-          value={statSlot}
+          value={settings.get(setting) as StatisticType}
           onChange={(event) => {
-            setStatSlot(event.target.value as StatisticType);
+            settings.set(setting, event.target.value as StatisticType);
           }}
         >
           {Object.values(StatisticType).map((value) => {

@@ -1,47 +1,35 @@
 import { Language, languages } from '../../translations/translations.ts';
 import { Checkbox } from '../../components/Checkbox.tsx';
-import { Dispatch, useContext } from 'react';
+import { Dispatch, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LanguageContext, SettingsContext } from '../Generator.tsx';
 import { InfoBox } from '../../components/InfoBox.tsx';
+import { getPlayerProfile } from '../../../widget/src/utils/faceit_util.ts';
+import { ShowRanking } from '../../../widget/src/widget/Widget.tsx';
 
 type Props = {
   playerExists: boolean | undefined;
+  username: string;
+  language: Language;
   setLanguage: Dispatch<Language>;
-  setWidgetLanguage: Dispatch<Language | undefined>;
   setUsername: Dispatch<string>;
-  setPlayerId: Dispatch<string>;
+  setPlayerElo: Dispatch<number>;
+  setPlayerLevel: Dispatch<number>;
   setPlayerBanner: Dispatch<string | undefined>;
-  setAutoWidth: Dispatch<boolean>;
-  setShowUsername: Dispatch<boolean>;
-  setShowEloSuffix: Dispatch<boolean>;
-  setShowEloDiff: Dispatch<boolean>;
-  setShowEloProgressBar: Dispatch<boolean>;
-  setShowStatistics: Dispatch<boolean>;
-  setShowRanking: Dispatch<boolean>;
-  setShowRankingOnlyWhenChallenger: Dispatch<boolean>;
-  setOnlyOfficialMatchesCount: Dispatch<boolean>;
-  setRefreshInterval: Dispatch<number>;
-  setSaveSession: Dispatch<boolean>;
+  setPlayerExists: Dispatch<boolean>;
   setSelectedTabIndex: Dispatch<number>;
 };
 
 export const MainTab = ({
   playerExists,
+  username,
+  language,
   setLanguage,
-  setWidgetLanguage,
-  setAutoWidth,
   setUsername,
-  setShowUsername,
-  setShowEloSuffix,
-  setShowEloDiff,
-  setShowEloProgressBar,
-  setShowStatistics,
-  setShowRanking,
-  setShowRankingOnlyWhenChallenger,
-  setOnlyOfficialMatchesCount,
-  setRefreshInterval,
-  setSaveSession,
+  setPlayerElo,
+  setPlayerLevel,
+  setPlayerBanner,
+  setPlayerExists,
   setSelectedTabIndex,
 }: Props) => {
   const navigate = useNavigate();
@@ -52,6 +40,28 @@ export const MainTab = ({
     return null;
   }
 
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      getPlayerProfile(username).then((res) => {
+        if (res && res.games.cs2) {
+          settings.set('playerId', res.player_id);
+          setPlayerBanner(res.cover_image);
+          setPlayerElo(res.games.cs2.faceit_elo);
+          setPlayerLevel(res.games.cs2.skill_level);
+          setPlayerExists(true);
+        } else {
+          setPlayerElo(100);
+          setPlayerLevel(1);
+          setPlayerExists(false);
+        }
+      });
+    }, 500);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [username]);
+
   return (
     <>
       <div className={'settings'}>
@@ -59,7 +69,7 @@ export const MainTab = ({
           <p>{tl('generator.settings.faceit_name')}</p>
           <input
             max={12}
-            value={settings.username}
+            value={username}
             onChange={(e) => {
               if (e.target.value.length > 12) return;
               setUsername(e.target.value);
@@ -76,7 +86,7 @@ export const MainTab = ({
           <div>
             <p>{tl('generator.settings.language')}</p>
             <select
-              value={settings.language.id}
+              value={language.id}
               onChange={(event) => {
                 const language =
                   languages.find(
@@ -99,17 +109,17 @@ export const MainTab = ({
           <div>
             <p>{tl('generator.settings.widget_language')}</p>
             <select
-              value={settings.widgetLanguage?.id}
+              value={settings.get('widgetLanguage') as string | undefined}
               onChange={(event) => {
                 if (event.target.value === 'default') {
-                  setWidgetLanguage(undefined);
+                  settings.set('widgetLanguage', undefined);
                   return;
                 }
                 const language =
                   languages.find(
                     (language) => language.id === event.target.value
                   ) || languages[0];
-                setWidgetLanguage(language);
+                settings.set('widgetLanguage', language.id);
               }}
             >
               <option key={'default'} value={'default'}>
@@ -129,9 +139,9 @@ export const MainTab = ({
         <div className={'setting'}>
           <p>{tl('generator.settings.refresh_delay')}</p>
           <select
-            value={settings.refreshInterval}
+            value={settings.get('refreshInterval')}
             onChange={(event) => {
-              setRefreshInterval(parseInt(event.currentTarget.value));
+              settings.set('refreshInterval', parseInt(event.currentTarget.value));
             }}
           >
             <option value={10}>
@@ -150,46 +160,44 @@ export const MainTab = ({
         <div className={'setting'}>
           <Checkbox
             text={tl('generator.settings.show_username')}
-            state={settings.showUsername}
-            setState={setShowUsername}
+            setting={'showUsername'}
           />
           <Checkbox
             text={tl('generator.settings.show_elo_suffix')}
-            state={settings.showEloSuffix}
-            setState={setShowEloSuffix}
+            setting={'showEloSuffix'}
           />
           <Checkbox
             text={tl('generator.settings.show_elo_diff')}
-            state={settings.showEloDiff}
-            setState={setShowEloDiff}
+            setting={'showEloDiff'}
           />
           <Checkbox
             text={tl('generator.settings.show_elo_progress_bar')}
-            state={settings.showEloProgressBar}
-            setState={setShowEloProgressBar}
+            setting={'showEloProgressBar'}
           />
           <Checkbox
             text={tl('generator.settings.show_kd')}
-            state={settings.showStatistics}
-            setState={setShowStatistics}
+            setting={'showStatistics'}
           />
-          <Checkbox
-            text={tl('generator.settings.show_ranking')}
-            state={settings.showRanking}
-            setState={setShowRanking}
-          />
-          {settings.showRanking && (
-            <Checkbox
-              text={tl('generator.settings.show_ranking_only_when_challenger')}
-              state={settings.showRankingOnlyWhenChallenger}
-              setState={setShowRankingOnlyWhenChallenger}
-            />
-          )}
+          <div className={'setting'}>
+            <p>{tl('generator.settings.show_ranking')}</p>
+            <select
+              value={settings.get('showRanking')}
+              onChange={(e) => settings.set('showRanking', parseInt(e.target.value) as ShowRanking)}
+            >
+              {Object.entries(ShowRanking).map(([key, value]) => {
+                if (typeof value !== "number") return;
+                return (
+                  <option key={key} value={value}>
+                    {tl(`ranking_state.${key}`)}{' '}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
           <button
             onClick={() => {
               setSelectedTabIndex(1);
             }}
-            style={{ marginTop: '12px' }}
           >
             {tl('generator.settings.adjust_style')}
           </button>
@@ -199,21 +207,17 @@ export const MainTab = ({
         <div className={'setting'}>
           <Checkbox
             text={tl('generator.settings.auto_width')}
-            state={settings.autoWidth}
-            setState={setAutoWidth}
-            helpTitle={tl('generator.settings.auto_width.help')}
+            setting={'autoWidth'}
           />
           <Checkbox
             text={tl('generator.settings.save_session')}
-            state={settings.saveSession}
-            setState={setSaveSession}
+            setting={'saveSession'}
             experimental={true}
             helpTitle={tl('generator.settings.save_session.help')}
           />
           <Checkbox
             text={tl('generator.settings.only_official_matches')}
-            state={settings.onlyOfficialMatchesCount}
-            setState={setOnlyOfficialMatchesCount}
+            setting={'onlyOfficialMatchesCount'}
           />
         </div>
       </div>

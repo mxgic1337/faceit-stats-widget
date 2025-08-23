@@ -10,7 +10,7 @@
   "widget.ranking": "Rangfolge",
   "widget.kd": "K/D",
   "widget.deaths": "Todesfälle",
-  "generator.testing": "Sie verwenden derzeit eine experimentelle Version. Diese Version ist noch nicht fertig und kann noch einige Fehler enthalten.",
+  "generator.testing": "Sie verwenden derzeit eine experimentelle Version.",
   "generator.testing.stable": "Stabile Version",
   "generator.description": "FACEIT Statistik Widget ist ein freies und quelloffenes Widget für OBS Studio. Damit können Ihre Zuschauer Ihre ELO und Statistiken direkt in Ihrem Stream sehen. Es ist einfach einzurichten und bietet eine Vielzahl von Anpassungsmöglichkeiten.",
   "generator.experimental": "Experimentell",

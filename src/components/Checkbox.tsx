@@ -1,27 +1,31 @@
 import { Dispatch, useContext } from 'react';
-import { LanguageContext } from '../generator/Generator.tsx';
+import { LanguageContext, SettingsContext } from '../generator/Generator.tsx';
+import { SettingKey } from '../settings/manager.ts';
 export const Checkbox = ({
   text,
+  setting,
   state,
   setState,
   experimental,
   helpTitle,
 }: {
   text: string;
-  state: boolean;
-  setState: Dispatch<boolean>;
+  setting?: SettingKey;
+  state?: boolean;
+  setState?: Dispatch<boolean>;
   experimental?: boolean;
   helpTitle?: string;
 }) => {
   const tl = useContext(LanguageContext);
+  const settings = useContext(SettingsContext);
 
-  if (!tl) {
+  if (!tl || !settings) {
     return null;
   }
 
   return (
-    <div className={'checkbox'} onClick={() => setState(!state)}>
-      <div className={`check${state ? ' checked' : ''}`}></div>
+    <div className={'checkbox'} onClick={state && setState ? () => setState(!state) : (setting ? () => { settings.set(setting, !(settings.get(setting) as boolean)) } : () => { })}>
+      <div className={`check${state || (setting && settings.get(setting)) ? ' checked' : ''}`}></div>
       <p>
         {text}
         {experimental && (
