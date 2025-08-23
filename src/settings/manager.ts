@@ -45,6 +45,7 @@ export function useSettings(useWidgetDefaults?: boolean) {
   const [searchParams] = useSearchParams();
 
   const [settings, setSettings] = useState<Settings>(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (Object.entries(SETTINGS_DEFINITIONS) as [SettingKey, any][]).reduce((acc, [key, val]) => {
       acc[key] = val.defaultValue;
       if (useWidgetDefaults && (SETTINGS_DEFINITIONS[key] as { defaultWidgetValue?: boolean }).defaultWidgetValue) {
@@ -73,7 +74,7 @@ export function useSettings(useWidgetDefaults?: boolean) {
   }, [settings])
 
   const loadSettingsFromQuery = useCallback(() => {
-    let newSettings: { [key: string]: any } = {};
+    const newSettings: { [key: string]: SettingValue } = {};
     (Object.entries(SETTINGS_DEFINITIONS) as [SettingKey, SettingDefinition][]).forEach(([key, definition]) => {
       if (!definition.query || definition.query.length === 0) {
         return;

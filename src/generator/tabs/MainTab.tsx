@@ -36,12 +36,8 @@ export const MainTab = ({
   const tl = useContext(LanguageContext);
   const settings = useContext(SettingsContext);
 
-  if (!settings || !tl) {
-    return null;
-  }
-
-
   useEffect(() => {
+    if (!settings || !tl) return;
     const timeout = setTimeout(() => {
       getPlayerProfile(username).then((res) => {
         if (res && res.games.cs2) {
@@ -61,6 +57,10 @@ export const MainTab = ({
       clearTimeout(timeout);
     };
   }, [username]);
+
+  if (!settings || !tl) {
+    return null;
+  }
 
   return (
     <>

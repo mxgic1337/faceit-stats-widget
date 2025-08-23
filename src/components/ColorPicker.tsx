@@ -1,4 +1,4 @@
-import { Dispatch, useContext } from 'react';
+import { useContext } from 'react';
 import { SettingKey } from '../settings/manager';
 import { SettingsContext } from '../generator/Generator';
 

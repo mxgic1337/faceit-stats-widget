@@ -1,5 +1,5 @@
 import { StatisticType } from '../generator/tabs/StatisticsTab.tsx';
-import { Dispatch, useContext } from 'react';
+import { useContext } from 'react';
 import { LanguageContext, SettingsContext } from '../generator/Generator.tsx';
 import { SettingKey } from '../settings/manager.ts';
 

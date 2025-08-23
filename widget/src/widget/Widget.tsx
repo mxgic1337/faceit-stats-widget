@@ -90,7 +90,7 @@ export const Widget = ({ preview, previewBanner, previewUsername, previewElo, pr
   const [banner, setBanner] = useState<string>();
 
   const [level, setLevel] = useState(1);
-  const [language, _setLanguage] = useState<Language>(languages[0]);
+  const [language] = useState<Language>(languages[0]);
   const [startingElo, setStartingElo] = useState<number>(100);
   const [elo, setElo] = useState(100);
   const [wins, setWins] = useState(0);

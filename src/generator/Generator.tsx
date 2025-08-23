@@ -73,7 +73,7 @@ export const Generator = () => {
   }, [settings, getSetting, setSetting])
 
   const generateWidgetURL = useCallback(() => {
-    let params: {
+    const params: {
       [key: string]:
       | string
       | (string | undefined)
