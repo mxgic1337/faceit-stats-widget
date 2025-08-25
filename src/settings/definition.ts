@@ -68,15 +68,18 @@ export const SETTINGS_DEFINITIONS = {
   },
   adjustBackgroundOpacity: {
     type: 'boolean',
-    defaultValue: false,
-    query: ['banner']
+    defaultValue: false
   },
   backgroundOpacity: {
     type: 'number',
     defaultValue: .15,
     min: 0,
     max: 1,
-    query: ['banner_opacity']
+    query: ['banner_opacity'],
+    requirements: [{
+      setting: 'adjustBackgroundOpacity',
+      value: true
+    }]
   },
   refreshInterval: {
     type: 'number',

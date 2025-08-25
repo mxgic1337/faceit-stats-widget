@@ -99,10 +99,6 @@ export const Generator = () => {
 
     params.stats = [settings.statSlot1, settings.statSlot2, settings.statSlot3, settings.statSlot4].toString()
 
-    // TODO
-
-    console.log(`Parameters:\n`, params)
-
     setGeneratedURL(
       `${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`
     );
