@@ -83,18 +83,20 @@ export const Widget = ({
   previewUsername,
   previewElo,
   previewLevel,
+  previewLanguage,
 }: {
   preview: boolean;
   previewBanner?: string;
   previewUsername?: string;
   previewElo?: number;
   previewLevel?: number;
+  previewLanguage?: Language;
 }) => {
   const [username, setUsername] = useState<string>();
   const [banner, setBanner] = useState<string>();
 
   const [level, setLevel] = useState(1);
-  const [language] = useState<Language>(languages[0]);
+  const [language, setLanguage] = useState<Language>(languages[0]);
   const [startingElo, setStartingElo] = useState<number>(100);
   const [elo, setElo] = useState(100);
   const [wins, setWins] = useState(0);
@@ -158,6 +160,14 @@ export const Widget = ({
     const statsQ = searchParams.get('stats');
     if (statsQ) setStats(statsQ.split(',') as StatisticType[]);
   }, [searchParams]);
+
+  useLayoutEffect(() => {
+    setLanguage(
+      languages.find((lang) => lang.id === SETTINGS.get('widgetLanguage')) ||
+        previewLanguage ||
+        languages[0]
+    );
+  }, [SETTINGS]);
 
   /** Returns a path to a level icon */
   const getIcon = useCallback(() => {
@@ -397,12 +407,12 @@ export const Widget = ({
       {SETTINGS.get('colorScheme') === 'custom' && (
         <style>{`
                 .wrapper {
-                    --text: ${SETTINGS.get('customTextColor')} !important;
-                    --subtext: ${SETTINGS.get('customTextColor')} !important;
-                    --border-1: ${SETTINGS.get('customBorderColor1')} !important;
-                    --border-2: ${SETTINGS.get('customBorderColor2')} !important;
+                    --text: #${SETTINGS.get('customTextColor')} !important;
+                    --subtext: #${SETTINGS.get('customTextColor')} !important;
+                    --border-1: #${SETTINGS.get('customBorderColor1')} !important;
+                    --border-2: #${SETTINGS.get('customBorderColor2')} !important;
                     --border-rotation: 0deg !important;
-                    --background: ${SETTINGS.get('customBackgroundColor')} !important;
+                    --background: #${SETTINGS.get('customBackgroundColor')} !important;
                 }
             `}</style>
       )}

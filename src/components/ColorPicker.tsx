@@ -20,8 +20,10 @@ export const ColorPicker = ({
       <p>{text}</p>
       <input
         type={'color'}
-        onChange={(e) => settings.set(setting, e.currentTarget.value)}
-        value={settings.get(setting) as string}
+        onChange={(e) =>
+          settings.set(setting, e.currentTarget.value.substring(1))
+        }
+        value={`#${settings.get(setting)}`}
       />
     </div>
   );

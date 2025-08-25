@@ -79,10 +79,6 @@ export const Generator = () => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log(settings, getSetting, setSetting);
-  }, [settings, getSetting, setSetting]);
-
   const generateWidgetURL = useCallback(() => {
     const params: {
       [key: string]:
@@ -124,7 +120,7 @@ export const Generator = () => {
     setGeneratedURL(
       `${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`
     );
-  }, [settings]);
+  }, [settings, language]);
 
   const jsonToQuery = useCallback(
     (params: {
@@ -251,6 +247,7 @@ export const Generator = () => {
                     previewUsername={username}
                     previewElo={playerElo}
                     previewLevel={playerLevel}
+                    previewLanguage={language}
                   />
                 )}
               </div>

@@ -125,7 +125,6 @@ export function useSettings(useWidgetDefaults?: boolean) {
       }
       definition.query.forEach((query) => {
         const queryVal = searchParams.get(query);
-        console.log(query, queryVal);
         if (!queryVal) return;
         if (
           definition.type === 'number' ||

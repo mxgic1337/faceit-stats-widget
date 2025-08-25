@@ -2,7 +2,7 @@ import { colorSchemes, styles } from '../../widget/src/styles/styles';
 import { languages } from '../translations/translations';
 import { SettingDefinition } from './manager';
 
-const HEX_REGEXP = /^#[0-9a-fA-F]{3,8}$/;
+const HEX_REGEXP = /^[0-9a-fA-F]{3,8}$/;
 
 export const SETTINGS_DEFINITIONS = {
   widgetLanguage: {
@@ -104,7 +104,7 @@ export const SETTINGS_DEFINITIONS = {
   },
   customBorderColor1: {
     type: 'string',
-    defaultValue: '#595959',
+    defaultValue: '595959',
     regex: HEX_REGEXP,
     query: ['border1'],
     requirements: [
@@ -116,7 +116,7 @@ export const SETTINGS_DEFINITIONS = {
   },
   customBorderColor2: {
     type: 'string',
-    defaultValue: '#8d8d8d',
+    defaultValue: '8d8d8d',
     regex: HEX_REGEXP,
     query: ['border2'],
     requirements: [
@@ -128,7 +128,7 @@ export const SETTINGS_DEFINITIONS = {
   },
   customTextColor: {
     type: 'string',
-    defaultValue: '#ffffff',
+    defaultValue: 'ffffff',
     regex: HEX_REGEXP,
     query: ['color'],
     requirements: [
@@ -140,7 +140,7 @@ export const SETTINGS_DEFINITIONS = {
   },
   customBackgroundColor: {
     type: 'string',
-    defaultValue: '#121212',
+    defaultValue: '121212',
     regex: HEX_REGEXP,
     query: ['bg_color', 'bg-color'],
     requirements: [
