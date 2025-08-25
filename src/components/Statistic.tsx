@@ -10,7 +10,7 @@ export const Statistic = ({
   slot: string;
   setting: SettingKey;
 }) => {
-  const settings = useContext(SettingsContext)
+  const settings = useContext(SettingsContext);
   const tl = useContext(LanguageContext);
 
   if (!tl || !settings) {

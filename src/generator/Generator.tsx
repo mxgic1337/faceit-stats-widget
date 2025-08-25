@@ -22,13 +22,24 @@ import nukePreview from '../assets/previews/nuke.png';
 import miragePreview from '../assets/previews/mirage.png';
 import ancientPreview from '../assets/previews/ancient.png';
 import { useSearchParams } from 'react-router-dom';
-import { SetSettingFunction, SettingDefinition, SettingKey, Settings, SettingValueType, useSettings } from '../settings/manager.ts';
+import {
+  SetSettingFunction,
+  SettingDefinition,
+  SettingKey,
+  Settings,
+  SettingValueType,
+  useSettings,
+} from '../settings/manager.ts';
 import { SETTINGS_DEFINITIONS } from '../settings/definition.ts';
 
 export const LanguageContext = createContext<
   ((text: string, args?: string[]) => string) | null
 >(null);
-export const SettingsContext = createContext<{ settings: Settings, get: <K extends SettingKey>(key: K) => SettingValueType<K>, set: SetSettingFunction } | null>(null);
+export const SettingsContext = createContext<{
+  settings: Settings;
+  get: <K extends SettingKey>(key: K) => SettingValueType<K>;
+  set: SetSettingFunction;
+} | null>(null);
 export const Generator = () => {
   const [playerExists, setPlayerExists] = useState<boolean>(true);
   const [generatedURL, setGeneratedURL] = useState<string | undefined>();
@@ -39,9 +50,9 @@ export const Generator = () => {
   const [searchParams] = useSearchParams();
   const [language, setLanguage] = useState<Language>(
     languages.find((language) => language.id === searchParams.get('lang')) ||
-    languages.find((language) => language.id === localStorage.fcw_lang) ||
-    languages.find((language) => language.id === navigator.language) ||
-    languages[0]
+      languages.find((language) => language.id === localStorage.fcw_lang) ||
+      languages.find((language) => language.id === navigator.language) ||
+      languages[0]
   );
   const [previewBackground, setPreviewBackground] = useState<string>('ancient');
 
@@ -69,51 +80,60 @@ export const Generator = () => {
   }, []);
 
   useEffect(() => {
-    console.log(settings, getSetting, setSetting)
-  }, [settings, getSetting, setSetting])
+    console.log(settings, getSetting, setSetting);
+  }, [settings, getSetting, setSetting]);
 
   const generateWidgetURL = useCallback(() => {
     const params: {
       [key: string]:
-      | string
-      | (string | undefined)
-      | number
-      | boolean
-      | string[];
+        | string
+        | (string | undefined)
+        | number
+        | boolean
+        | string[];
     } = {};
 
-    Object.entries(SETTINGS_DEFINITIONS).forEach(([setting, definition]: [string, SettingDefinition]) => {
-      if (!definition.query || definition.query.length === 0) return;
-      if (definition.requirements && definition.requirements.length !== 0) {
-        for (const requirement of definition.requirements) {
-          if (getSetting(requirement.setting as SettingKey) !== requirement.value) return;
+    Object.entries(SETTINGS_DEFINITIONS).forEach(
+      ([setting, definition]: [string, SettingDefinition]) => {
+        if (!definition.query || definition.query.length === 0) return;
+        if (definition.requirements && definition.requirements.length !== 0) {
+          for (const requirement of definition.requirements) {
+            if (
+              getSetting(requirement.setting as SettingKey) !==
+              requirement.value
+            )
+              return;
+          }
         }
+        if (!getSetting(setting)) return;
+        params[definition.query[0]] = getSetting(setting);
       }
-      if (!getSetting(setting)) return;
-      params[definition.query[0]] = getSetting(setting)
-    })
+    );
 
     if (!params.lang) {
       params.lang = language.id;
     }
 
-    params.stats = [settings.statSlot1, settings.statSlot2, settings.statSlot3, settings.statSlot4].toString()
+    params.stats = [
+      settings.statSlot1,
+      settings.statSlot2,
+      settings.statSlot3,
+      settings.statSlot4,
+    ].toString();
 
     setGeneratedURL(
       `${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`
     );
-  }, [
-    settings
-  ]);
+  }, [settings]);
 
   const jsonToQuery = useCallback(
     (params: {
       [key: string]:
-      | string
-      | (string | undefined)
-      | number
-      | boolean
-      | string[];
+        | string
+        | (string | undefined)
+        | number
+        | boolean
+        | string[];
     }) => {
       return `?${Object.entries(params)
         .map((param) => {
@@ -155,11 +175,7 @@ export const Generator = () => {
     },
     {
       name: tl('generator.stats.title'),
-      component: (
-        <StatisticsTab
-          key={'stats'}
-        />
-      ),
+      component: <StatisticsTab key={'stats'} />,
     },
   ];
 
@@ -169,7 +185,9 @@ export const Generator = () => {
 
   return (
     <LanguageContext.Provider value={tl}>
-      <SettingsContext.Provider value={{ settings, get: getSetting, set: setSetting }}>
+      <SettingsContext.Provider
+        value={{ settings, get: getSetting, set: setSetting }}
+      >
         <GeneratedWidgetModal
           language={language}
           url={generatedURL}
@@ -227,8 +245,14 @@ export const Generator = () => {
                 {(getSetting('style') !== 'custom' ||
                   (getSetting('style') === 'custom' &&
                     getSetting('customCSS') !== 'https://example.com')) && (
-                    <Widget preview={true} previewBanner={playerBanner} previewUsername={username} previewElo={playerElo} previewLevel={playerLevel} />
-                  )}
+                  <Widget
+                    preview={true}
+                    previewBanner={playerBanner}
+                    previewUsername={username}
+                    previewElo={playerElo}
+                    previewLevel={playerLevel}
+                  />
+                )}
               </div>
               <select
                 value={previewBackground}

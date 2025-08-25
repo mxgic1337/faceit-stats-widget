@@ -24,8 +24,21 @@ export const Checkbox = ({
   }
 
   return (
-    <div className={'checkbox'} onClick={state && setState ? () => setState(!state) : (setting ? () => { settings.set(setting, !(settings.get(setting) as boolean)) } : () => { })}>
-      <div className={`check${state || (setting && settings.get(setting)) ? ' checked' : ''}`}></div>
+    <div
+      className={'checkbox'}
+      onClick={
+        state && setState
+          ? () => setState(!state)
+          : setting
+            ? () => {
+                settings.set(setting, !(settings.get(setting) as boolean));
+              }
+            : () => {}
+      }
+    >
+      <div
+        className={`check${state || (setting && settings.get(setting)) ? ' checked' : ''}`}
+      ></div>
       <p>
         {text}
         {experimental && (

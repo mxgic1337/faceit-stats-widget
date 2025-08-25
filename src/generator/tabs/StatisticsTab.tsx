@@ -28,22 +28,10 @@ export const StatisticsTab = () => {
           />
         )}
         <div className={'setting stats'}>
-          <Statistic
-            slot={'1'}
-            setting={'statSlot1'}
-          />
-          <Statistic
-            slot={'2'}
-            setting={'statSlot2'}
-          />
-          <Statistic
-            slot={'3'}
-            setting={'statSlot3'}
-          />
-          <Statistic
-            slot={'4'}
-            setting={'statSlot4'}
-          />
+          <Statistic slot={'1'} setting={'statSlot1'} />
+          <Statistic slot={'2'} setting={'statSlot2'} />
+          <Statistic slot={'3'} setting={'statSlot3'} />
+          <Statistic slot={'4'} setting={'statSlot4'} />
         </div>
       </div>
       <div className={'settings'}>
@@ -52,7 +40,10 @@ export const StatisticsTab = () => {
           <select
             value={settings.get('averageStatsMatchCount')}
             onChange={(e) => {
-              settings.set('averageStatsMatchCount', parseInt(e.currentTarget.value));
+              settings.set(
+                'averageStatsMatchCount',
+                parseInt(e.currentTarget.value)
+              );
             }}
           >
             <option value="20">

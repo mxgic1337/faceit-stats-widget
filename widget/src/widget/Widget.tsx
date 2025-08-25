@@ -14,9 +14,7 @@ import {
   languages,
   tl,
 } from '../../../src/translations/translations.ts';
-import {
-  getPlayerStats,
-} from '../utils/faceit_util.ts';
+import { getPlayerStats } from '../utils/faceit_util.ts';
 import { Level1 } from '../components/levels/Level1.tsx';
 import { Level2 } from '../components/levels/Level2.tsx';
 import { Level3 } from '../components/levels/Level3.tsx';
@@ -79,12 +77,18 @@ export enum ShowRanking {
   ONLY_WHEN_CHALLENGER = 2,
 }
 
-export const Widget = ({ preview, previewBanner, previewUsername, previewElo, previewLevel }: {
-  preview: boolean,
-  previewBanner?: string,
-  previewUsername?: string,
-  previewElo?: number,
-  previewLevel?: number
+export const Widget = ({
+  preview,
+  previewBanner,
+  previewUsername,
+  previewElo,
+  previewLevel,
+}: {
+  preview: boolean;
+  previewBanner?: string;
+  previewUsername?: string;
+  previewElo?: number;
+  previewLevel?: number;
 }) => {
   const [username, setUsername] = useState<string>();
   const [banner, setBanner] = useState<string>();
@@ -106,14 +110,20 @@ export const Widget = ({ preview, previewBanner, previewUsername, previewElo, pr
     [number, (string | number)[]]
   >([1, eloDistribution[0]]);
   const [compatibilityMode, setCompatibilityMode] = useState<boolean>(false);
-  const [stats, setStats] = useState<StatisticType[]>([StatisticType.KILLS, StatisticType.KD, StatisticType.WINRATIO, StatisticType.HSPERCENT]);
+  const [stats, setStats] = useState<StatisticType[]>([
+    StatisticType.KILLS,
+    StatisticType.KD,
+    StatisticType.WINRATIO,
+    StatisticType.HSPERCENT,
+  ]);
 
-  const { settings, getSetting, setSetting, loadSettingsFromQuery } = useSettings(true);
+  const { settings, getSetting, setSetting, loadSettingsFromQuery } =
+    useSettings(true);
   const overrides = useContext(SettingsContext);
 
   const SETTINGS = useMemo(() => {
-    return overrides || { settings, get: getSetting, set: setSetting }
-  }, [overrides, settings])
+    return overrides || { settings, get: getSetting, set: setSetting };
+  }, [overrides, settings]);
 
   const translate = useCallback(
     (text: string, args?: string[]) => {
@@ -126,10 +136,10 @@ export const Widget = ({ preview, previewBanner, previewUsername, previewElo, pr
 
   useEffect(() => {
     if (!previewElo || !previewLevel) return;
-    setElo(previewElo)
-    setLevel(previewLevel)
-    setCurrentEloDistribution(getEloDistribution(previewLevel, 1337))
-  }, [previewElo, previewLevel])
+    setElo(previewElo);
+    setLevel(previewLevel);
+    setCurrentEloDistribution(getEloDistribution(previewLevel, 1337));
+  }, [previewElo, previewLevel]);
 
   useEffect(() => {
     if (!overrides || !preview) return;
@@ -137,9 +147,9 @@ export const Widget = ({ preview, previewBanner, previewUsername, previewElo, pr
       overrides.get('statSlot1'),
       overrides.get('statSlot2'),
       overrides.get('statSlot3'),
-      overrides.get('statSlot4')
-    ])
-  }, [preview, overrides])
+      overrides.get('statSlot4'),
+    ]);
+  }, [preview, overrides]);
 
   /* Load settings */
   useLayoutEffect(() => {
@@ -147,7 +157,7 @@ export const Widget = ({ preview, previewBanner, previewUsername, previewElo, pr
     loadSettingsFromQuery();
     const statsQ = searchParams.get('stats');
     if (statsQ) setStats(statsQ.split(',') as StatisticType[]);
-  }, [searchParams])
+  }, [searchParams]);
 
   /** Returns a path to a level icon */
   const getIcon = useCallback(() => {
@@ -177,7 +187,12 @@ export const Widget = ({ preview, previewBanner, previewUsername, previewElo, pr
   /* Update player stats */
   useEffect(() => {
     if (preview) return;
-    console.log(`%cWidget settings:%c\n%o`, 'font-weight: bold;', '', SETTINGS.settings)
+    console.log(
+      `%cWidget settings:%c\n%o`,
+      'font-weight: bold;',
+      '',
+      SETTINGS.settings
+    );
     let startDate = new Date();
     const savedStartDate = localStorage.getItem('fcw_session_start');
     const savedPlayerId = localStorage.getItem('fcw_session_player-id');
@@ -290,16 +305,29 @@ export const Widget = ({ preview, previewBanner, previewUsername, previewElo, pr
     }
 
     /* Set widget style and color scheme */
-    document.getElementsByTagName('html')[0].classList.add(`${SETTINGS.get('style')}-theme`)
-    document.getElementsByTagName('html')[0].classList.add(`${SETTINGS.get('colorScheme')}-scheme`)
-    if (SETTINGS.get('autoWidth')) document.getElementsByTagName('html')[0].classList.add(`auto-width`);
+    document
+      .getElementsByTagName('html')[0]
+      .classList.add(`${SETTINGS.get('style')}-theme`);
+    document
+      .getElementsByTagName('html')[0]
+      .classList.add(`${SETTINGS.get('colorScheme')}-scheme`);
+    if (SETTINGS.get('autoWidth'))
+      document.getElementsByTagName('html')[0].classList.add(`auto-width`);
 
-    const interval = setInterval(getStats, 1000 * SETTINGS.get('refreshInterval') || 30000);
+    const interval = setInterval(
+      getStats,
+      1000 * SETTINGS.get('refreshInterval') || 30000
+    );
     return () => {
       clearInterval(interval);
-      document.getElementsByTagName('html')[0].classList.remove(`${SETTINGS.get('style')}-theme`)
-      document.getElementsByTagName('html')[0].classList.remove(`${SETTINGS.get('colorScheme')}-scheme`)
-      if (SETTINGS.get('autoWidth')) document.getElementsByTagName('html')[0].classList.remove(`auto-width`);
+      document
+        .getElementsByTagName('html')[0]
+        .classList.remove(`${SETTINGS.get('style')}-theme`);
+      document
+        .getElementsByTagName('html')[0]
+        .classList.remove(`${SETTINGS.get('colorScheme')}-scheme`);
+      if (SETTINGS.get('autoWidth'))
+        document.getElementsByTagName('html')[0].classList.remove(`auto-width`);
     };
   }, [SETTINGS]);
 
@@ -352,9 +380,10 @@ export const Widget = ({ preview, previewBanner, previewUsername, previewElo, pr
       diff = elo - startingElo;
     }
 
-    let text = translate(`widget.elo${!SETTINGS.get('showEloSuffix') ? '_no_suffix' : ''}`, [
-      String(currentElo),
-    ]);
+    let text = translate(
+      `widget.elo${!SETTINGS.get('showEloSuffix') ? '_no_suffix' : ''}`,
+      [String(currentElo)]
+    );
     if (SETTINGS.get('showEloDiff')) {
       text += translate(`widget.elo_diff`, [
         `${diff >= 0 ? `+${diff}` : String(diff)}`,
@@ -398,7 +427,9 @@ export const Widget = ({ preview, previewBanner, previewUsername, previewElo, pr
           } as CSSProperties
         }
       >
-        <div className={`widget ${SETTINGS.get('useBannerAsBackground') ? 'banner' : ''}`}>
+        <div
+          className={`widget ${SETTINGS.get('useBannerAsBackground') ? 'banner' : ''}`}
+        >
           <div className={'player-stats'}>
             <div className={'level'}>
               {getIcon()}
@@ -407,12 +438,17 @@ export const Widget = ({ preview, previewBanner, previewUsername, previewElo, pr
                 {SETTINGS.get('showUsername') && (
                   <h2>{username || previewUsername || '?'} </h2>
                 )}
-                <p className={SETTINGS.get('showUsername') ? '' : 'username-hidden'}>
+                <p
+                  className={
+                    SETTINGS.get('showUsername') ? '' : 'username-hidden'
+                  }
+                >
                   {(SETTINGS.get('showRanking') === ShowRanking.SHOW ||
-                    (SETTINGS.get('showRanking') === ShowRanking.ONLY_WHEN_CHALLENGER &&
+                    (SETTINGS.get('showRanking') ===
+                      ShowRanking.ONLY_WHEN_CHALLENGER &&
                       ranking <= 1000)) && (
-                      <span className={'ranking'}>#{ranking} </span>
-                    )}
+                    <span className={'ranking'}>#{ranking} </span>
+                  )}
                   {getElo()}
                 </p>
               </div>

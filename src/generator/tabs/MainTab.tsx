@@ -141,7 +141,10 @@ export const MainTab = ({
           <select
             value={settings.get('refreshInterval')}
             onChange={(event) => {
-              settings.set('refreshInterval', parseInt(event.currentTarget.value));
+              settings.set(
+                'refreshInterval',
+                parseInt(event.currentTarget.value)
+              );
             }}
           >
             <option value={10}>
@@ -182,10 +185,15 @@ export const MainTab = ({
             <p>{tl('generator.settings.show_ranking')}</p>
             <select
               value={settings.get('showRanking')}
-              onChange={(e) => settings.set('showRanking', parseInt(e.target.value) as ShowRanking)}
+              onChange={(e) =>
+                settings.set(
+                  'showRanking',
+                  parseInt(e.target.value) as ShowRanking
+                )
+              }
             >
               {Object.entries(ShowRanking).map(([key, value]) => {
-                if (typeof value !== "number") return;
+                if (typeof value !== 'number') return;
                 return (
                   <option key={key} value={value}>
                     {tl(`ranking_state.${key}`)}{' '}

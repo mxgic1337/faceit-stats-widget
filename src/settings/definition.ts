@@ -1,144 +1,154 @@
-import { colorSchemes, styles } from "../../widget/src/styles/styles"
-import { languages } from "../translations/translations";
-import { SettingDefinition } from "./manager";
+import { colorSchemes, styles } from '../../widget/src/styles/styles';
+import { languages } from '../translations/translations';
+import { SettingDefinition } from './manager';
 
-const HEX_REGEXP = /^#[0-9a-fA-F]{3,8}$/
+const HEX_REGEXP = /^#[0-9a-fA-F]{3,8}$/;
 
 export const SETTINGS_DEFINITIONS = {
   widgetLanguage: {
     type: 'string_undefined',
     defaultValue: undefined,
-    options: [...languages.map(language => language.id), undefined],
-    query: ['lang']
+    options: [...languages.map((language) => language.id), undefined],
+    query: ['lang'],
   },
   playerId: {
     type: 'string',
     defaultValue: undefined,
-    query: ['player_id']
+    query: ['player_id'],
   },
   autoWidth: {
     type: 'boolean',
     defaultValue: true,
     defaultWidgetValue: false,
-    query: ['auto_width']
+    query: ['auto_width'],
   },
   onlyOfficialMatchesCount: {
     type: 'boolean',
     defaultValue: true,
-    query: ['only_official']
+    query: ['only_official'],
   },
   showRanking: {
     type: 'ranking_state',
     defaultValue: 2,
     defaultWidgetValue: 0,
-    query: ['ranking']
+    query: ['ranking'],
   },
   showEloDiff: {
     type: 'boolean',
     defaultValue: true,
-    query: ['diff']
+    query: ['diff'],
   },
   showUsername: {
     type: 'boolean',
     defaultValue: true,
-    query: ['name']
+    query: ['name'],
   },
   showEloSuffix: {
     type: 'boolean',
     defaultValue: true,
-    query: ['suffix']
+    query: ['suffix'],
   },
   showStatistics: {
     type: 'boolean',
     defaultValue: true,
     defaultWidgetValue: false,
-    query: ['show_stats', 'avg']
+    query: ['show_stats', 'avg'],
   },
   showEloProgressBar: {
     type: 'boolean',
     defaultValue: true,
     defaultWidgetValue: false,
-    query: ['progress', 'eloBar']
+    query: ['progress', 'eloBar'],
   },
   useBannerAsBackground: {
     type: 'boolean',
     defaultValue: true,
     defaultWidgetValue: false,
-    query: ['banner']
+    query: ['banner'],
   },
   adjustBackgroundOpacity: {
     type: 'boolean',
-    defaultValue: false
+    defaultValue: false,
   },
   backgroundOpacity: {
     type: 'number',
-    defaultValue: .15,
+    defaultValue: 0.15,
     min: 0,
     max: 1,
     query: ['banner_opacity'],
-    requirements: [{
-      setting: 'adjustBackgroundOpacity',
-      value: true
-    }]
+    requirements: [
+      {
+        setting: 'adjustBackgroundOpacity',
+        value: true,
+      },
+    ],
   },
   refreshInterval: {
     type: 'number',
     defaultValue: 30,
     min: 10,
     max: 60,
-    query: ['refresh']
+    query: ['refresh'],
   },
   colorScheme: {
     type: 'string',
     defaultValue: 'dark',
     options: colorSchemes,
-    query: ['scheme']
+    query: ['scheme'],
   },
   style: {
     type: 'string',
     defaultValue: 'normal',
-    options: styles.map(style => style.id),
-    query: ['style']
+    options: styles.map((style) => style.id),
+    query: ['style'],
   },
   customBorderColor1: {
     type: 'string',
     defaultValue: '#595959',
     regex: HEX_REGEXP,
     query: ['border1'],
-    requirements: [{
-      setting: 'colorScheme',
-      value: 'custom'
-    }]
+    requirements: [
+      {
+        setting: 'colorScheme',
+        value: 'custom',
+      },
+    ],
   },
   customBorderColor2: {
     type: 'string',
     defaultValue: '#8d8d8d',
     regex: HEX_REGEXP,
     query: ['border2'],
-    requirements: [{
-      setting: 'colorScheme',
-      value: 'custom'
-    }]
+    requirements: [
+      {
+        setting: 'colorScheme',
+        value: 'custom',
+      },
+    ],
   },
   customTextColor: {
     type: 'string',
     defaultValue: '#ffffff',
     regex: HEX_REGEXP,
     query: ['color'],
-    requirements: [{
-      setting: 'colorScheme',
-      value: 'custom'
-    }]
+    requirements: [
+      {
+        setting: 'colorScheme',
+        value: 'custom',
+      },
+    ],
   },
   customBackgroundColor: {
     type: 'string',
     defaultValue: '#121212',
     regex: HEX_REGEXP,
     query: ['bg_color', 'bg-color'],
-    requirements: [{
-      setting: 'colorScheme',
-      value: 'custom'
-    }]
+    requirements: [
+      {
+        setting: 'colorScheme',
+        value: 'custom',
+      },
+    ],
   },
   statSlot1: {
     type: 'statistic_type',
@@ -159,23 +169,23 @@ export const SETTINGS_DEFINITIONS = {
   saveSession: {
     type: 'boolean',
     defaultValue: false,
-    query: ['save_session']
+    query: ['save_session'],
   },
   averageStatsMatchCount: {
     type: 'number',
     defaultValue: 30,
-    query: ['avg_matches']
+    query: ['avg_matches'],
   },
   widgetOpacity: {
     type: 'number',
     defaultValue: 1,
     min: 0,
     max: 1,
-    query: ['opacity']
+    query: ['opacity'],
   },
   customCSS: {
     type: 'string_undefined',
     defaultValue: undefined,
-    query: ['css']
+    query: ['css'],
   },
-} satisfies Record<string, SettingDefinition>
+} satisfies Record<string, SettingDefinition>;

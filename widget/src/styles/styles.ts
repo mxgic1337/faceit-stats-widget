@@ -3,11 +3,11 @@ export const styles: {
   hidden?: boolean;
   experimental?: boolean;
 }[] = [
-    { id: 'normal' },
-    { id: 'compact' },
-    { id: 'classic' },
-    { id: 'custom', experimental: true, hidden: true },
-  ];
+  { id: 'normal' },
+  { id: 'compact' },
+  { id: 'classic' },
+  { id: 'custom', experimental: true, hidden: true },
+];
 
 export const colorSchemes: string[] = [
   'dark',

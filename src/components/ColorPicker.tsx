@@ -4,12 +4,12 @@ import { SettingsContext } from '../generator/Generator';
 
 export const ColorPicker = ({
   text,
-  setting
+  setting,
 }: {
   text: string;
   setting: SettingKey;
 }) => {
-  const settings = useContext(SettingsContext)
+  const settings = useContext(SettingsContext);
 
   if (!settings) {
     return null;

@@ -5,7 +5,13 @@ import { Checkbox } from '../../components/Checkbox.tsx';
 import { InfoBox } from '../../components/InfoBox.tsx';
 import { LanguageContext, SettingsContext } from '../Generator.tsx';
 
-export const StyleTab = ({ username, playerBanner }: { username: string, playerBanner?: string }) => {
+export const StyleTab = ({
+  username,
+  playerBanner,
+}: {
+  username: string;
+  playerBanner?: string;
+}) => {
   const customCSSInputRef = useRef<HTMLInputElement>(null);
   const tl = useContext(LanguageContext);
   const settings = useContext(SettingsContext);
@@ -75,7 +81,10 @@ export const StyleTab = ({ username, playerBanner }: { username: string, playerB
                   step={0.01}
                   disabled={!settings.get('adjustBackgroundOpacity')}
                   onChange={(event) => {
-                    settings.set('backgroundOpacity', parseFloat(event.currentTarget.value));
+                    settings.set(
+                      'backgroundOpacity',
+                      parseFloat(event.currentTarget.value)
+                    );
                   }}
                 />
                 <p style={{ width: '50px', textAlign: 'right' }}>
@@ -116,7 +125,10 @@ export const StyleTab = ({ username, playerBanner }: { username: string, playerB
               ref={customCSSInputRef}
               onKeyDown={(e) => {
                 if (e.code !== 'Enter') return;
-                settings.set('customCSS', customCSSInputRef.current?.value as string);
+                settings.set(
+                  'customCSS',
+                  customCSSInputRef.current?.value as string
+                );
               }}
             />
             <small>{tl('generator.theme.custom_css.apply')}</small>
@@ -162,7 +174,10 @@ export const StyleTab = ({ username, playerBanner }: { username: string, playerB
               max={1}
               step={0.01}
               onChange={(event) => {
-                settings.set('widgetOpacity', parseFloat(event.currentTarget.value));
+                settings.set(
+                  'widgetOpacity',
+                  parseFloat(event.currentTarget.value)
+                );
               }}
             />
 
