@@ -92,13 +92,13 @@ export const SETTINGS_DEFINITIONS = {
   },
   colorScheme: {
     type: 'string',
-    defaultValue: 'dark',
+    defaultValue: 'faceit',
     options: colorSchemes,
     query: ['scheme'],
   },
   style: {
     type: 'string',
-    defaultValue: 'normal',
+    defaultValue: 'rounded',
     options: styles.map((style) => style.id),
     query: ['style'],
   },

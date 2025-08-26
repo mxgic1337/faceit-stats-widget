@@ -91,6 +91,7 @@
   "scheme.ctp-mocha": "Catppuccin Mocha",
   "scheme.custom": "Custom theme",
   "style.normal": "Normal",
+  "style.rounded": "Rounded",
   "style.compact": "Compact",
   "style.classic": "Classic",
   "style.custom": "Custom CSS"

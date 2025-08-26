@@ -30,6 +30,7 @@ import { Challenger } from '../components/levels/Challenger.tsx';
 import { StatisticType } from '../../../src/generator/tabs/StatisticsTab.tsx';
 
 import '../styles/themes/normal.less';
+import '../styles/themes/rounded.less';
 import '../styles/themes/compact.less';
 import '../styles/themes/classic.less';
 
