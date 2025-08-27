@@ -24,7 +24,6 @@
   padding: 0;
   margin: 0;
   font-family: 'DM Sans', sans-serif;
-  color: @text;
 }
 
 #root {
@@ -36,12 +35,14 @@
 }
 
 body {
+  color: @text;
   background: @base;
 }
 
 input,
 select,
 button {
+  color: @text;
   border: 1px solid @surface0;
   background: @base;
   padding: 6px;
@@ -265,21 +266,34 @@ div.preview {
   user-select: none;
 
   .check {
-    @size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    @size: 18px;
     min-width: @size;
     min-height: @size;
     max-width: @size;
     max-height: @size;
-    border: 1px solid @surface0;
     border-radius: 6px;
     background-color: @base;
     margin-right: 4px;
     transition: 0.1s;
-  }
 
-  .check.checked {
-    background: fade(@green, 10%);
-    border: 1px solid @green;
+    svg.icon {
+      opacity: 0;
+      margin-right: 0;
+      transition: 0.2s;
+    }
+
+    &.checked {
+      background: fade(@green, 10%);
+
+      svg {
+        color: @green;
+        opacity: 1;
+      }
+    }
   }
 }
 
@@ -334,10 +348,17 @@ div.preview {
 }
 
 .info-box(@color) {
-  padding: 6px 10px;
-  border-left: 3px solid @color;
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 12px;
   background: fade(@color, 5%);
   margin: 6px 0;
+
+  svg.icon {
+    color: @color;
+    margin-right: 0.3rem;
+  }
 
   p {
     color: @text;
@@ -430,4 +451,12 @@ dialog {
     border: none;
     background: none;
   }
+}
+
+svg.icon:not(.widget) {
+  position: relative;
+  width: auto;
+  height: 1rem;
+  aspect-ratio: 1/1;
+  margin-right: 0.2rem;
 }

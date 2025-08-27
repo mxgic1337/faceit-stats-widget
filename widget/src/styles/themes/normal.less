@@ -27,7 +27,9 @@
     p,
     span,
     h2,
-    small {
+    small,
+    svg.icon,
+    svg.icon > * {
       color: var(--text);
       filter: drop-shadow(0 0 6px var(--text-shadow));
     }
@@ -87,7 +89,7 @@
         display: flex;
         align-items: center;
 
-        svg {
+        svg.faceit-level {
           @size: 70px;
           width: @size;
           height: @size;
@@ -99,7 +101,18 @@
         }
 
         .elo {
+          svg.icon {
+            position: relative;
+            top: -1px;
+            width: auto;
+            height: 1rem;
+            aspect-ratio: 1/1;
+            margin-right: 0.2rem;
+          }
+
           p {
+            display: flex;
+            align-items: center;
             font-size: 0.85em;
           }
 

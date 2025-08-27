@@ -1,10 +1,10 @@
 export const Level3 = () => {
   return (
     <svg
+      className="faceit-level"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="none"
-      id="f_icon_32f1620f"
     >
       <circle cx="12" cy="12" r="12" fill="#1F1F22"></circle>
       <path

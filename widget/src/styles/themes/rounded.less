@@ -62,11 +62,15 @@
       }
 
       .level {
-        .elo p {
-          color: var(--subtext);
+        .elo {
+          p,
+          svg.icon,
+          svg.icon > * {
+            color: var(--subtext);
+          }
         }
 
-        svg {
+        svg.faceit-level {
           @size: 64px;
           width: @size;
           height: @size;

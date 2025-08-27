@@ -37,6 +37,7 @@ import '../styles/themes/classic.less';
 import '../styles/color_schemes.less';
 import { SettingsContext } from '../../../src/generator/Generator.tsx';
 import { useSettings } from '../../../src/settings/manager.ts';
+import { TimelineIcon } from '../../../src/assets/icons/tabler/TimelineIcon.tsx';
 
 const levelIcons = [
   <Level1 />,
@@ -460,7 +461,7 @@ export const Widget = ({
                       ranking <= 1000)) && (
                     <span className={'ranking'}>#{ranking} </span>
                   )}
-                  {getElo()}
+                  <TimelineIcon /> {getElo()}
                 </p>
               </div>
             </div>

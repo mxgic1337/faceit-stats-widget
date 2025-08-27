@@ -1,6 +1,7 @@
 import { Dispatch, useContext } from 'react';
 import { LanguageContext, SettingsContext } from '../generator/Generator.tsx';
 import { SettingKey } from '../settings/manager.ts';
+import { CheckIcon } from '../assets/icons/tabler/CheckIcon.tsx';
 export const Checkbox = ({
   text,
   setting,
@@ -38,7 +39,9 @@ export const Checkbox = ({
     >
       <div
         className={`check${state || (setting && settings.get(setting)) ? ' checked' : ''}`}
-      ></div>
+      >
+        <CheckIcon />
+      </div>
       <p>
         {text}
         {experimental && (
