@@ -1,0 +1,102 @@
+@import 'normal.less';
+
+.rounded-theme:extend(.normal-theme all) {
+  --border-width: 2px;
+
+  .wrapper {
+    &:after {
+      border-radius: 18px;
+    }
+
+    .player-stats {
+      .stat {
+        @size: 42px;
+        width: @size;
+        height: @size;
+        font-size: 1.17rem;
+        border-radius: 15px;
+      }
+
+      .stat.green,
+      .stat.red {
+        border: none;
+
+        small {
+          display: none;
+        }
+      }
+
+      .stat.green {
+        p {
+          color: var(--wins-text);
+        }
+      }
+
+      .stat.red {
+        p {
+          color: var(--losses-text);
+        }
+      }
+    }
+
+    .average {
+      margin-top: 2px;
+
+      .stat {
+        border-right: none;
+        align-items: center;
+
+        p:first-child {
+          margin-right: 0;
+        }
+      }
+    }
+
+    &.banner::before {
+      border-radius: 18px;
+    }
+
+    .widget {
+      &::after {
+        border-radius: 18px;
+      }
+
+      .level {
+        .elo p {
+          color: var(--subtext);
+
+          &.username-hidden {
+            font-size: 1em;
+            color: var(--text);
+
+            .ranking {
+              font-weight: bold;
+            }
+
+            svg.icon {
+              top: 0;
+            }
+          }
+        }
+
+        #faceit-level(@size) {
+          width: @size;
+          height: @size;
+          margin-right: 10px;
+        }
+
+        svg.faceit-level {
+          #faceit-level(64px);
+        }
+
+        &:has(.username-hidden) svg.faceit-level {
+          #faceit-level(52px);
+        }
+      }
+    }
+
+    .progress-bar .progress {
+      height: 2px;
+    }
+  }
+}

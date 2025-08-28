@@ -178,6 +178,10 @@ export const MainTab = ({
             setting={'showEloProgressBar'}
           />
           <Checkbox
+            text={tl('generator.settings.show_icons')}
+            setting={'showIcons'}
+          />
+          <Checkbox
             text={tl('generator.settings.show_kd')}
             setting={'showStatistics'}
           />

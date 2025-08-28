@@ -31,6 +31,7 @@
   "generator.settings.show_elo_suffix": "Show ELO suffix",
   "generator.settings.show_elo_diff": "Show ELO diff (gain/loss)",
   "generator.settings.show_elo_progress_bar": "Show ELO progress bar",
+  "generator.settings.show_icons": "Show icons",
   "generator.settings.show_kd": "Show statistics",
   "generator.settings.show_ranking": "Show ranking",
   "generator.settings.show_ranking_only_when_challenger": "Show ranking only when Challenger",
@@ -91,7 +92,10 @@
   "scheme.ctp-mocha": "Catppuccin Mocha",
   "scheme.custom": "Custom theme",
   "style.normal": "Normal",
+  "style.rounded": "Rounded",
   "style.compact": "Compact",
+  "style.rounded-compact": "Rounded (compact)",
+  "style.radar": "Radar",
   "style.classic": "Classic",
   "style.custom": "Custom CSS"
 }

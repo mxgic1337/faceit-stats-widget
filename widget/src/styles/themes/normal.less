@@ -17,6 +17,8 @@
     font-family: 'DM Sans', sans-serif;
   }
 
+  color: var(--text);
+
   .wrapper {
     position: relative;
     display: flex;
@@ -28,7 +30,6 @@
     span,
     h2,
     small {
-      color: var(--text);
       filter: drop-shadow(0 0 6px var(--text-shadow));
     }
 
@@ -87,7 +88,7 @@
         display: flex;
         align-items: center;
 
-        svg {
+        svg.faceit-level {
           @size: 70px;
           width: @size;
           height: @size;
@@ -99,8 +100,43 @@
         }
 
         .elo {
+          svg.icon {
+            position: relative;
+            top: -1px;
+            width: auto;
+            height: 1rem;
+            aspect-ratio: 1/1;
+            margin-right: 0.2rem;
+          }
+
           p {
+            display: flex;
+            align-items: center;
             font-size: 0.85em;
+
+            .diff {
+              display: flex;
+              align-items: center;
+              margin-left: 0.25rem;
+
+              &.gain {
+                color: var(--wins-text);
+              }
+
+              &.loss {
+                color: var(--losses-text);
+              }
+
+              svg.icon {
+                position: relative;
+                left: -2px;
+                margin-right: 0rem;
+              }
+            }
+
+            .ranking {
+              margin-right: 0.2rem;
+            }
           }
 
           .username-hidden {

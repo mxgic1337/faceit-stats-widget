@@ -1,0 +1,89 @@
+@import 'compact.less';
+
+.rounded-compact-theme:extend(.compact-theme all) {
+  --border-width: 2px;
+  --auto-width: 400px;
+
+  .wrapper {
+    &::after {
+      border-radius: 20px;
+    }
+
+    .widget {
+      padding: 8px 14px !important;
+
+      &::after {
+        border-radius: 18px;
+      }
+
+      &.banner::before {
+        border-radius: 20px;
+      }
+
+      .level {
+        svg.faceit-level {
+          margin-right: 4px;
+        }
+
+        .elo {
+          p {
+            color: var(--subtext);
+
+            &.username-hidden {
+              color: var(--text);
+            }
+          }
+
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+        }
+      }
+    }
+
+    .player-stats {
+      .stat {
+        @size: 30px;
+        width: @size;
+        height: @size;
+        font-size: 1.17rem;
+        border-radius: 12px;
+
+        p {
+          font-weight: bold;
+        }
+      }
+
+      .stat.green,
+      .stat.red {
+        border: none;
+
+        small {
+          display: none;
+        }
+      }
+
+      .stat.green {
+        p {
+          color: var(--wins-text);
+        }
+      }
+
+      .stat.red {
+        p {
+          color: var(--losses-text);
+        }
+      }
+    }
+
+    .average {
+      .stat {
+        border-right: none;
+
+        p:first-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}
