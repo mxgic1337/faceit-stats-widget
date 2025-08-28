@@ -101,7 +101,7 @@ export const Generator = () => {
               return;
           }
         }
-        if (!getSetting(setting)) return;
+        if (getSetting(setting) === undefined) return;
         params[definition.query[0]] = getSetting(setting);
       }
     );

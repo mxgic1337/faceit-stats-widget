@@ -38,6 +38,12 @@ export const SETTINGS_DEFINITIONS = {
     defaultValue: true,
     query: ['diff'],
   },
+  showIcons: {
+    type: 'boolean',
+    defaultValue: true,
+    defaultWidgetValue: false,
+    query: ['icons'],
+  },
   showUsername: {
     type: 'boolean',
     defaultValue: true,

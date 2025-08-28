@@ -1,4 +1,4 @@
-export const InfoCircleIcon = () => {
+export const ArrowDownIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -10,12 +10,12 @@ export const InfoCircleIcon = () => {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="icon icon-tabler icons-tabler-outline icon-tabler-info-circle"
+      className="icon icon-tabler icons-tabler-outline icon-tabler-arrow-down"
     >
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
-      <path d="M12 9h.01" />
-      <path d="M11 12h1v4h1" />
+      <path d="M12 5l0 14" />
+      <path d="M18 13l-6 6" />
+      <path d="M6 13l6 6" />
     </svg>
   );
 };

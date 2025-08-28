@@ -7,6 +7,7 @@ import {
   CSSProperties,
   useMemo,
   useLayoutEffect,
+  ReactElement,
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
@@ -38,6 +39,8 @@ import '../styles/color_schemes.less';
 import { SettingsContext } from '../../../src/generator/Generator.tsx';
 import { useSettings } from '../../../src/settings/manager.ts';
 import { TimelineIcon } from '../../../src/assets/icons/tabler/TimelineIcon.tsx';
+import { ArrowUpIcon } from '../../../src/assets/icons/tabler/ArrowUpIcon.tsx';
+import { ArrowDownIcon } from '../../../src/assets/icons/tabler/ArrowDownIcon.tsx';
 
 const levelIcons = [
   <Level1 />,
@@ -384,24 +387,27 @@ export const Widget = ({
   );
 
   /** Returns player ELO text */
-  const getElo = useCallback(() => {
-    const currentElo = elo;
+  const getEloDiff = useCallback(() => {
     let diff = 0;
 
     if (!preview) {
       diff = elo - startingElo;
     }
 
-    let text = translate(
-      `widget.elo${!SETTINGS.get('showEloSuffix') ? '_no_suffix' : ''}`,
-      [String(currentElo)]
-    );
-    if (SETTINGS.get('showEloDiff')) {
-      text += translate(`widget.elo_diff`, [
-        `${diff >= 0 ? `+${diff}` : String(diff)}`,
-      ]);
+    let diffArrow: ReactElement | null = null;
+
+    if (diff > 0) {
+      diffArrow = <ArrowUpIcon />;
+    } else if (diff < 0) {
+      diffArrow = <ArrowDownIcon />;
     }
-    return text;
+
+    return (
+      <span className={`diff ${diff > 0 ? 'gain' : diff === 0 ? '' : 'loss'}`}>
+        ({SETTINGS.get('showIcons') ? diffArrow : null}
+        {diff >= 0 ? `+${diff}` : String(diff)})
+      </span>
+    );
   }, [language, elo, startingElo, SETTINGS]);
 
   return (
@@ -461,7 +467,12 @@ export const Widget = ({
                       ranking <= 1000)) && (
                     <span className={'ranking'}>#{ranking} </span>
                   )}
-                  <TimelineIcon /> {getElo()}
+                  {SETTINGS.get('showIcons') && <TimelineIcon />}{' '}
+                  {translate(
+                    `widget.elo${!SETTINGS.get('showEloSuffix') ? '_no_suffix' : ''}`,
+                    [String(elo)]
+                  )}{' '}
+                  {SETTINGS.get('showEloDiff') && getEloDiff()}
                 </p>
               </div>
             </div>

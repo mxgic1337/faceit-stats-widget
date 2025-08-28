@@ -14,6 +14,7 @@
         width: @size;
         height: @size;
         font-size: 1.17rem;
+        border-radius: 15px;
       }
 
       .stat.green,
@@ -62,11 +63,17 @@
       }
 
       .level {
-        .elo {
-          p,
-          svg.icon,
-          svg.icon > * {
-            color: var(--subtext);
+        .elo p {
+          color: var(--subtext);
+
+          .diff {
+            &.gain {
+              color: var(--wins-text);
+            }
+
+            &.loss {
+              color: var(--losses-text);
+            }
           }
         }
 

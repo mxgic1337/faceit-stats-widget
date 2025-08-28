@@ -194,10 +194,6 @@ footer {
   }
 }
 
-small {
-  color: @subtext0;
-}
-
 a {
   color: @blue;
   text-decoration: none;
@@ -399,6 +395,8 @@ dialog {
 
   text-align: center;
 
+  color: @text;
+
   border: 1px solid @surface0;
   border-radius: 12px;
   background: @base;
@@ -463,10 +461,12 @@ dialog {
   }
 }
 
-svg.icon:not(.widget) {
-  position: relative;
-  width: auto;
-  height: 1rem;
-  aspect-ratio: 1/1;
-  margin-right: 0.2rem;
+.box {
+  svg.icon {
+    position: relative;
+    width: auto;
+    height: 1rem;
+    aspect-ratio: 1/1;
+    margin-right: 0.2rem;
+  }
 }
