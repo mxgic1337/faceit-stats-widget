@@ -75,13 +75,32 @@
               color: var(--losses-text);
             }
           }
+
+          &.username-hidden {
+            font-size: 1em;
+
+            .ranking {
+              font-weight: bold;
+            }
+
+            svg.icon {
+              top: 0;
+            }
+          }
         }
 
-        svg.faceit-level {
-          @size: 64px;
+        #faceit-level(@size) {
           width: @size;
           height: @size;
           margin-right: 10px;
+        }
+
+        svg.faceit-level {
+          #faceit-level(64px);
+        }
+
+        &:has(.username-hidden) svg.faceit-level {
+          #faceit-level(52px);
         }
       }
     }
