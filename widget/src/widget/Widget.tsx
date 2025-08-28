@@ -395,15 +395,18 @@ export const Widget = ({
     }
 
     let diffArrow: ReactElement | null = null;
+    let diffStyle: string = '';
 
     if (diff > 0) {
       diffArrow = <ArrowUpIcon />;
+      diffStyle = 'gain';
     } else if (diff < 0) {
       diffArrow = <ArrowDownIcon />;
+      diffStyle = 'loss';
     }
 
     return (
-      <span className={`diff ${diff > 0 ? 'gain' : diff === 0 ? '' : 'loss'}`}>
+      <span className={`diff ${diffStyle}`}>
         ({SETTINGS.get('showIcons') ? diffArrow : null}
         {diff >= 0 ? `+${diff}` : String(diff)})
       </span>
