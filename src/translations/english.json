@@ -95,6 +95,7 @@
   "style.rounded": "Rounded",
   "style.compact": "Compact",
   "style.rounded-compact": "Rounded (compact)",
+  "style.radar": "Radar",
   "style.classic": "Classic",
   "style.custom": "Custom CSS"
 }
