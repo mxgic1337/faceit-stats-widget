@@ -86,6 +86,7 @@
   "style.normal": "Normalny",
   "style.rounded": "Zaokrąglony",
   "style.compact": "Kompaktowy",
+  "style.rounded-compact": "Zaokrąglony (kompaktowy)",
   "style.classic": "Klasyczny",
   "style.custom": "Własny CSS"
 }

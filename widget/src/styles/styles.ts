@@ -4,8 +4,9 @@ export const styles: {
   experimental?: boolean;
 }[] = [
   { id: 'normal' },
-  { id: 'rounded' },
   { id: 'compact' },
+  { id: 'rounded' },
+  { id: 'rounded-compact' },
   { id: 'classic' },
   { id: 'custom', experimental: true, hidden: true },
 ];

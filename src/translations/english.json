@@ -94,6 +94,7 @@
   "style.normal": "Normal",
   "style.rounded": "Rounded",
   "style.compact": "Compact",
+  "style.rounded-compact": "Rounded (compact)",
   "style.classic": "Classic",
   "style.custom": "Custom CSS"
 }
