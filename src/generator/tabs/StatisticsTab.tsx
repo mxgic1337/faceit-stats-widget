@@ -2,6 +2,7 @@ import { InfoBox } from '../../components/InfoBox.tsx';
 import { useContext } from 'react';
 import { Statistic } from '../../components/Statistic.tsx';
 import { LanguageContext, SettingsContext } from '../Generator.tsx';
+import { Checkbox } from '../../components/Checkbox.tsx';
 
 export enum StatisticType {
   KILLS = 'KILLS',
@@ -33,6 +34,12 @@ export const StatisticsTab = () => {
           <Statistic slot={'3'} setting={'statSlot3'} />
           <Statistic slot={'4'} setting={'statSlot4'} />
         </div>
+        <div className={'setting'}>
+          <Checkbox
+            text={tl('generator.settings.only_official_matches')}
+            setting={'onlyOfficialMatchesCount'}
+          />
+        </div>
       </div>
       <div className={'settings'}>
         <div className={'setting'}>
@@ -51,6 +58,28 @@ export const StatisticsTab = () => {
             </option>
             <option value="30">
               {tl('generator.stats.match_count.count', ['30'])}
+            </option>
+          </select>
+        </div>
+        <div className={'setting'}>
+          <p>{tl('generator.settings.refresh_delay')}</p>
+          <select
+            value={settings.get('refreshInterval')}
+            onChange={(event) => {
+              settings.set(
+                'refreshInterval',
+                parseInt(event.currentTarget.value)
+              );
+            }}
+          >
+            <option value={10}>
+              {tl('generator.settings.refresh_delay.quick', ['10'])}
+            </option>
+            <option value={30}>
+              {tl('generator.settings.refresh_delay.normal', ['30'])}
+            </option>
+            <option value={60}>
+              {tl('generator.settings.refresh_delay.slow', ['60'])}
             </option>
           </select>
         </div>

@@ -59,52 +59,6 @@ export const StyleTab = ({
               </select>
             </div>
           </div>
-
-          {/* Banner background settings */}
-
-          <Checkbox
-            text={tl('generator.theme.banner_as_background')}
-            setting={'useBannerAsBackground'}
-          />
-          {settings.get('useBannerAsBackground') && (
-            <>
-              <Checkbox
-                text={tl('generator.theme.banner_as_background.adjust_opacity')}
-                setting={'adjustBackgroundOpacity'}
-              />
-              <div className={'flex'} style={{ alignItems: 'center' }}>
-                <input
-                  type={'range'}
-                  value={settings.get('backgroundOpacity')}
-                  min={0.01}
-                  max={1}
-                  step={0.01}
-                  disabled={!settings.get('adjustBackgroundOpacity')}
-                  onChange={(event) => {
-                    settings.set(
-                      'backgroundOpacity',
-                      parseFloat(event.currentTarget.value)
-                    );
-                  }}
-                />
-                <p style={{ width: '50px', textAlign: 'right' }}>
-                  {Math.round(settings.get('backgroundOpacity') * 100)}%
-                </p>
-              </div>
-              {!playerBanner && (
-                <InfoBox
-                  style={'warn'}
-                  content={
-                    <p>
-                      {tl('generator.theme.banner_as_background.no_banner', [
-                        username,
-                      ])}
-                    </p>
-                  }
-                />
-              )}
-            </>
-          )}
         </div>
 
         {/* Custom CSS */}
@@ -133,6 +87,70 @@ export const StyleTab = ({
             />
             <small>{tl('generator.theme.custom_css.apply')}</small>
           </div>
+        )}
+      </div>
+
+      <div className={'settings'}>
+        {/* Banner background settings */}
+
+        <Checkbox
+          text={tl('generator.theme.banner_as_background')}
+          setting={'useBannerAsBackground'}
+        />
+
+        {settings.get('useBannerAsBackground') && (
+          <>
+            <Checkbox
+              text={tl('generator.theme.banner_as_background.adjust_opacity')}
+              setting={'adjustBackgroundOpacity'}
+            />
+            {settings.get('adjustBackgroundOpacity') && (
+              <div className={'flex'} style={{ alignItems: 'center' }}>
+                <input
+                  type={'range'}
+                  value={settings.get('backgroundOpacity')}
+                  min={0.01}
+                  max={1}
+                  step={0.01}
+                  disabled={!settings.get('adjustBackgroundOpacity')}
+                  onChange={(event) => {
+                    settings.set(
+                      'backgroundOpacity',
+                      parseFloat(event.currentTarget.value)
+                    );
+                  }}
+                />
+                <p style={{ width: '50px', textAlign: 'right' }}>
+                  {Math.round(settings.get('backgroundOpacity') * 100)}%
+                </p>
+              </div>
+            )}
+            {settings.get('adjustBackgroundOpacity') &&
+              settings.get('backgroundOpacity') > 0.5 && (
+                <InfoBox
+                  style={'warn'}
+                  content={
+                    <p>
+                      {tl(
+                        'generator.theme.banner_as_background.readability_warning'
+                      )}
+                    </p>
+                  }
+                />
+              )}
+            {!playerBanner && (
+              <InfoBox
+                style={'info'}
+                content={
+                  <p>
+                    {tl('generator.theme.banner_as_background.no_banner', [
+                      username,
+                    ])}
+                  </p>
+                }
+              />
+            )}
+          </>
         )}
       </div>
 

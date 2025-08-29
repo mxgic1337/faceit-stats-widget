@@ -46,6 +46,7 @@ export const Generator = () => {
   const [username, setUsername] = useState<string>('paszaBiceps');
   const [playerElo, setPlayerElo] = useState<number>(100);
   const [playerLevel, setPlayerLevel] = useState<number>(1);
+  const [playerAvatar, setPlayerAvatar] = useState<string | undefined>();
   const [playerBanner, setPlayerBanner] = useState<string | undefined>();
   const [searchParams] = useSearchParams();
   const [language, setLanguage] = useState<Language>(
@@ -148,10 +149,12 @@ export const Generator = () => {
           key={'main'}
           playerExists={playerExists}
           username={username}
+          playerAvatar={playerAvatar}
           language={language}
           setUsername={setUsername}
           setPlayerElo={setPlayerElo}
           setPlayerLevel={setPlayerLevel}
+          setPlayerAvatar={setPlayerAvatar}
           setPlayerBanner={setPlayerBanner}
           setPlayerExists={setPlayerExists}
           setLanguage={setLanguage}

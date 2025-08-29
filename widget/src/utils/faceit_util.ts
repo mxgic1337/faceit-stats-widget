@@ -11,6 +11,7 @@ export const OFFICIAL_COMPETITION_IDS = [
 /** Info about player returned by API v4 */
 interface V4PlayersResponse {
   player_id: string;
+  avatar: string;
   cover_image: string;
   nickname: string;
   games: {

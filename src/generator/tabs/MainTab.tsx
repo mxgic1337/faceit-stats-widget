@@ -6,15 +6,18 @@ import { LanguageContext, SettingsContext } from '../Generator.tsx';
 import { InfoBox } from '../../components/InfoBox.tsx';
 import { getPlayerProfile } from '../../../widget/src/utils/faceit_util.ts';
 import { ShowRanking } from '../../../widget/src/widget/Widget.tsx';
+import { UserIcon } from '../../assets/icons/tabler/UserIcon.tsx';
 
 type Props = {
   playerExists: boolean | undefined;
   username: string;
+  playerAvatar?: string;
   language: Language;
   setLanguage: Dispatch<Language>;
   setUsername: Dispatch<string>;
   setPlayerElo: Dispatch<number>;
   setPlayerLevel: Dispatch<number>;
+  setPlayerAvatar: Dispatch<string | undefined>;
   setPlayerBanner: Dispatch<string | undefined>;
   setPlayerExists: Dispatch<boolean>;
   setSelectedTabIndex: Dispatch<number>;
@@ -22,12 +25,14 @@ type Props = {
 
 export const MainTab = ({
   playerExists,
+  playerAvatar,
   username,
   language,
   setLanguage,
   setUsername,
   setPlayerElo,
   setPlayerLevel,
+  setPlayerAvatar,
   setPlayerBanner,
   setPlayerExists,
   setSelectedTabIndex,
@@ -42,6 +47,7 @@ export const MainTab = ({
       getPlayerProfile(username).then((res) => {
         if (res && res.games.cs2) {
           settings.set('playerId', res.player_id);
+          setPlayerAvatar(res.avatar);
           setPlayerBanner(res.cover_image);
           setPlayerElo(res.games.cs2.faceit_elo);
           setPlayerLevel(res.games.cs2.skill_level);
@@ -66,15 +72,26 @@ export const MainTab = ({
     <>
       <div className={'settings'}>
         <div className={'setting'}>
-          <p>{tl('generator.settings.faceit_name')}</p>
-          <input
-            max={12}
-            value={username}
-            onChange={(e) => {
-              if (e.target.value.length > 12) return;
-              setUsername(e.target.value);
-            }}
-          />
+          <div className={'flex'}>
+            {playerAvatar ? (
+              <img src={playerAvatar} className={'player-avatar'} />
+            ) : (
+              <span className={'player-avatar empty'}>
+                <UserIcon />
+              </span>
+            )}
+            <div>
+              <p>{tl('generator.settings.faceit_name')}</p>
+              <input
+                max={12}
+                value={username}
+                onChange={(e) => {
+                  if (e.target.value.length > 12) return;
+                  setUsername(e.target.value);
+                }}
+              />
+            </div>
+          </div>
           {!playerExists && (
             <InfoBox
               content={tl('generator.settings.player_not_found')}
@@ -134,29 +151,6 @@ export const MainTab = ({
               })}
             </select>
           </div>
-        </div>
-
-        <div className={'setting'}>
-          <p>{tl('generator.settings.refresh_delay')}</p>
-          <select
-            value={settings.get('refreshInterval')}
-            onChange={(event) => {
-              settings.set(
-                'refreshInterval',
-                parseInt(event.currentTarget.value)
-              );
-            }}
-          >
-            <option value={10}>
-              {tl('generator.settings.refresh_delay.quick', ['10'])}
-            </option>
-            <option value={30}>
-              {tl('generator.settings.refresh_delay.normal', ['30'])}
-            </option>
-            <option value={60}>
-              {tl('generator.settings.refresh_delay.slow', ['60'])}
-            </option>
-          </select>
         </div>
       </div>
       <div className={'settings'}>
@@ -226,10 +220,6 @@ export const MainTab = ({
             setting={'saveSession'}
             experimental={true}
             helpTitle={tl('generator.settings.save_session.help')}
-          />
-          <Checkbox
-            text={tl('generator.settings.only_official_matches')}
-            setting={'onlyOfficialMatchesCount'}
           />
         </div>
       </div>

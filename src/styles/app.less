@@ -43,10 +43,10 @@ input,
 select,
 button {
   color: @text;
-  border: 1px solid @surface0;
+  border: 1px solid fade(@surface0, 0%);
   background: @base;
-  padding: 6px;
-  border-radius: 6px;
+  padding: 6px 9px;
+  border-radius: 12px;
   outline: none;
   transition: 0.2s;
   width: 100%;
@@ -62,7 +62,7 @@ button {
   cursor: pointer;
 
   &:hover {
-    border: 1px solid @surface1;
+    background-color: @surface0;
   }
 }
 
@@ -224,6 +224,10 @@ div.preview {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+
+  &.radar-theme .wrapper {
+    max-height: 325px;
+  }
 }
 
 @media only screen and (max-width: 820px) {
@@ -448,7 +452,6 @@ dialog {
   padding: 2px 6px;
   border-radius: 6px;
   font-size: 0.85em;
-  border: 1px solid @green;
   background-color: fade(@green, 5%);
   margin-left: 0.4em;
 
@@ -469,4 +472,18 @@ dialog {
     aspect-ratio: 1/1;
     margin-right: 0.2rem;
   }
+}
+
+.player-avatar {
+  width: 58px;
+  height: 58px;
+  aspect-ratio: 1/1;
+  border-radius: 100%;
+  border: none;
+  margin-right: 12px;
+  background-color: @base;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: @subtext0;
 }
