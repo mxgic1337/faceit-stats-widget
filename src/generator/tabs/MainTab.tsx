@@ -218,7 +218,6 @@ export const MainTab = ({
           <Checkbox
             text={tl('generator.settings.save_session')}
             setting={'saveSession'}
-            experimental={true}
             helpTitle={tl('generator.settings.save_session.help')}
           />
         </div>

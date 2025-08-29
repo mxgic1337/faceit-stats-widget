@@ -174,7 +174,7 @@ export const SETTINGS_DEFINITIONS = {
   },
   saveSession: {
     type: 'boolean',
-    defaultValue: false,
+    defaultValue: true,
     query: ['save_session'],
   },
   averageStatsMatchCount: {
