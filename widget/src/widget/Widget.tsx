@@ -104,8 +104,8 @@ export const Widget = ({
 
   const [level, setLevel] = useState(1);
   const [language, setLanguage] = useState<Language>(languages[0]);
-  const [startingElo, setStartingElo] = useState<number>(100);
-  const [elo, setElo] = useState(100);
+  const [startingElo, setStartingElo] = useState<number>(0);
+  const [elo, setElo] = useState(0);
   const [wins, setWins] = useState(0);
   const [losses, setLosses] = useState(0);
   const [ranking, setRanking] = useState(1337);
@@ -370,16 +370,22 @@ export const Widget = ({
     (stat: StatisticType) => {
       switch (stat) {
         case StatisticType.KILLS:
+          if (!preview && (!kills || !avgMatches)) return null;
           return `${preview ? 20 : Math.round(kills / avgMatches)}`;
         case StatisticType.DEATHS:
+          if (!preview && (!deaths || !avgMatches)) return null;
           return `${preview ? 10 : Math.round(deaths / avgMatches)}`;
         case StatisticType.HSPERCENT:
+          if (!preview && (!hsPercent || !avgMatches)) return null;
           return `${preview ? '50' : Math.round(hsPercent / avgMatches)}%`;
         case StatisticType.KD:
+          if (!preview && (!kdRatio || !avgMatches)) return null;
           return `${preview ? '2' : Math.round((kdRatio / avgMatches) * 100) / 100}`;
         case StatisticType.WINRATIO:
+          if (!preview && !winsPercent) return null;
           return `${preview ? '50' : winsPercent}%`;
         case StatisticType.RANKING:
+          if (!preview && !ranking) return null;
           return `#${preview ? 999 : ranking}`;
         default:
           return `???`;
@@ -459,12 +465,12 @@ export const Widget = ({
 
               <div className={'elo'}>
                 {SETTINGS.get('showUsername') && (
-                  <h2>{username || previewUsername || '?'} </h2>
+                  <h2 className={elo === 0 ? 'skeleton' : ''}>
+                    {username || previewUsername || 'Loading...'}{' '}
+                  </h2>
                 )}
                 <p
-                  className={
-                    SETTINGS.get('showUsername') ? '' : 'username-hidden'
-                  }
+                  className={`${SETTINGS.get('showUsername') ? '' : 'username-hidden'} ${elo === 0 ? 'skeleton' : ''}`}
                 >
                   {(SETTINGS.get('showRanking') === ShowRanking.SHOW ||
                     (SETTINGS.get('showRanking') ===
@@ -502,7 +508,9 @@ export const Widget = ({
                 return (
                   <div className={'stat'}>
                     <p>{translate(`widget.${stat.toLowerCase()}`)}</p>
-                    <p>{getStat(stat)}</p>
+                    <p>
+                      {getStat(stat) || <span className={'skeleton'}>???</span>}
+                    </p>
                   </div>
                 );
               })}
