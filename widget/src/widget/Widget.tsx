@@ -276,6 +276,12 @@ export const Widget = ({
           }
         }
 
+        if (!firstTime && saveSession) {
+          const currentDate = new Date();
+          currentDate.setTime(currentDate.getTime() + 1000 * 60 * 60 * 2);
+          localStorage.setItem('fcw_session_end', currentDate.toString());
+        }
+
         setElo(player.elo);
         setLevel(player.level);
 
@@ -466,7 +472,7 @@ export const Widget = ({
               <div className={'elo'}>
                 {SETTINGS.get('showUsername') && (
                   <h2 className={elo === 0 ? 'skeleton' : ''}>
-                    {username || previewUsername || 'Loading...'}{' '}
+                    {username || previewUsername || 'Player'}{' '}
                   </h2>
                 )}
                 <p
