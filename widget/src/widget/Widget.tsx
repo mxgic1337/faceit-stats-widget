@@ -108,7 +108,7 @@ export const Widget = ({
   const [elo, setElo] = useState(0);
   const [wins, setWins] = useState(0);
   const [losses, setLosses] = useState(0);
-  const [ranking, setRanking] = useState(1337);
+  const [ranking, setRanking] = useState(0);
   const [kills, setKills] = useState(0);
   const [deaths, setDeaths] = useState(0);
   const [kdRatio, setKDRatio] = useState(0);
@@ -171,8 +171,8 @@ export const Widget = ({
   useLayoutEffect(() => {
     setLanguage(
       languages.find((lang) => lang.id === SETTINGS.get('widgetLanguage')) ||
-        previewLanguage ||
-        languages[0]
+      previewLanguage ||
+      languages[0]
     );
   }, [SETTINGS]);
 
@@ -476,8 +476,8 @@ export const Widget = ({
                     (SETTINGS.get('showRanking') ===
                       ShowRanking.ONLY_WHEN_CHALLENGER &&
                       ranking <= 1000)) && (
-                    <span className={'ranking'}>#{ranking} </span>
-                  )}
+                      <span className={'ranking'}>#{ranking} </span>
+                    )}
                   {SETTINGS.get('showIcons') && <TimelineIcon />}{' '}
                   {translate(
                     `widget.elo${!SETTINGS.get('showEloSuffix') ? '_no_suffix' : ''}`,
