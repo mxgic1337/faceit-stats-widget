@@ -108,7 +108,7 @@ export const Widget = ({
   const [elo, setElo] = useState(0);
   const [wins, setWins] = useState(0);
   const [losses, setLosses] = useState(0);
-  const [ranking, setRanking] = useState(1337);
+  const [ranking, setRanking] = useState(0);
   const [kills, setKills] = useState(0);
   const [deaths, setDeaths] = useState(0);
   const [kdRatio, setKDRatio] = useState(0);
@@ -178,14 +178,14 @@ export const Widget = ({
 
   /** Returns a path to a level icon */
   const getIcon = useCallback(() => {
-    if (level === 10 && ranking <= 1000) {
+    if (level === 10 && ranking <= 1000 && !preview) {
       if (ranking === 1) return levelIcons[11];
       else if (ranking === 2) return levelIcons[12];
       else if (ranking === 3) return levelIcons[13];
       return levelIcons[10]; /* Challenger */
     }
     return levelIcons[level - 1];
-  }, [level, ranking]);
+  }, [level, ranking, preview]);
 
   /** Returns a color, min ELO and max ELO of a level */
   const getEloDistribution = useCallback(
@@ -475,8 +475,9 @@ export const Widget = ({
                   {(SETTINGS.get('showRanking') === ShowRanking.SHOW ||
                     (SETTINGS.get('showRanking') ===
                       ShowRanking.ONLY_WHEN_CHALLENGER &&
-                      ranking <= 1000)) && (
-                    <span className={'ranking'}>#{ranking} </span>
+                      ranking <= 1000 &&
+                      !preview)) && (
+                    <span className={'ranking'}>#{ranking || 1337} </span>
                   )}
                   {SETTINGS.get('showIcons') && <TimelineIcon />}{' '}
                   {translate(
