@@ -1,5 +1,7 @@
+import { CheckIcon } from '../assets/icons/tabler/CheckIcon.tsx';
 import { Language, tl } from '../translations/translations.ts';
 import { Dispatch, useEffect, useRef } from 'react';
+import { InfoBox } from './InfoBox.tsx';
 
 export const GeneratedWidgetModal = ({
   language,
@@ -30,9 +32,18 @@ export const GeneratedWidgetModal = ({
       }}
     >
       <div className={'content'}>
+        <div className={'modal-icon success'}>
+          <CheckIcon />
+        </div>
         <h1>{tl(language, 'modals.generated.title')}</h1>
         <p>{tl(language, 'generator.generate.info.0')}</p>
-        <p>{tl(language, 'generator.generate.info.1')}</p>
+        <br />
+        {import.meta.env.VITE_IS_TESTING && (
+          <InfoBox
+            content={<p>{tl(language, 'generator.testing')}</p>}
+            style={'info'}
+          />
+        )}
         <input readOnly={true} value={url} />
         <div className={'buttons'}>
           <button

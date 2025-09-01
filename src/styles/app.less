@@ -7,6 +7,7 @@
 
 @base: #1e1e2e;
 @mantle: #181825;
+@crust: #11111b;
 @surface0: #313244;
 @surface1: #45475a;
 @text: #fafafa;
@@ -393,7 +394,7 @@ dialog {
   left: 50%;
   transform: translate(-50%, -50%) scale(0);
   opacity: 0;
-  padding: 16px;
+  padding: 20px;
 
   transition: 0.25s;
 
@@ -401,12 +402,14 @@ dialog {
 
   color: @text;
 
-  border: 1px solid @surface0;
-  border-radius: 12px;
-  background: @base;
+  border: 1px solid @base;
+  border-radius: 20px;
+  background: @mantle;
 
   &::backdrop {
-    background: fade(#000, 50%);
+    background: fade(@crust, 85%);
+    backdrop-filter: blur(4px);
+    transition: 0.2s;
   }
 
   &[open] {
@@ -419,6 +422,19 @@ dialog {
 
     .content {
       width: 400px;
+    }
+  }
+
+  .modal-icon {
+    &.success {
+      color: @green;
+    }
+
+    .icon {
+      margin-right: 0;
+      @size: 48px;
+      width: @size;
+      height: @size;
     }
   }
 }
