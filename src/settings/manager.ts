@@ -72,7 +72,7 @@ export function useSettings(useWidgetDefaults?: boolean) {
         if (
           useWidgetDefaults &&
           (SETTINGS_DEFINITIONS[key] as { defaultWidgetValue?: boolean })
-            .defaultWidgetValue
+            .defaultWidgetValue !== undefined
         ) {
           acc[key] = val.defaultWidgetValue;
         }
