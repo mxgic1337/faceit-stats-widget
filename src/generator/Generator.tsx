@@ -31,6 +31,7 @@ import {
   useSettings,
 } from '../settings/manager.ts';
 import { SETTINGS_DEFINITIONS } from '../settings/definition.ts';
+import { SavedSettings } from '../components/SavedSettingsSection.tsx';
 
 export const LanguageContext = createContext<
   ((text: string, args?: string[]) => string) | null
@@ -228,57 +229,60 @@ export const Generator = () => {
             <br />
             <Footer />
           </section>
-          <section className={'preview'}>
-            <div className={'settings'}>
-              <h4 style={{ marginBottom: '6px' }}>
-                {translate(language, 'generator.preview.title')}
-              </h4>
-              <style>{`
+          <aside>
+            <div className={'preview-box'}>
+              <div className={'settings'}>
+                <h4 style={{ marginBottom: '6px' }}>
+                  {translate(language, 'generator.preview.title')}
+                </h4>
+                <style>{`
 		      div.preview.nuke {--preview-background: url(${nukePreview})}
 		      div.preview.mirage {--preview-background: url(${miragePreview})}
 		      div.preview.ancient {--preview-background: url(${ancientPreview})}
 		      `}</style>
-              <div
-                className={`${getSetting('style')}-theme ${getSetting('colorScheme')}-scheme preview ${previewBackground}`}
-              >
-                {(getSetting('style') !== 'custom' ||
-                  (getSetting('style') === 'custom' &&
-                    getSetting('customCSS') !== 'https://example.com')) && (
-                  <Widget
-                    preview={true}
-                    previewBanner={playerBanner}
-                    previewUsername={username}
-                    previewElo={playerElo}
-                    previewLevel={playerLevel}
-                    previewLanguage={language}
-                  />
-                )}
-              </div>
-              <select
-                value={previewBackground}
-                onChange={(e) => {
-                  setPreviewBackground(e.target.value);
-                }}
-              >
-                {previews.map((preview) => {
-                  return (
-                    <option key={preview} value={preview}>
-                      {tl(`generator.preview.${preview}`)}
-                    </option>
-                  );
-                })}
-              </select>
-              <div className={'flex'}>
-                <button
-                  onClick={() => {
-                    generateWidgetURL();
+                <div
+                  className={`${getSetting('style')}-theme ${getSetting('colorScheme')}-scheme preview ${previewBackground}`}
+                >
+                  {(getSetting('style') !== 'custom' ||
+                    (getSetting('style') === 'custom' &&
+                      getSetting('customCSS') !== 'https://example.com')) && (
+                    <Widget
+                      preview={true}
+                      previewBanner={playerBanner}
+                      previewUsername={username}
+                      previewElo={playerElo}
+                      previewLevel={playerLevel}
+                      previewLanguage={language}
+                    />
+                  )}
+                </div>
+                <select
+                  value={previewBackground}
+                  onChange={(e) => {
+                    setPreviewBackground(e.target.value);
                   }}
                 >
-                  {tl('generator.generate.button')}
-                </button>
+                  {previews.map((preview) => {
+                    return (
+                      <option key={preview} value={preview}>
+                        {tl(`generator.preview.${preview}`)}
+                      </option>
+                    );
+                  })}
+                </select>
+                <div className={'flex'}>
+                  <button
+                    onClick={() => {
+                      generateWidgetURL();
+                    }}
+                  >
+                    {tl('generator.generate.button')}
+                  </button>
+                </div>
               </div>
             </div>
-          </section>
+            <SavedSettings />
+          </aside>
         </main>
       </SettingsContext.Provider>
     </LanguageContext.Provider>

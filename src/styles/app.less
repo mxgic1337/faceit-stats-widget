@@ -209,13 +209,19 @@ section {
   padding: 8px;
 }
 
-section.preview {
-  margin-left: 8px;
+aside {
+  margin: 8px 6px 0 8px;
+}
+
+aside div.settings {
   display: flex;
   min-width: 490px;
   max-width: 490px;
   flex-direction: column;
   justify-content: flex-start;
+  box-sizing: border-box;
+
+  margin: 12px 0 0 8px;
 }
 
 div.preview {
@@ -239,7 +245,7 @@ div.preview {
     max-height: initial;
     flex-direction: column-reverse;
 
-    section.preview {
+    div.preview-box {
       min-width: 100%;
       max-width: 100%;
       width: 100%;
