@@ -5,7 +5,8 @@ export const SAMPLE_PLAYER_ID = '24180323-d946-4bb7-a334-be3e96fcac05';
 /** Competition ID of official matches */
 export const OFFICIAL_COMPETITION_IDS = [
   'f4148ddd-bce8-41b8-9131-ee83afcdd6dd' /* EU Queue */,
-  '3aced33b-f21c-450c-91d5-10535164e0ab' /* NA Queue*/,
+  '3aced33b-f21c-450c-91d5-10535164e0ab' /* NA Queue */,
+  '73557c8e-4b67-4ac8-bae0-e910b49a5fa0' /* SA Queue */,
 ];
 
 /** Info about player returned by API v4 */
