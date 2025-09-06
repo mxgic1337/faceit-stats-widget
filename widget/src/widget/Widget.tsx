@@ -215,14 +215,35 @@ export const Widget = ({
     const savedPlayerId = localStorage.getItem('fcw_session_player-id');
     const saveSession = SETTINGS.get('saveSession');
     const playerId = SETTINGS.get('playerId');
-    if (saveSession && savedStartDate && savedPlayerId === playerId) {
-      console.log('Loaded starting date from session.');
-      startDate = new Date(savedStartDate);
+    let sessionExpired = false;
+    if (saveSession) {
+      const sessionEnd = localStorage.getItem('fcw_session_end');
+      if (!sessionEnd) {
+        sessionExpired = true;
+      } else {
+        const sessionEndDate = new Date(sessionEnd);
+        if (new Date() > sessionEndDate) {
+          sessionExpired = true;
+        }
+      }
+      if (playerId !== savedPlayerId) {
+        sessionExpired = true;
+      }
+      if (sessionExpired) {
+        /* Save saved session data */
+        console.log('Session expired. Saving new data...');
+        localStorage.setItem('fcw_session_start', new Date().toString());
+        localStorage.setItem('fcw_session_player-id', playerId);
+      }
+      if (savedStartDate && savedPlayerId === playerId) {
+        console.log('Loaded starting date from session.');
+        startDate = new Date(savedStartDate);
+      }
     }
     if (!playerId) {
       return;
     }
-    const getStats = (firstTime?: boolean) => {
+    const getStats = (firstTime?: boolean, expired?: boolean) => {
       getPlayerStats(
         playerId,
         SETTINGS.get('averageStatsMatchCount'),
@@ -234,52 +255,27 @@ export const Widget = ({
         setBanner(player.banner);
 
         if (!player || !player.elo || !player.level) return;
-        if (firstTime) {
-          if (saveSession) {
-            let expired = false;
-            const sessionEnd = localStorage.getItem('fcw_session_end');
-            const startingElo = localStorage.getItem(
-              'fcw_session_starting-elo'
-            );
-            if (!sessionEnd) {
-              expired = true;
-            } else {
-              const sessionEndDate = new Date(sessionEnd);
-              if (new Date() > sessionEndDate) {
-                expired = true;
-              }
-            }
-            if (playerId !== savedPlayerId) {
-              expired = true;
-            }
-            if (expired) {
-              /* Save saved session data */
-              console.log('Session expired. Saving new data...');
-              localStorage.setItem(
-                'fcw_session_starting-elo',
-                String(player.elo)
-              );
-              localStorage.setItem('fcw_session_start', new Date().toString());
-              localStorage.setItem('fcw_session_player-id', playerId);
-            }
-            const currentDate = new Date();
-            currentDate.setTime(currentDate.getTime() + 1000 * 60 * 60 * 2);
-            localStorage.setItem('fcw_session_end', currentDate.toString());
-            /* Load saved session ELO */
-            if (startingElo && !expired) {
-              setStartingElo(Number(startingElo));
-            } else {
-              setStartingElo(player.elo);
-            }
-          } else {
-            setStartingElo(player.elo);
-          }
-        }
 
-        if (!firstTime && saveSession) {
+        if (firstTime && saveSession) {
           const currentDate = new Date();
           currentDate.setTime(currentDate.getTime() + 1000 * 60 * 60 * 2);
           localStorage.setItem('fcw_session_end', currentDate.toString());
+
+          /* Load saved session ELO */
+          const startingElo = localStorage.getItem('fcw_session_starting-elo');
+          if (startingElo && !expired) {
+            setStartingElo(Number(startingElo));
+          } else {
+            setStartingElo(player.elo);
+          }
+
+          expired = false;
+        } else if (!firstTime && saveSession) {
+          const currentDate = new Date();
+          currentDate.setTime(currentDate.getTime() + 1000 * 60 * 60 * 2);
+          localStorage.setItem('fcw_session_end', currentDate.toString());
+        } else {
+          setStartingElo(player.elo);
         }
 
         setElo(player.elo);
@@ -303,7 +299,7 @@ export const Widget = ({
         );
       });
     };
-    getStats(true);
+    getStats(true, sessionExpired);
 
     /* Check for older Chromium version */
     const userAgent = window.navigator.userAgent;
