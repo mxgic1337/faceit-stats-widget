@@ -235,7 +235,7 @@ export const Widget = ({
         localStorage.setItem('fcw_session_start', new Date().toString());
         localStorage.setItem('fcw_session_player-id', playerId);
       }
-      if (savedStartDate && savedPlayerId === playerId) {
+      if (!sessionExpired && savedStartDate && savedPlayerId === playerId) {
         console.log('Loaded starting date from session.');
         startDate = new Date(savedStartDate);
       }
