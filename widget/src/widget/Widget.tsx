@@ -215,6 +215,11 @@ export const Widget = ({
     const savedPlayerId = localStorage.getItem('fcw_session_player-id');
     const saveSession = SETTINGS.get('saveSession');
     const playerId = SETTINGS.get('playerId');
+
+    if (!playerId) {
+      return;
+    }
+
     let sessionExpired = false;
     if (saveSession) {
       const sessionEnd = localStorage.getItem('fcw_session_end');
@@ -239,9 +244,6 @@ export const Widget = ({
         console.log('Loaded starting date from session.');
         startDate = new Date(savedStartDate);
       }
-    }
-    if (!playerId) {
-      return;
     }
     const getStats = (firstTime?: boolean, expired?: boolean) => {
       getPlayerStats(
