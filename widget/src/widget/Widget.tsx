@@ -429,7 +429,8 @@ export const Widget = ({
         <style>{`
                 .wrapper {
                     --text: #${SETTINGS.get('customTextColor')} !important;
-                    --subtext: #${SETTINGS.get('customTextColor')} !important;
+                    --subtext: #${SETTINGS.get('customSubtextColor')} !important;
+                    --text-shadow: #${SETTINGS.get('customTextShadowColor')} !important;
                     --border-1: #${SETTINGS.get('customBorderColor1')} !important;
                     --border-2: #${SETTINGS.get('customBorderColor2')} !important;
                     --border-rotation: 0deg !important;

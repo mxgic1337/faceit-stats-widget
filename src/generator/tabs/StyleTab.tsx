@@ -172,6 +172,14 @@ export const StyleTab = ({
               setting={'customTextColor'}
             />
             <ColorPicker
+              text={tl('generator.theme.subtext_color')}
+              setting={'customSubtextColor'}
+            />
+            <ColorPicker
+              text={tl('generator.theme.text_shadow_color')}
+              setting={'customTextShadowColor'}
+            />
+            <ColorPicker
               text={tl('generator.theme.background_color')}
               setting={'customBackgroundColor'}
             />
