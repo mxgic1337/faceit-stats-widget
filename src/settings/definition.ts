@@ -110,7 +110,7 @@ export const SETTINGS_DEFINITIONS = {
   },
   customBorderColor1: {
     type: 'string',
-    defaultValue: '595959',
+    defaultValue: '2d2d2d',
     regex: HEX_REGEXP,
     query: ['border1'],
     requirements: [
@@ -122,7 +122,7 @@ export const SETTINGS_DEFINITIONS = {
   },
   customBorderColor2: {
     type: 'string',
-    defaultValue: '8d8d8d',
+    defaultValue: '383838',
     regex: HEX_REGEXP,
     query: ['border2'],
     requirements: [
@@ -136,7 +136,31 @@ export const SETTINGS_DEFINITIONS = {
     type: 'string',
     defaultValue: 'ffffff',
     regex: HEX_REGEXP,
-    query: ['color'],
+    query: ['text_color', 'color'],
+    requirements: [
+      {
+        setting: 'colorScheme',
+        value: 'custom',
+      },
+    ],
+  },
+  customSubtextColor: {
+    type: 'string',
+    defaultValue: 'dcdcdc',
+    regex: HEX_REGEXP,
+    query: ['subtext_color'],
+    requirements: [
+      {
+        setting: 'colorScheme',
+        value: 'custom',
+      },
+    ],
+  },
+  customTextShadowColor: {
+    type: 'string',
+    defaultValue: '000000ff',
+    regex: HEX_REGEXP,
+    query: ['text_shadow_color'],
     requirements: [
       {
         setting: 'colorScheme',
@@ -146,7 +170,7 @@ export const SETTINGS_DEFINITIONS = {
   },
   customBackgroundColor: {
     type: 'string',
-    defaultValue: '121212',
+    defaultValue: '181818',
     regex: HEX_REGEXP,
     query: ['bg_color', 'bg-color'],
     requirements: [
