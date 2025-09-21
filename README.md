@@ -12,11 +12,30 @@
 ##### [🧪 Generator (experimental version)](https://widget-git.mxgic1337.xyz/)
 </div>
 
-## 🔧 Getting started:
+## 🔧 Getting started
 
 To get started, generate your widget link at [this website](https://widget.mxgic1337.xyz/).
 
 Then, add a new browser source in OBS Studio and paste your generated link.
+
+## 🔨 Building
+
+#### Requirements:
+- Node.js 18.x or newer
+- [pnpm](https://pnpm.io/) package manager
+
+---
+
+#### Building:
+- Clone this repository
+- Run `pnpm install` to install required dependencies
+- Generate a **client side** API key on the [FACEIT for Developers](https://developers.faceit.com/apps) portal
+- Create a file named `.env` in the root of the project
+- Inside the `.env` file, set the **VITE_FACEIT_API_KEY** variable to your **client side** API key from FACEIT
+  ```bash
+  VITE_FACEIT_API_KEY="YOUR_API_KEY"
+  ```
+- Run `pnpm run build` to build the application or `pnpm run dev` to run a dev server
 
 > [!NOTE]
 > This project is not affiliated with [FACEIT](https://faceit.com).
