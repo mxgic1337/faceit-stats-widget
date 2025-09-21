@@ -1,7 +1,10 @@
-.idea
+.vscode/
+.idea/
 dist
 node_modules
 .env
 .env.*
 *.env
 *.iml
+package-lock.json
+yarn.lock
