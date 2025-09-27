@@ -25,9 +25,7 @@ import dust2Preview from '../assets/previews/dust2.png';
 import infernoPreview from '../assets/previews/inferno.png';
 import overpassPreview from '../assets/previews/overpass.png';
 import vertigoPreview from '../assets/previews/vertigo.png';
-import cachePreview from '../assets/previews/cache.png';
 import trainPreview from '../assets/previews/train.png';
-import cobblestonePreview from '../assets/previews/cobblestone.png';
 import anubisPreview from '../assets/previews/anubis.png';
 import { useSearchParams } from 'react-router-dom';
 import {
@@ -187,7 +185,7 @@ export const Generator = () => {
   ];
 
   const previews = useMemo<string[]>(() => {
-    return ['nuke', 'mirage', 'ancient', 'dust2', 'inferno', 'overpass', 'vertigo', 'cache', 'train', 'cobblestone', 'anubis'];
+    return ['nuke', 'mirage', 'ancient', 'dust2', 'inferno', 'overpass', 'vertigo', 'train', 'anubis'];
   }, []);
 
   return (
@@ -249,9 +247,7 @@ export const Generator = () => {
 		      div.preview.inferno {--preview-background: url(${infernoPreview})}
 		      div.preview.overpass {--preview-background: url(${overpassPreview})}
 		      div.preview.vertigo {--preview-background: url(${vertigoPreview})}
-		      div.preview.cache {--preview-background: url(${cachePreview})}
 		      div.preview.train {--preview-background: url(${trainPreview})}
-		      div.preview.cobblestone {--preview-background: url(${cobblestonePreview})}
 		      div.preview.anubis {--preview-background: url(${anubisPreview})}
 		      `}</style>
               <div
