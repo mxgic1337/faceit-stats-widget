@@ -185,7 +185,17 @@ export const Generator = () => {
   ];
 
   const previews = useMemo<string[]>(() => {
-    return ['nuke', 'mirage', 'ancient', 'dust2', 'inferno', 'overpass', 'vertigo', 'train', 'anubis'];
+    return [
+      'nuke',
+      'mirage',
+      'ancient',
+      'dust2',
+      'inferno',
+      'overpass',
+      'vertigo',
+      'train',
+      'anubis',
+    ];
   }, []);
 
   return (
