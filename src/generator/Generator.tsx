@@ -21,6 +21,12 @@ import { Footer } from '../components/Footer.tsx';
 import nukePreview from '../assets/previews/nuke.png';
 import miragePreview from '../assets/previews/mirage.png';
 import ancientPreview from '../assets/previews/ancient.png';
+import dust2Preview from '../assets/previews/dust2.png';
+import infernoPreview from '../assets/previews/inferno.png';
+import overpassPreview from '../assets/previews/overpass.png';
+import vertigoPreview from '../assets/previews/vertigo.png';
+import trainPreview from '../assets/previews/train.png';
+import anubisPreview from '../assets/previews/anubis.png';
 import { useSearchParams } from 'react-router-dom';
 import {
   SetSettingFunction,
@@ -179,7 +185,7 @@ export const Generator = () => {
   ];
 
   const previews = useMemo<string[]>(() => {
-    return ['nuke', 'mirage', 'ancient'];
+    return ['nuke', 'mirage', 'ancient', 'dust2', 'inferno', 'overpass', 'vertigo', 'train', 'anubis'];
   }, []);
 
   return (
@@ -237,6 +243,12 @@ export const Generator = () => {
 		      div.preview.nuke {--preview-background: url(${nukePreview})}
 		      div.preview.mirage {--preview-background: url(${miragePreview})}
 		      div.preview.ancient {--preview-background: url(${ancientPreview})}
+		      div.preview.dust2 {--preview-background: url(${dust2Preview})}
+		      div.preview.inferno {--preview-background: url(${infernoPreview})}
+		      div.preview.overpass {--preview-background: url(${overpassPreview})}
+		      div.preview.vertigo {--preview-background: url(${vertigoPreview})}
+		      div.preview.train {--preview-background: url(${trainPreview})}
+		      div.preview.anubis {--preview-background: url(${anubisPreview})}
 		      `}</style>
               <div
                 className={`${getSetting('style')}-theme ${getSetting('colorScheme')}-scheme preview ${previewBackground}`}
