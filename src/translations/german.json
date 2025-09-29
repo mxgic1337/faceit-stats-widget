@@ -49,6 +49,8 @@
   "generator.theme.border_color_1": "Farbe der Umrandung 1",
   "generator.theme.border_color_2": "Farbe der Umrandung 2",
   "generator.theme.text_color": "Textfarbe",
+  "generator.theme.subtext_color": "Farbe des sekundären Textes",
+  "generator.theme.text_shadow_color": "Farbe des Textschattens",
   "generator.theme.background_color": "Hintergrundfarbe",
   "generator.theme.color_scheme": "Widget Thema",
   "generator.theme.style": "Widget Stil",
