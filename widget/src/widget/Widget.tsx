@@ -276,7 +276,7 @@ export const Widget = ({
           const currentDate = new Date();
           currentDate.setTime(currentDate.getTime() + 1000 * 60 * 60 * 2);
           localStorage.setItem('fcw_session_end', currentDate.toString());
-        } else {
+        } else if (firstTime) {
           setStartingElo(player.elo);
         }
 
