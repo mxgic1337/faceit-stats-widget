@@ -171,8 +171,8 @@ export const Widget = ({
   useLayoutEffect(() => {
     setLanguage(
       languages.find((lang) => lang.id === SETTINGS.get('widgetLanguage')) ||
-      previewLanguage ||
-      languages[0]
+        previewLanguage ||
+        languages[0]
     );
   }, [SETTINGS]);
 
@@ -482,8 +482,8 @@ export const Widget = ({
                       ShowRanking.ONLY_WHEN_CHALLENGER &&
                       ranking <= 1000 &&
                       !preview)) && (
-                      <span className={'ranking'}>#{ranking || 1337} </span>
-                    )}
+                    <span className={'ranking'}>#{ranking || 1337} </span>
+                  )}
                   {SETTINGS.get('showIcons') && <TimelineIcon />}{' '}
                   {translate(
                     `widget.elo${!SETTINGS.get('showEloSuffix') ? '_no_suffix' : ''}`,
