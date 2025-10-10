@@ -239,6 +239,7 @@ export const Widget = ({
         console.log('Session expired. Saving new data...');
         localStorage.setItem('fcw_session_start', new Date().toString());
         localStorage.setItem('fcw_session_player-id', playerId);
+        localStorage.removeItem('fcw_session_starting-elo');
       }
       if (!sessionExpired && savedStartDate && savedPlayerId === playerId) {
         console.log('Loaded starting date from session.');
@@ -267,8 +268,13 @@ export const Widget = ({
           const startingElo = localStorage.getItem('fcw_session_starting-elo');
           if (startingElo && !expired) {
             setStartingElo(Number(startingElo));
+            localStorage.setItem('fcw_session_starting-elo', startingElo);
           } else {
             setStartingElo(player.elo);
+            localStorage.setItem(
+              'fcw_session_starting-elo',
+              String(player.elo)
+            );
           }
 
           expired = false;
