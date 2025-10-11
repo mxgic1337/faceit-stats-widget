@@ -479,6 +479,7 @@ dialog {
   margin-left: 0.4em;
 
   &.help {
+    position: relative;
     padding: 2px;
     font-weight: bold;
     color: fade(@subtext0, 50%) !important;
@@ -509,4 +510,27 @@ dialog {
   align-items: center;
   justify-content: center;
   color: @subtext0;
+}
+
+.tooltip {
+  color: @text;
+  position: absolute;
+  background-color: fade(@crust, 90%);
+  backdrop-filter: blur(12px);
+  padding: 12px;
+  top: 12px;
+  left: 12px;
+  border-radius: 12px;
+  transition: 0.2s;
+  transform-origin: top left;
+  opacity: 1;
+  pointer-events: none;
+  width: 250px;
+  z-index: 100;
+  font-weight: normal;
+
+  &.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
