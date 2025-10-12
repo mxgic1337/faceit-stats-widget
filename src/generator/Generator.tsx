@@ -57,9 +57,9 @@ export const Generator = () => {
   const [searchParams] = useSearchParams();
   const [language, setLanguage] = useState<Language>(
     languages.find((language) => language.id === searchParams.get('lang')) ||
-      languages.find((language) => language.id === localStorage.fcw_lang) ||
-      languages.find((language) => language.id === navigator.language) ||
-      languages[0]
+    languages.find((language) => language.id === localStorage.fcw_lang) ||
+    languages.find((language) => language.id === navigator.language) ||
+    languages[0]
   );
   const [previewBackground, setPreviewBackground] = useState<string>('ancient');
 
@@ -89,11 +89,11 @@ export const Generator = () => {
   const generateWidgetURL = useCallback(() => {
     const params: {
       [key: string]:
-        | string
-        | (string | undefined)
-        | number
-        | boolean
-        | string[];
+      | string
+      | (string | undefined)
+      | number
+      | boolean
+      | string[];
     } = {};
 
     Object.entries(SETTINGS_DEFINITIONS).forEach(
@@ -132,11 +132,11 @@ export const Generator = () => {
   const jsonToQuery = useCallback(
     (params: {
       [key: string]:
-        | string
-        | (string | undefined)
-        | number
-        | boolean
-        | string[];
+      | string
+      | (string | undefined)
+      | number
+      | boolean
+      | string[];
     }) => {
       return `?${Object.entries(params)
         .map((param) => {
@@ -185,7 +185,7 @@ export const Generator = () => {
   ];
 
   const previews = useMemo<string[]>(() => {
-    return [
+    const previewArray = [
       'nuke',
       'mirage',
       'ancient',
@@ -196,6 +196,8 @@ export const Generator = () => {
       'train',
       'anubis',
     ];
+    if (import.meta.env.DEV) previewArray.push('color-green');
+    return previewArray;
   }, []);
 
   return (
@@ -259,6 +261,7 @@ export const Generator = () => {
 		      div.preview.vertigo {--preview-background: url(${vertigoPreview})}
 		      div.preview.train {--preview-background: url(${trainPreview})}
 		      div.preview.anubis {--preview-background: url(${anubisPreview})}
+		      div.preview.color-green {--preview-background: #00ff00}
 		      `}</style>
               <div
                 className={`${getSetting('style')}-theme ${getSetting('colorScheme')}-scheme preview ${previewBackground}`}
@@ -266,15 +269,15 @@ export const Generator = () => {
                 {(getSetting('style') !== 'custom' ||
                   (getSetting('style') === 'custom' &&
                     getSetting('customCSS') !== 'https://example.com')) && (
-                  <Widget
-                    preview={true}
-                    previewBanner={playerBanner}
-                    previewUsername={username}
-                    previewElo={playerElo}
-                    previewLevel={playerLevel}
-                    previewLanguage={language}
-                  />
-                )}
+                    <Widget
+                      preview={true}
+                      previewBanner={playerBanner}
+                      previewUsername={username}
+                      previewElo={playerElo}
+                      previewLevel={playerLevel}
+                      previewLanguage={language}
+                    />
+                  )}
               </div>
               <select
                 value={previewBackground}
