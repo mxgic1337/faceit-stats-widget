@@ -180,6 +180,54 @@ export const SETTINGS_DEFINITIONS = {
       },
     ],
   },
+  customWinsColor: {
+    type: 'string',
+    defaultValue: '00ff5f',
+    regex: HEX_REGEXP,
+    query: ['wins_color'],
+    requirements: [
+      {
+        setting: 'colorScheme',
+        value: 'custom',
+      },
+    ],
+  },
+  customLossesColor: {
+    type: 'string',
+    defaultValue: 'ff2222',
+    regex: HEX_REGEXP,
+    query: ['losses_color'],
+    requirements: [
+      {
+        setting: 'colorScheme',
+        value: 'custom',
+      },
+    ],
+  },
+  customWinsTextColor: {
+    type: 'string',
+    defaultValue: '99ffbf',
+    regex: HEX_REGEXP,
+    query: ['wins_text_color'],
+    requirements: [
+      {
+        setting: 'colorScheme',
+        value: 'custom',
+      },
+    ],
+  },
+  customLossesTextColor: {
+    type: 'string',
+    defaultValue: 'ffbbbb',
+    regex: HEX_REGEXP,
+    query: ['losses_text_color'],
+    requirements: [
+      {
+        setting: 'colorScheme',
+        value: 'custom',
+      },
+    ],
+  },
   statSlot1: {
     type: 'statistic_type',
     defaultValue: 'KILLS',

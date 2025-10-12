@@ -7,7 +7,7 @@ import { HelpIcon } from '../assets/icons/tabler/HelpIcon';
 export const ColorPicker = ({
   text,
   setting,
-  helpImage
+  helpImage,
 }: {
   text: string;
   setting: SettingKey;
@@ -22,18 +22,23 @@ export const ColorPicker = ({
 
   return (
     <div className={'color-picker'}>
-      <p>{text} {helpImage && <span className={'badge help'}>
-        <Tooltip
-          content={
-            <>
-              <img src={helpImage} />
-              <p>{tl('generator.theme.custom_color_help')}</p>
-            </>
-          }
-        >
-          <HelpIcon />
-        </Tooltip>
-      </span>}</p>
+      <p>
+        {text}{' '}
+        {helpImage && (
+          <span className={'badge help'}>
+            <Tooltip
+              content={
+                <>
+                  <img src={helpImage} />
+                  <p>{tl('generator.theme.custom_color_help')}</p>
+                </>
+              }
+            >
+              <HelpIcon />
+            </Tooltip>
+          </span>
+        )}
+      </p>
       <input
         type={'color'}
         onChange={(e) =>

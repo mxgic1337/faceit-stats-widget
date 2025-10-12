@@ -10,6 +10,10 @@ import helpTextShadowColor from '../../assets/help/text_shadow_color.png';
 import helpBackgroundColor from '../../assets/help/background_color.png';
 import helpBorder1 from '../../assets/help/border_1.png';
 import helpBorder2 from '../../assets/help/border_2.png';
+import helpWins from '../../assets/help/wins.png';
+import helpLosses from '../../assets/help/losses.png';
+import helpWinsText from '../../assets/help/wins_text.png';
+import helpLossesText from '../../assets/help/losses_text.png';
 
 export const StyleTab = ({
   username,
@@ -194,6 +198,26 @@ export const StyleTab = ({
               text={tl('generator.theme.border_color_2')}
               setting={'customBorderColor2'}
               helpImage={helpBorder2}
+            />
+            <ColorPicker
+              text={tl('generator.theme.wins_color')}
+              setting={'customWinsColor'}
+              helpImage={helpWins}
+            />
+            <ColorPicker
+              text={tl('generator.theme.losses_color')}
+              setting={'customLossesColor'}
+              helpImage={helpLosses}
+            />
+            <ColorPicker
+              text={tl('generator.theme.wins_text_color')}
+              setting={'customWinsTextColor'}
+              helpImage={helpWinsText}
+            />
+            <ColorPicker
+              text={tl('generator.theme.losses_text_color')}
+              setting={'customLossesTextColor'}
+              helpImage={helpLossesText}
             />
           </div>
         </div>

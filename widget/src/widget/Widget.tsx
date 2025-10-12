@@ -443,6 +443,10 @@ export const Widget = ({
                     --border-2: #${SETTINGS.get('customBorderColor2')} !important;
                     --border-rotation: 0deg !important;
                     --background: #${SETTINGS.get('customBackgroundColor')} !important;
+                    --background-wins: #${SETTINGS.get('customWinsColor')}21 !important;
+                    --background-losses: #${SETTINGS.get('customLossesColor')}21 !important;
+                    --wins-text: #${SETTINGS.get('customWinsTextColor')} !important;
+                    --losses-text: #${SETTINGS.get('customLossesTextColor')} !important;
                 }
             `}</style>
       )}
