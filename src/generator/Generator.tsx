@@ -57,9 +57,9 @@ export const Generator = () => {
   const [searchParams] = useSearchParams();
   const [language, setLanguage] = useState<Language>(
     languages.find((language) => language.id === searchParams.get('lang')) ||
-      languages.find((language) => language.id === localStorage.fcw_lang) ||
-      languages.find((language) => language.id === navigator.language) ||
-      languages[0]
+    languages.find((language) => language.id === localStorage.fcw_lang) ||
+    languages.find((language) => language.id === navigator.language) ||
+    languages[0]
   );
   const [previewBackground, setPreviewBackground] = useState<string>('ancient');
 
@@ -86,14 +86,32 @@ export const Generator = () => {
     };
   }, []);
 
+  const jsonToQuery = useCallback(
+    (params: {
+      [key: string]:
+      | string
+      | (string | undefined)
+      | number
+      | boolean
+      | string[];
+    }) => {
+      return `?${Object.entries(params)
+        .map((param) => {
+          return `${param[0]}=${param[1]}`;
+        })
+        .join('&')}`;
+    },
+    []
+  );
+
   const generateWidgetURL = useCallback(() => {
     const params: {
       [key: string]:
-        | string
-        | (string | undefined)
-        | number
-        | boolean
-        | string[];
+      | string
+      | (string | undefined)
+      | number
+      | boolean
+      | string[];
     } = {};
 
     Object.entries(SETTINGS_DEFINITIONS).forEach(
@@ -127,25 +145,7 @@ export const Generator = () => {
     setGeneratedURL(
       `${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`
     );
-  }, [settings, language]);
-
-  const jsonToQuery = useCallback(
-    (params: {
-      [key: string]:
-        | string
-        | (string | undefined)
-        | number
-        | boolean
-        | string[];
-    }) => {
-      return `?${Object.entries(params)
-        .map((param) => {
-          return `${param[0]}=${param[1]}`;
-        })
-        .join('&')}`;
-    },
-    []
-  );
+  }, [settings, getSetting, language]);
 
   const tabs = [
     {
@@ -266,15 +266,15 @@ export const Generator = () => {
                 {(getSetting('style') !== 'custom' ||
                   (getSetting('style') === 'custom' &&
                     getSetting('customCSS') !== 'https://example.com')) && (
-                  <Widget
-                    preview={true}
-                    previewBanner={playerBanner}
-                    previewUsername={username}
-                    previewElo={playerElo}
-                    previewLevel={playerLevel}
-                    previewLanguage={language}
-                  />
-                )}
+                    <Widget
+                      preview={true}
+                      previewBanner={playerBanner}
+                      previewUsername={username}
+                      previewElo={playerElo}
+                      previewLevel={playerLevel}
+                      previewLanguage={language}
+                    />
+                  )}
               </div>
               <select
                 value={previewBackground}

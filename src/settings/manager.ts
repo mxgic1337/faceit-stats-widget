@@ -28,8 +28,8 @@ export type SettingValue =
 
 export type SettingValueType<K extends SettingKey> =
   (typeof SETTINGS_DEFINITIONS)[K]['type'] extends keyof SettingValueTypeMap
-    ? SettingValueTypeMap[(typeof SETTINGS_DEFINITIONS)[K]['type']]
-    : unknown;
+  ? SettingValueTypeMap[(typeof SETTINGS_DEFINITIONS)[K]['type']]
+  : unknown;
 
 export type SetSettingFunction = <K extends SettingKey>(
   key: K,
@@ -38,13 +38,13 @@ export type SetSettingFunction = <K extends SettingKey>(
 
 export type SettingDefinition = {
   type:
-    | 'string'
-    | 'string_undefined'
-    | 'number'
-    | 'boolean'
-    | 'statistic_type'
-    | 'language'
-    | 'ranking_state';
+  | 'string'
+  | 'string_undefined'
+  | 'number'
+  | 'boolean'
+  | 'statistic_type'
+  | 'language'
+  | 'ranking_state';
   min?: number;
   max?: number;
   regex?: RegExp;
@@ -145,7 +145,7 @@ export function useSettings(useWidgetDefaults?: boolean) {
       });
     });
     setSettings({ ...settings, ...newSettings });
-  }, []);
+  }, [searchParams, settings]);
 
   const getSetting = useCallback(
     <K extends SettingKey>(key: K | string): SettingValueType<K> => {
