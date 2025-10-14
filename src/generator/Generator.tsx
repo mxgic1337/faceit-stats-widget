@@ -86,6 +86,24 @@ export const Generator = () => {
     };
   }, []);
 
+  const jsonToQuery = useCallback(
+    (params: {
+      [key: string]:
+        | string
+        | (string | undefined)
+        | number
+        | boolean
+        | string[];
+    }) => {
+      return `?${Object.entries(params)
+        .map((param) => {
+          return `${param[0]}=${param[1]}`;
+        })
+        .join('&')}`;
+    },
+    []
+  );
+
   const generateWidgetURL = useCallback(() => {
     const params: {
       [key: string]:
@@ -127,25 +145,7 @@ export const Generator = () => {
     setGeneratedURL(
       `${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`
     );
-  }, [settings, language]);
-
-  const jsonToQuery = useCallback(
-    (params: {
-      [key: string]:
-        | string
-        | (string | undefined)
-        | number
-        | boolean
-        | string[];
-    }) => {
-      return `?${Object.entries(params)
-        .map((param) => {
-          return `${param[0]}=${param[1]}`;
-        })
-        .join('&')}`;
-    },
-    []
-  );
+  }, [settings, getSetting, language]);
 
   const tabs = [
     {
