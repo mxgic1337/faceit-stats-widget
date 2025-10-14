@@ -145,7 +145,7 @@ export function useSettings(useWidgetDefaults?: boolean) {
       });
     });
     setSettings({ ...settings, ...newSettings });
-  }, []);
+  }, [searchParams, settings]);
 
   const getSetting = useCallback(
     <K extends SettingKey>(key: K | string): SettingValueType<K> => {

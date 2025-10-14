@@ -6,7 +6,6 @@ import {
   useState,
   CSSProperties,
   useMemo,
-  useLayoutEffect,
   ReactElement,
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -102,10 +101,10 @@ export const Widget = ({
   const [username, setUsername] = useState<string>();
   const [banner, setBanner] = useState<string>();
 
-  const [level, setLevel] = useState(1);
-  const [language, setLanguage] = useState<Language>(languages[0]);
+  const [playerLevel, setPlayerLevel] = useState(previewLevel || 1);
+
   const [startingElo, setStartingElo] = useState<number>(0);
-  const [elo, setElo] = useState(0);
+  const [playerElo, setPlayerElo] = useState(0);
   const [wins, setWins] = useState(0);
   const [losses, setLosses] = useState(0);
   const [ranking, setRanking] = useState(0);
@@ -115,24 +114,44 @@ export const Widget = ({
   const [hsPercent, setHSPercent] = useState(0);
   const [winsPercent, setWinsPercent] = useState(0);
   const [avgMatches, setAvgMatches] = useState(0);
-  const [currentEloDistribution, setCurrentEloDistribution] = useState<
-    [number, (string | number)[]]
-  >([1, eloDistribution[0]]);
-  const [compatibilityMode, setCompatibilityMode] = useState<boolean>(false);
-  const [stats, setStats] = useState<StatisticType[]>([
-    StatisticType.KILLS,
-    StatisticType.KD,
-    StatisticType.WINRATIO,
-    StatisticType.HSPERCENT,
-  ]);
+
+  const level = useMemo(() => {
+    return preview && previewLevel ? previewLevel : playerLevel;
+  }, [playerLevel, preview, previewLevel]);
+
+  const elo = useMemo(() => {
+    return preview && previewElo ? previewElo : playerElo;
+  }, [playerElo, preview, previewElo]);
 
   const { settings, getSetting, setSetting, loadSettingsFromQuery } =
     useSettings(true);
   const overrides = useContext(SettingsContext);
 
+  /** Returns a color, min ELO and max ELO of a level */
+  const currentEloDistribution = useMemo<[number, (string | number)[]]>(() => {
+    if (preview) {
+      return [level, eloDistribution[level - 1]];
+    }
+    if (level === 10 && ranking <= 1000) {
+      if (ranking === 1) return [12, eloDistribution[11]];
+      else if (ranking === 2) return [13, eloDistribution[12]];
+      else if (ranking === 3) return [14, eloDistribution[13]];
+      return [11, eloDistribution[10]]; /* Challenger */
+    }
+    return [level, eloDistribution[level - 1]];
+  }, [preview, level]);
+
   const SETTINGS = useMemo(() => {
     return overrides || { settings, get: getSetting, set: setSetting };
-  }, [overrides, settings]);
+  }, [overrides, settings, getSetting, setSetting]);
+
+  const language = useMemo<Language>(() => {
+    return (
+      languages.find((lang) => lang.id === SETTINGS.get('widgetLanguage')) ||
+      previewLanguage ||
+      languages[0]
+    );
+  }, [SETTINGS, previewLanguage]);
 
   const translate = useCallback(
     (text: string, args?: string[]) => {
@@ -143,38 +162,23 @@ export const Widget = ({
 
   const [searchParams] = useSearchParams();
 
-  useEffect(() => {
-    if (!previewElo || !previewLevel) return;
-    setElo(previewElo);
-    setLevel(previewLevel);
-    setCurrentEloDistribution(getEloDistribution(previewLevel, 1337));
-  }, [previewElo, previewLevel]);
-
-  useEffect(() => {
-    if (!overrides || !preview) return;
-    setStats([
+  const stats = useMemo(() => {
+    if (!overrides || !preview) {
+      const statsQ = searchParams.get('stats');
+      if (statsQ) return statsQ.split(',') as StatisticType[];
+      return [];
+    }
+    return [
       overrides.get('statSlot1'),
       overrides.get('statSlot2'),
       overrides.get('statSlot3'),
       overrides.get('statSlot4'),
-    ]);
-  }, [preview, overrides]);
+    ];
+  }, [preview, overrides, searchParams]);
 
-  /* Load settings */
-  useLayoutEffect(() => {
-    if (preview) return;
+  useEffect(() => {
     loadSettingsFromQuery();
-    const statsQ = searchParams.get('stats');
-    if (statsQ) setStats(statsQ.split(',') as StatisticType[]);
-  }, [searchParams]);
-
-  useLayoutEffect(() => {
-    setLanguage(
-      languages.find((lang) => lang.id === SETTINGS.get('widgetLanguage')) ||
-        previewLanguage ||
-        languages[0]
-    );
-  }, [SETTINGS]);
+  }, []);
 
   /** Returns a path to a level icon */
   const getIcon = useCallback(() => {
@@ -187,19 +191,16 @@ export const Widget = ({
     return levelIcons[level - 1];
   }, [level, ranking, preview]);
 
-  /** Returns a color, min ELO and max ELO of a level */
-  const getEloDistribution = useCallback(
-    (level: number, ranking: number): [number, (string | number)[]] => {
-      if (level === 10 && ranking <= 1000) {
-        if (ranking === 1) return [12, eloDistribution[11]];
-        else if (ranking === 2) return [13, eloDistribution[12]];
-        else if (ranking === 3) return [14, eloDistribution[13]];
-        return [11, eloDistribution[10]]; /* Challenger */
-      }
-      return [level, eloDistribution[level - 1]];
-    },
-    [preview]
-  );
+  const compatibilityMode = useMemo(() => {
+    /* Check for older Chromium version */
+    const userAgent = window.navigator.userAgent;
+    const chromeVersion = userAgent
+      .split(' ')
+      .find((version) => version.startsWith('Chrome/'));
+    return (
+      chromeVersion && parseInt(chromeVersion.split('/')[1].split('.')[0]) < 120
+    );
+  }, []);
 
   /* Update player stats */
   useEffect(() => {
@@ -286,8 +287,8 @@ export const Widget = ({
           setStartingElo(player.elo);
         }
 
-        setElo(player.elo);
-        setLevel(player.level);
+        setPlayerElo(player.elo);
+        setPlayerLevel(player.level);
 
         setWins(player.wins);
         setLosses(player.losses);
@@ -302,24 +303,9 @@ export const Widget = ({
         setAvgMatches(player.avg.matches);
 
         setRanking(player.ranking);
-        setCurrentEloDistribution(
-          getEloDistribution(player.level, player.ranking)
-        );
       });
     };
     getStats(true, sessionExpired);
-
-    /* Check for older Chromium version */
-    const userAgent = window.navigator.userAgent;
-    const chromeVersion = userAgent
-      .split(' ')
-      .find((version) => version.startsWith('Chrome/'));
-    if (
-      chromeVersion &&
-      parseInt(chromeVersion.split('/')[1].split('.')[0]) < 120
-    ) {
-      setCompatibilityMode(true);
-    }
 
     let refreshDelay = 30;
     const refreshParam = searchParams.get('refresh');
@@ -401,7 +387,16 @@ export const Widget = ({
           return `???`;
       }
     },
-    [kills, deaths, winsPercent, hsPercent, ranking, avgMatches]
+    [
+      preview,
+      kills,
+      deaths,
+      winsPercent,
+      hsPercent,
+      ranking,
+      avgMatches,
+      kdRatio,
+    ]
   );
 
   /** Returns player ELO text */
@@ -409,7 +404,7 @@ export const Widget = ({
     let diff = 0;
 
     if (!preview) {
-      diff = elo - startingElo;
+      diff = playerElo - startingElo;
     }
 
     let diffArrow: ReactElement | null = null;
@@ -429,7 +424,7 @@ export const Widget = ({
         {diff >= 0 ? `+${diff}` : String(diff)})
       </span>
     );
-  }, [language, elo, startingElo, SETTINGS]);
+  }, [preview, language, playerElo, startingElo, SETTINGS]);
 
   return (
     <>
