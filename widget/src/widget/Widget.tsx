@@ -114,6 +114,7 @@ export const Widget = ({
   const [hsPercent, setHSPercent] = useState(0);
   const [winsPercent, setWinsPercent] = useState(0);
   const [avgMatches, setAvgMatches] = useState(0);
+  const [lastMatchId, setLastMatchId] = useState<string | undefined>();
 
   const level = useMemo(() => {
     return preview && previewLevel ? previewLevel : playerLevel;
@@ -302,7 +303,10 @@ export const Widget = ({
         );
         setAvgMatches(player.avg.matches);
 
-        setRanking(player.ranking);
+        setLastMatchId(player.lastMatchId);
+        if (firstTime || lastMatchId !== player.lastMatchId) {
+          setRanking(player.ranking);
+        }
       });
     };
     getStats(true, sessionExpired);
