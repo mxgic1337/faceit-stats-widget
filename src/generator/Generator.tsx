@@ -185,7 +185,7 @@ export const Generator = () => {
   ];
 
   const previews = useMemo<string[]>(() => {
-    return [
+    const previewArray = [
       'nuke',
       'mirage',
       'ancient',
@@ -196,6 +196,8 @@ export const Generator = () => {
       'train',
       'anubis',
     ];
+    if (import.meta.env.DEV) previewArray.push('color-green');
+    return previewArray;
   }, []);
 
   return (
@@ -259,6 +261,7 @@ export const Generator = () => {
 		      div.preview.vertigo {--preview-background: url(${vertigoPreview})}
 		      div.preview.train {--preview-background: url(${trainPreview})}
 		      div.preview.anubis {--preview-background: url(${anubisPreview})}
+		      div.preview.color-green {--preview-background: #00ff00}
 		      `}</style>
               <div
                 className={`${getSetting('style')}-theme ${getSetting('colorScheme')}-scheme preview ${previewBackground}`}

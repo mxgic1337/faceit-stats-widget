@@ -114,6 +114,7 @@ export const Widget = ({
   const [hsPercent, setHSPercent] = useState(0);
   const [winsPercent, setWinsPercent] = useState(0);
   const [avgMatches, setAvgMatches] = useState(0);
+  const [lastMatchId, setLastMatchId] = useState<string | undefined>();
 
   const level = useMemo(() => {
     return preview && previewLevel ? previewLevel : playerLevel;
@@ -302,7 +303,10 @@ export const Widget = ({
         );
         setAvgMatches(player.avg.matches);
 
-        setRanking(player.ranking);
+        setLastMatchId(player.lastMatchId);
+        if (firstTime || lastMatchId !== player.lastMatchId) {
+          setRanking(player.ranking);
+        }
       });
     };
     getStats(true, sessionExpired);
@@ -438,6 +442,12 @@ export const Widget = ({
                     --border-2: #${SETTINGS.get('customBorderColor2')} !important;
                     --border-rotation: 0deg !important;
                     --background: #${SETTINGS.get('customBackgroundColor')} !important;
+                    --background-wins: #${SETTINGS.get('customWinsColor')}21 !important;
+                    --background-losses: #${SETTINGS.get('customLossesColor')}21 !important;
+                    --wins: #${SETTINGS.get('customWinsColor')} !important;
+                    --wins-text: #${SETTINGS.get('customWinsTextColor')} !important;
+                    --losses: #${SETTINGS.get('customLossesColor')} !important;
+                    --losses-text: #${SETTINGS.get('customLossesTextColor')} !important;
                 }
             `}</style>
       )}
@@ -483,8 +493,8 @@ export const Widget = ({
                       ShowRanking.ONLY_WHEN_CHALLENGER &&
                       ranking <= 1000 &&
                       !preview)) && (
-                    <span className={'ranking'}>#{ranking || 1337} </span>
-                  )}
+                      <span className={'ranking'}>#{ranking || 1337} </span>
+                    )}
                   {SETTINGS.get('showIcons') && <TimelineIcon />}{' '}
                   {translate(
                     `widget.elo${!SETTINGS.get('showEloSuffix') ? '_no_suffix' : ''}`,

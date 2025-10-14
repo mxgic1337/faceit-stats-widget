@@ -37,7 +37,7 @@ export const Footer = () => {
           </a>{' '}
           &bull;{' '}
           <a
-            href={'https://github.com/mxgic1337/faceit-stats-widget/issues/new'}
+            href={'https://github.com/mxgic1337/faceit-stats-widget/issues'}
             target={'_blank'}
           >
             {tl('generator.footer.issues')}
