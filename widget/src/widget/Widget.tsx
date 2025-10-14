@@ -116,42 +116,41 @@ export const Widget = ({
   const [avgMatches, setAvgMatches] = useState(0);
 
   const level = useMemo(() => {
-    return preview && previewLevel ? previewLevel : playerLevel
-  }, [playerLevel, preview, previewLevel])
+    return preview && previewLevel ? previewLevel : playerLevel;
+  }, [playerLevel, preview, previewLevel]);
 
   const elo = useMemo(() => {
-    return preview && previewElo ? previewElo : playerElo
-  }, [playerElo, preview, previewElo])
+    return preview && previewElo ? previewElo : playerElo;
+  }, [playerElo, preview, previewElo]);
 
   const { settings, getSetting, setSetting, loadSettingsFromQuery } =
     useSettings(true);
   const overrides = useContext(SettingsContext);
 
   /** Returns a color, min ELO and max ELO of a level */
-  const currentEloDistribution = useMemo<[number, (string | number)[]]>(
-    () => {
-      if (preview) {
-        return [level, eloDistribution[level - 1]];
-      }
-      if (level === 10 && ranking <= 1000) {
-        if (ranking === 1) return [12, eloDistribution[11]];
-        else if (ranking === 2) return [13, eloDistribution[12]];
-        else if (ranking === 3) return [14, eloDistribution[13]];
-        return [11, eloDistribution[10]]; /* Challenger */
-      }
+  const currentEloDistribution = useMemo<[number, (string | number)[]]>(() => {
+    if (preview) {
       return [level, eloDistribution[level - 1]];
-    },
-    [preview, level]
-  );
+    }
+    if (level === 10 && ranking <= 1000) {
+      if (ranking === 1) return [12, eloDistribution[11]];
+      else if (ranking === 2) return [13, eloDistribution[12]];
+      else if (ranking === 3) return [14, eloDistribution[13]];
+      return [11, eloDistribution[10]]; /* Challenger */
+    }
+    return [level, eloDistribution[level - 1]];
+  }, [preview, level]);
 
   const SETTINGS = useMemo(() => {
     return overrides || { settings, get: getSetting, set: setSetting };
   }, [overrides, settings, getSetting, setSetting]);
 
   const language = useMemo<Language>(() => {
-    return languages.find((lang) => lang.id === SETTINGS.get('widgetLanguage')) ||
+    return (
+      languages.find((lang) => lang.id === SETTINGS.get('widgetLanguage')) ||
       previewLanguage ||
       languages[0]
+    );
   }, [SETTINGS, previewLanguage]);
 
   const translate = useCallback(
@@ -198,9 +197,10 @@ export const Widget = ({
     const chromeVersion = userAgent
       .split(' ')
       .find((version) => version.startsWith('Chrome/'));
-    return chromeVersion &&
-      parseInt(chromeVersion.split('/')[1].split('.')[0]) < 120;
-  }, [])
+    return (
+      chromeVersion && parseInt(chromeVersion.split('/')[1].split('.')[0]) < 120
+    );
+  }, []);
 
   /* Update player stats */
   useEffect(() => {
@@ -387,7 +387,16 @@ export const Widget = ({
           return `???`;
       }
     },
-    [preview, kills, deaths, winsPercent, hsPercent, ranking, avgMatches, kdRatio]
+    [
+      preview,
+      kills,
+      deaths,
+      winsPercent,
+      hsPercent,
+      ranking,
+      avgMatches,
+      kdRatio,
+    ]
   );
 
   /** Returns player ELO text */
@@ -474,8 +483,8 @@ export const Widget = ({
                       ShowRanking.ONLY_WHEN_CHALLENGER &&
                       ranking <= 1000 &&
                       !preview)) && (
-                      <span className={'ranking'}>#{ranking || 1337} </span>
-                    )}
+                    <span className={'ranking'}>#{ranking || 1337} </span>
+                  )}
                   {SETTINGS.get('showIcons') && <TimelineIcon />}{' '}
                   {translate(
                     `widget.elo${!SETTINGS.get('showEloSuffix') ? '_no_suffix' : ''}`,
