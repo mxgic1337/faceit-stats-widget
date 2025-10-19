@@ -3,6 +3,8 @@
 .radar-theme:extend(.normal-theme all) {
   --border-width: 2px;
   --auto-width: 325px;
+  --border-radius: 50%;
+  --border-radius-background: 50%;
 
   .wrapper {
     position: relative;
@@ -10,24 +12,12 @@
     display: flex;
     flex-direction: column;
 
-    &::after {
-      border-radius: 100%;
-    }
-
     .widget {
       display: flex;
       aspect-ratio: 1/1;
       justify-content: center;
       align-items: center;
       flex-direction: column;
-
-      &::after {
-        border-radius: 100%;
-      }
-
-      &.banner::before {
-        border-radius: 100%;
-      }
 
       .player-stats {
         flex-direction: column;

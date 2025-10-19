@@ -69,6 +69,10 @@ export const StyleTab = ({
               </select>
             </div>
           </div>
+          <Checkbox
+            text={tl('generator.theme.show_border')}
+            setting={'showBorder'}
+          />
         </div>
 
         {/* Custom CSS */}

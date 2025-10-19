@@ -2,12 +2,10 @@
 
 .rounded-theme:extend(.normal-theme all) {
   --border-width: 2px;
+  --border-radius: 18px;
+  --border-radius-background: 14px;
 
   .wrapper {
-    &:after {
-      border-radius: 18px;
-    }
-
     .player-stats {
       .stat {
         @size: 42px;
@@ -53,14 +51,6 @@
     }
 
     .widget {
-      &::after {
-        border-radius: 14px;
-      }
-
-      &.banner::before {
-        border-radius: 16px;
-      }
-
       .level {
         .elo p {
           color: var(--subtext);

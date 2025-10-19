@@ -124,7 +124,9 @@ export function getPlayerStats(
         matchesLength = matchesLength > matchCount ? matchCount : matchesLength;
 
         const lastMatch = v4StatsResponse.items[0];
-        lastMatchId = lastMatch ? lastMatch.stats['Match Id'] as string : undefined;
+        lastMatchId = lastMatch
+          ? (lastMatch.stats['Match Id'] as string)
+          : undefined;
 
         let i = 0;
         for (const match of v4StatsResponse.items) {
@@ -202,7 +204,7 @@ export function getPlayerStats(
           matches: matchesLength,
           kd,
         },
-        lastMatchId
+        lastMatchId,
       });
     });
   });

@@ -465,7 +465,7 @@ export const Widget = ({
 				}`}</style>
       )}
       <div
-        className={`wrapper${compatibilityMode ? ' compatibility' : ''}`}
+        className={`wrapper${compatibilityMode ? ' compatibility' : ''}${SETTINGS.get('showBorder') ? ' border' : ''}`}
         style={
           {
             '--faceit-level': `var(--faceit-level-${currentEloDistribution[0]})`,
@@ -493,8 +493,8 @@ export const Widget = ({
                       ShowRanking.ONLY_WHEN_CHALLENGER &&
                       ranking <= 1000 &&
                       !preview)) && (
-                      <span className={'ranking'}>#{ranking || 1337} </span>
-                    )}
+                    <span className={'ranking'}>#{ranking || 1337} </span>
+                  )}
                   {SETTINGS.get('showIcons') && <TimelineIcon />}{' '}
                   {translate(
                     `widget.elo${!SETTINGS.get('showEloSuffix') ? '_no_suffix' : ''}`,

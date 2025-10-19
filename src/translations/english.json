@@ -60,6 +60,7 @@
   "generator.theme.custom_color_help": "The color of the element marked in red will change.",
   "generator.theme.color_scheme": "Widget theme",
   "generator.theme.style": "Widget style",
+  "generator.theme.show_border": "Show border",
   "generator.theme.banner_as_background": "Use profile banner as background",
   "generator.theme.banner_as_background.no_banner": "Player {{0}} has no profile banner set.",
   "generator.theme.banner_as_background.adjust_opacity": "Adjust banner opacity",

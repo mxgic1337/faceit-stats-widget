@@ -261,6 +261,11 @@ export const SETTINGS_DEFINITIONS = {
     max: 1,
     query: ['opacity'],
   },
+  showBorder: {
+    type: 'boolean',
+    defaultValue: true,
+    query: ['show_border'],
+  },
   customCSS: {
     type: 'string_undefined',
     defaultValue: undefined,
