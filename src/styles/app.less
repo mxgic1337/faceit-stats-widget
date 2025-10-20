@@ -297,13 +297,6 @@ div.preview {
     }
   }
 
-  svg.icon-tabler-help {
-    position: relative;
-    top: 3px;
-    width: 1rem;
-    height: 1rem;
-  }
-
   &:hover {
     .check {
       background-color: @surface0;
@@ -321,20 +314,34 @@ div.preview {
   align-items: center;
 
   input {
-    width: 45px;
+    width: 30px;
     height: 15px;
     padding: 0;
-    border: 1px solid #8d8d8d;
+    border: 1px solid @surface0;
     outline: none;
     margin: 1px 0;
-  }
 
-  input::-webkit-color-swatch-wrapper {
-    padding: 0;
-  }
+    &::-moz-color-swatch {
+      border: none;
+    }
 
-  input::-webkit-color-swatch {
-    border: none;
+    &::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    &::-webkit-color-swatch {
+      border: none;
+    }
+  }
+}
+
+.checkbox,
+.color-picker {
+  svg.icon-tabler-help {
+    position: relative;
+    top: 3px;
+    width: 1rem;
+    height: 1rem;
   }
 }
 
@@ -479,6 +486,7 @@ dialog {
   margin-left: 0.4em;
 
   &.help {
+    position: relative;
     padding: 2px;
     font-weight: bold;
     color: fade(@subtext0, 50%) !important;
@@ -509,4 +517,33 @@ dialog {
   align-items: center;
   justify-content: center;
   color: @subtext0;
+}
+
+.tooltip {
+  color: @text;
+  position: absolute;
+  background-color: fade(@crust, 90%);
+  backdrop-filter: blur(12px);
+  padding: 12px;
+  top: 12px;
+  left: 12px;
+  border-radius: 12px;
+  transition: 0.2s;
+  transform-origin: top left;
+  opacity: 1;
+  pointer-events: none;
+  width: 250px;
+  z-index: 100;
+  font-weight: normal;
+
+  img {
+    width: 100%;
+    border-radius: 12px;
+    background-color: @mantle;
+  }
+
+  &.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
 }

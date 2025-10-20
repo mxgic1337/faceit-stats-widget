@@ -3,22 +3,12 @@
 .rounded-compact-theme:extend(.compact-theme all) {
   --border-width: 2px;
   --auto-width: 400px;
+  --border-radius: 20px;
+  --border-radius-background: 16px;
 
   .wrapper {
-    &::after {
-      border-radius: 20px;
-    }
-
     .widget {
       padding: 8px 14px !important;
-
-      &::after {
-        border-radius: 18px;
-      }
-
-      &.banner::before {
-        border-radius: 20px;
-      }
 
       .level {
         svg.faceit-level {

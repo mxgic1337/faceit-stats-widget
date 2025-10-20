@@ -4,6 +4,16 @@ import { useContext, useRef } from 'react';
 import { Checkbox } from '../../components/Checkbox.tsx';
 import { InfoBox } from '../../components/InfoBox.tsx';
 import { LanguageContext, SettingsContext } from '../Generator.tsx';
+import helpTextColor from '../../assets/help/text_color.png';
+import helpSubtextColor from '../../assets/help/subtext_color.png';
+import helpTextShadowColor from '../../assets/help/text_shadow_color.png';
+import helpBackgroundColor from '../../assets/help/background_color.png';
+import helpBorder1 from '../../assets/help/border_1.png';
+import helpBorder2 from '../../assets/help/border_2.png';
+import helpWins from '../../assets/help/wins.png';
+import helpLosses from '../../assets/help/losses.png';
+import helpWinsText from '../../assets/help/wins_text.png';
+import helpLossesText from '../../assets/help/losses_text.png';
 
 export const StyleTab = ({
   username,
@@ -59,6 +69,10 @@ export const StyleTab = ({
               </select>
             </div>
           </div>
+          <Checkbox
+            text={tl('generator.theme.show_border')}
+            setting={'showBorder'}
+          />
         </div>
 
         {/* Custom CSS */}
@@ -160,28 +174,54 @@ export const StyleTab = ({
         <div className={'settings'}>
           <div className={'setting'}>
             <ColorPicker
-              text={tl('generator.theme.border_color_1')}
-              setting={'customBorderColor1'}
-            />
-            <ColorPicker
-              text={tl('generator.theme.border_color_2')}
-              setting={'customBorderColor2'}
-            />
-            <ColorPicker
               text={tl('generator.theme.text_color')}
               setting={'customTextColor'}
+              helpImage={helpTextColor}
             />
             <ColorPicker
               text={tl('generator.theme.subtext_color')}
               setting={'customSubtextColor'}
+              helpImage={helpSubtextColor}
             />
             <ColorPicker
               text={tl('generator.theme.text_shadow_color')}
               setting={'customTextShadowColor'}
+              helpImage={helpTextShadowColor}
             />
             <ColorPicker
               text={tl('generator.theme.background_color')}
               setting={'customBackgroundColor'}
+              helpImage={helpBackgroundColor}
+            />
+            <ColorPicker
+              text={tl('generator.theme.border_color_1')}
+              setting={'customBorderColor1'}
+              helpImage={helpBorder1}
+            />
+            <ColorPicker
+              text={tl('generator.theme.border_color_2')}
+              setting={'customBorderColor2'}
+              helpImage={helpBorder2}
+            />
+            <ColorPicker
+              text={tl('generator.theme.wins_color')}
+              setting={'customWinsColor'}
+              helpImage={helpWins}
+            />
+            <ColorPicker
+              text={tl('generator.theme.losses_color')}
+              setting={'customLossesColor'}
+              helpImage={helpLosses}
+            />
+            <ColorPicker
+              text={tl('generator.theme.wins_text_color')}
+              setting={'customWinsTextColor'}
+              helpImage={helpWinsText}
+            />
+            <ColorPicker
+              text={tl('generator.theme.losses_text_color')}
+              setting={'customLossesTextColor'}
+              helpImage={helpLossesText}
             />
           </div>
         </div>

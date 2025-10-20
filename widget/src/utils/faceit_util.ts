@@ -61,6 +61,7 @@ interface FaceitPlayer {
     wins: number;
     matches: number;
   };
+  lastMatchId: string | undefined;
 }
 
 const HEADERS = {
@@ -104,6 +105,7 @@ export function getPlayerStats(
       let deaths: number = 0;
       let wrWins: number = 0;
       let kd: number = 0;
+      let lastMatchId: string | undefined = undefined;
 
       let matchesLength: number = 0;
 
@@ -120,6 +122,11 @@ export function getPlayerStats(
         const v4StatsResponse = (await matchStats.json()) as V4StatsResponse;
         matchesLength = v4StatsResponse.items.length;
         matchesLength = matchesLength > matchCount ? matchCount : matchesLength;
+
+        const lastMatch = v4StatsResponse.items[0];
+        lastMatchId = lastMatch
+          ? (lastMatch.stats['Match Id'] as string)
+          : undefined;
 
         let i = 0;
         for (const match of v4StatsResponse.items) {
@@ -197,6 +204,7 @@ export function getPlayerStats(
           matches: matchesLength,
           kd,
         },
+        lastMatchId,
       });
     });
   });
