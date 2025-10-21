@@ -72,28 +72,26 @@ export function useSettings(
       const settingsString = localStorage.getItem('fcw_generator_settings');
       const localStorageSettings: { [key: string]: undefined } | undefined =
         settingsString ? JSON.parse(settingsString) : undefined;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return (
-        Object.entries(SETTINGS_DEFINITIONS) as [SettingKey, any][]
-      ).reduce((acc, [key, val]) => {
-        acc[key] = val.defaultValue;
-        if (
-          useWidgetDefaults &&
-          (SETTINGS_DEFINITIONS[key] as { defaultWidgetValue?: boolean })
-            .defaultWidgetValue !== undefined
-        ) {
-          acc[key] = val.defaultWidgetValue;
-        }
-        if (
-          loadFromLocalStorage &&
-          !useWidgetDefaults &&
-          localStorageSettings &&
-          localStorageSettings[key] !== undefined
-        ) {
-          acc[key] = localStorageSettings[key];
-        }
-        return acc;
-      }, {} as Partial<Settings>) as Settings;
+      return (Object.entries(SETTINGS_DEFINITIONS) as [SettingKey, any][]) // eslint-disable-line @typescript-eslint/no-explicit-any
+        .reduce((acc, [key, val]) => {
+          acc[key] = val.defaultValue;
+          if (
+            useWidgetDefaults &&
+            (SETTINGS_DEFINITIONS[key] as { defaultWidgetValue?: boolean })
+              .defaultWidgetValue !== undefined
+          ) {
+            acc[key] = val.defaultWidgetValue;
+          }
+          if (
+            loadFromLocalStorage &&
+            !useWidgetDefaults &&
+            localStorageSettings &&
+            localStorageSettings[key] !== undefined
+          ) {
+            acc[key] = localStorageSettings[key];
+          }
+          return acc;
+        }, {} as Partial<Settings>) as Settings;
     },
     [useWidgetDefaults]
   );
