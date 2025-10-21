@@ -403,12 +403,13 @@ div.preview {
 }
 
 dialog {
-  display: none;
+  display: flex;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0);
   opacity: 0;
   padding: 20px;
+  visibility: hidden;
 
   transition: 0.25s;
 
@@ -429,19 +430,21 @@ dialog {
   &[open] {
     opacity: 1;
     transform: translate(-50%, -50%);
+    visibility: visible;
   }
 
-  &.generated {
-    display: flex;
-
-    .content {
-      width: 400px;
-    }
+  &.generated .content,
+  &.restore-defaults .content {
+    width: 400px;
   }
 
   .modal-icon {
     &.success {
       color: @green;
+    }
+
+    &.warning {
+      color: @peach;
     }
 
     .icon {

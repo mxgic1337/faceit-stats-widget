@@ -1,10 +1,9 @@
 import { Language, languages } from '../../translations/translations.ts';
 import { Checkbox } from '../../components/Checkbox.tsx';
-import { Dispatch, useContext, useEffect } from 'react';
+import { Dispatch, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LanguageContext, SettingsContext } from '../Generator.tsx';
 import { InfoBox } from '../../components/InfoBox.tsx';
-import { getPlayerProfile } from '../../../widget/src/utils/faceit_util.ts';
 import { ShowRanking } from '../../../widget/src/widget/Widget.tsx';
 import { UserIcon } from '../../assets/icons/tabler/UserIcon.tsx';
 
@@ -30,40 +29,11 @@ export const MainTab = ({
   language,
   setLanguage,
   setUsername,
-  setPlayerElo,
-  setPlayerLevel,
-  setPlayerAvatar,
-  setPlayerBanner,
-  setPlayerExists,
   setSelectedTabIndex,
 }: Props) => {
   const navigate = useNavigate();
   const tl = useContext(LanguageContext);
   const settings = useContext(SettingsContext);
-
-  useEffect(() => {
-    if (!settings || !tl) return;
-    const timeout = setTimeout(() => {
-      getPlayerProfile(username).then((res) => {
-        if (res && res.games.cs2) {
-          settings.set('playerId', res.player_id);
-          setPlayerAvatar(res.avatar);
-          setPlayerBanner(res.cover_image);
-          setPlayerElo(res.games.cs2.faceit_elo);
-          setPlayerLevel(res.games.cs2.skill_level);
-          setPlayerExists(true);
-          console.log(`Fetched ${res.nickname}'s profile`);
-        } else {
-          setPlayerElo(100);
-          setPlayerLevel(1);
-          setPlayerExists(false);
-        }
-      });
-    }, 500);
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [username]);
 
   if (!settings || !tl) {
     return null;
