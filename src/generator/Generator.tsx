@@ -37,6 +37,8 @@ import {
   useSettings,
 } from '../settings/manager.ts';
 import { SETTINGS_DEFINITIONS } from '../settings/definition.ts';
+import { RestoreSettingsModal } from '../components/RestoreSettingsModal.tsx';
+import { getPlayerProfile } from '../../widget/src/utils/faceit_util.ts';
 
 export const LanguageContext = createContext<
   ((text: string, args?: string[]) => string) | null
@@ -49,7 +51,9 @@ export const SettingsContext = createContext<{
 export const Generator = () => {
   const [playerExists, setPlayerExists] = useState<boolean>(true);
   const [generatedURL, setGeneratedURL] = useState<string | undefined>();
-  const [username, setUsername] = useState<string>('paszaBiceps');
+  const [username, setUsername] = useState<string>(
+    localStorage.getItem('fcw_generator_username') || 'paszaBiceps'
+  );
   const [playerElo, setPlayerElo] = useState<number>(100);
   const [playerLevel, setPlayerLevel] = useState<number>(1);
   const [playerAvatar, setPlayerAvatar] = useState<string | undefined>();
@@ -64,6 +68,8 @@ export const Generator = () => {
   const [previewBackground, setPreviewBackground] = useState<string>('ancient');
 
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [restoreSettingsModalOpen, setRestoreSettingsModalOpen] =
+    useState(false);
 
   const tl = useCallback(
     (text: string, args?: string[]) => {
@@ -72,7 +78,13 @@ export const Generator = () => {
     [language]
   );
 
-  const { settings, getSetting, setSetting } = useSettings();
+  const {
+    settings,
+    getSetting,
+    setSetting,
+    restoreDefaults,
+    saveSettingsToLocalStorage,
+  } = useSettings(false, true);
 
   useLayoutEffect(() => {
     const description = document.getElementsByName('description');
@@ -85,6 +97,30 @@ export const Generator = () => {
       document.getElementsByTagName('html')[0].classList.remove(`generator`);
     };
   }, []);
+
+  useEffect(() => {
+    if (!settings || !tl) return;
+    const timeout = setTimeout(() => {
+      getPlayerProfile(username).then((res) => {
+        if (res && res.games.cs2) {
+          setSetting('playerId', res.player_id);
+          setPlayerAvatar(res.avatar);
+          setPlayerBanner(res.cover_image);
+          setPlayerElo(res.games.cs2.faceit_elo);
+          setPlayerLevel(res.games.cs2.skill_level);
+          setPlayerExists(true);
+          console.log(`Fetched ${res.nickname}'s profile`);
+        } else {
+          setPlayerElo(100);
+          setPlayerLevel(1);
+          setPlayerExists(false);
+        }
+      });
+    }, 500);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [username]);
 
   const jsonToQuery = useCallback(
     (params: {
@@ -145,7 +181,10 @@ export const Generator = () => {
     setGeneratedURL(
       `${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`
     );
-  }, [settings, getSetting, language]);
+
+    saveSettingsToLocalStorage();
+    localStorage.setItem('fcw_generator_username', username);
+  }, [settings, getSetting, language, saveSettingsToLocalStorage, username]);
 
   const tabs = [
     {
@@ -158,11 +197,6 @@ export const Generator = () => {
           playerAvatar={playerAvatar}
           language={language}
           setUsername={setUsername}
-          setPlayerElo={setPlayerElo}
-          setPlayerLevel={setPlayerLevel}
-          setPlayerAvatar={setPlayerAvatar}
-          setPlayerBanner={setPlayerBanner}
-          setPlayerExists={setPlayerExists}
           setLanguage={setLanguage}
           setSelectedTabIndex={setSelectedTabIndex}
         />
@@ -209,6 +243,12 @@ export const Generator = () => {
           language={language}
           url={generatedURL}
           setURL={setGeneratedURL}
+        />
+        <RestoreSettingsModal
+          open={restoreSettingsModalOpen}
+          setOpen={setRestoreSettingsModalOpen}
+          setUsername={setUsername}
+          restoreDefaults={restoreDefaults}
         />
         <header>
           {import.meta.env.VITE_IS_TESTING && (
@@ -302,6 +342,14 @@ export const Generator = () => {
                   {tl('generator.generate.button')}
                 </button>
               </div>
+              <hr />
+              <button
+                onClick={() => {
+                  setRestoreSettingsModalOpen(true);
+                }}
+              >
+                {tl('generator.restore_defaults.button')}
+              </button>
             </div>
           </section>
         </main>
