@@ -52,7 +52,7 @@ export const MainTab = ({
           setPlayerElo(res.games.cs2.faceit_elo);
           setPlayerLevel(res.games.cs2.skill_level);
           setPlayerExists(true);
-          console.log('Fetched ');
+          console.log(`Fetched ${res.nickname}'s profile`);
         } else {
           setPlayerElo(100);
           setPlayerLevel(1);

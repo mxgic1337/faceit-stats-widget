@@ -61,13 +61,21 @@ export type Settings = { [K in SettingKey]: SettingValueType<K> };
 /**
  * @param useWidgetDefaults If true, uses `defaultWidgetValue` instead of `defaultValue`
  */
-export function useSettings(useWidgetDefaults?: boolean) {
+export function useSettings(
+  useWidgetDefaults?: boolean,
+  loadFromLocalStorage?: boolean
+) {
   const [searchParams] = useSearchParams();
 
-  const [settings, setSettings] = useState<Settings>(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (Object.entries(SETTINGS_DEFINITIONS) as [SettingKey, any][]).reduce(
-      (acc, [key, val]) => {
+  const defaults = useCallback(
+    (loadFromLocalStorage?: boolean) => {
+      const settingsString = localStorage.getItem('fcw_generator_settings');
+      const localStorageSettings: { [key: string]: undefined } | undefined =
+        settingsString ? JSON.parse(settingsString) : undefined;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return (
+        Object.entries(SETTINGS_DEFINITIONS) as [SettingKey, any][]
+      ).reduce((acc, [key, val]) => {
         acc[key] = val.defaultValue;
         if (
           useWidgetDefaults &&
@@ -76,39 +84,59 @@ export function useSettings(useWidgetDefaults?: boolean) {
         ) {
           acc[key] = val.defaultWidgetValue;
         }
+        if (
+          loadFromLocalStorage &&
+          !useWidgetDefaults &&
+          localStorageSettings &&
+          localStorageSettings[key] !== undefined
+        ) {
+          acc[key] = localStorageSettings[key];
+        }
         return acc;
-      },
-      {} as Partial<Settings>
-    ) as Settings;
-  });
+      }, {} as Partial<Settings>) as Settings;
+    },
+    [useWidgetDefaults]
+  );
+
+  const [settings, setSettings] = useState<Settings>(
+    defaults(loadFromLocalStorage)
+  );
+
+  function validateSetting<K extends SettingKey>(
+    key: K,
+    value: SettingValueType<K>
+  ) {
+    const definition: SettingDefinition = SETTINGS_DEFINITIONS[key];
+    if (
+      definition.min !== undefined &&
+      definition.max !== undefined &&
+      typeof value === 'number'
+    ) {
+      if (definition.min > value || definition.max < value) {
+        return false;
+      }
+    }
+
+    if (
+      definition.regex &&
+      typeof value === 'string' &&
+      !definition.regex.test(value)
+    ) {
+      return false;
+    }
+
+    if (
+      definition.options &&
+      !definition.options.includes(value as SettingValue)
+    )
+      return false;
+
+    return true;
+  }
 
   const setSetting = useCallback(
     <K extends SettingKey>(key: K, value: SettingValueType<K>): boolean => {
-      const definition: SettingDefinition = SETTINGS_DEFINITIONS[key];
-      if (
-        definition.min !== undefined &&
-        definition.max !== undefined &&
-        typeof value === 'number'
-      ) {
-        if (definition.min > value || definition.max < value) {
-          return false;
-        }
-      }
-
-      if (
-        definition.regex &&
-        typeof value === 'string' &&
-        !definition.regex.test(value)
-      ) {
-        return false;
-      }
-
-      if (
-        definition.options &&
-        !definition.options.includes(value as SettingValue)
-      )
-        return false;
-
+      if (!validateSetting(key, value)) return false;
       setSettings({ ...settings, [key]: value });
       return true;
     },
@@ -135,17 +163,24 @@ export function useSettings(useWidgetDefaults?: boolean) {
               ? parseInt(queryVal)
               : parseFloat(queryVal);
           if (!isNaN(number)) {
+            if (!validateSetting(key, number)) return;
             newSettings[key] = number;
           }
         } else if (definition.type === 'boolean') {
+          if (!validateSetting(key, queryVal === 'true')) return;
           newSettings[key] = queryVal === 'true';
         } else {
+          if (!validateSetting(key, queryVal)) return;
           newSettings[key] = queryVal;
         }
       });
     });
     setSettings({ ...settings, ...newSettings });
   }, [searchParams, settings]);
+
+  const saveSettingsToLocalStorage = useCallback(() => {
+    localStorage.setItem('fcw_generator_settings', JSON.stringify(settings));
+  }, [settings]);
 
   const getSetting = useCallback(
     <K extends SettingKey>(key: K | string): SettingValueType<K> => {
@@ -154,10 +189,16 @@ export function useSettings(useWidgetDefaults?: boolean) {
     [settings]
   );
 
+  const restoreDefaults = useCallback(() => {
+    setSettings(defaults());
+  }, [defaults]);
+
   return {
     settings,
     getSetting,
     setSetting,
+    restoreDefaults,
     loadSettingsFromQuery,
+    saveSettingsToLocalStorage,
   };
 }

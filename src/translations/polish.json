@@ -71,6 +71,7 @@
   "generator.generate.open_in_browser.button": "Otwórz w przeglądarce",
   "generator.generate.info.0": "Skopiuj ten link i wklej go do przeglądarki w OBS Studio.",
   "generator.generate.info.1": "Zalecane jest ustawienie szerokości przeglądarki na ok. 500px.",
+  "generator.restore_defaults.button": "Przywróć ustawienia domyślne",
   "generator.preview.title": "Podgląd widżetu",
   "generator.stats.title": "Statystyki",
   "generator.stats.slot": "Miejsce {{0}}",

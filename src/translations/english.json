@@ -72,6 +72,7 @@
   "generator.generate.open_in_browser.button": "Open in Browser",
   "generator.generate.info.0": "Copy this link and paste it into a browser source in OBS Studio.",
   "generator.generate.info.1": "It is recommended to set browser's width to 500px.",
+  "generator.restore_defaults.button": "Restore default settings",
   "generator.preview.title": "Widget preview",
   "generator.stats.title": "Statistics",
   "generator.stats.slot": "Slot {{0}}",

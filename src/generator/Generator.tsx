@@ -49,7 +49,9 @@ export const SettingsContext = createContext<{
 export const Generator = () => {
   const [playerExists, setPlayerExists] = useState<boolean>(true);
   const [generatedURL, setGeneratedURL] = useState<string | undefined>();
-  const [username, setUsername] = useState<string>('paszaBiceps');
+  const [username, setUsername] = useState<string>(
+    localStorage.getItem('fcw_generator_username') || 'paszaBiceps'
+  );
   const [playerElo, setPlayerElo] = useState<number>(100);
   const [playerLevel, setPlayerLevel] = useState<number>(1);
   const [playerAvatar, setPlayerAvatar] = useState<string | undefined>();
@@ -72,7 +74,13 @@ export const Generator = () => {
     [language]
   );
 
-  const { settings, getSetting, setSetting } = useSettings();
+  const {
+    settings,
+    getSetting,
+    setSetting,
+    restoreDefaults,
+    saveSettingsToLocalStorage,
+  } = useSettings(false, true);
 
   useLayoutEffect(() => {
     const description = document.getElementsByName('description');
@@ -145,7 +153,10 @@ export const Generator = () => {
     setGeneratedURL(
       `${window.location.protocol}//${window.location.host}/widget/${jsonToQuery(params)}`
     );
-  }, [settings, getSetting, language]);
+
+    saveSettingsToLocalStorage();
+    localStorage.setItem('fcw_generator_username', username);
+  }, [settings, getSetting, language, saveSettingsToLocalStorage, username]);
 
   const tabs = [
     {
@@ -302,6 +313,15 @@ export const Generator = () => {
                   {tl('generator.generate.button')}
                 </button>
               </div>
+              <hr />
+              <button
+                onClick={() => {
+                  restoreDefaults();
+                  setUsername('paszaBiceps');
+                }}
+              >
+                {tl('generator.restore_defaults.button')}
+              </button>
             </div>
           </section>
         </main>
