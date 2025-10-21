@@ -14,11 +14,6 @@ type Props = {
   language: Language;
   setLanguage: Dispatch<Language>;
   setUsername: Dispatch<string>;
-  setPlayerElo: Dispatch<number>;
-  setPlayerLevel: Dispatch<number>;
-  setPlayerAvatar: Dispatch<string | undefined>;
-  setPlayerBanner: Dispatch<string | undefined>;
-  setPlayerExists: Dispatch<boolean>;
   setSelectedTabIndex: Dispatch<number>;
 };
 

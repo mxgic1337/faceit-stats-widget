@@ -197,11 +197,6 @@ export const Generator = () => {
           playerAvatar={playerAvatar}
           language={language}
           setUsername={setUsername}
-          setPlayerElo={setPlayerElo}
-          setPlayerLevel={setPlayerLevel}
-          setPlayerAvatar={setPlayerAvatar}
-          setPlayerBanner={setPlayerBanner}
-          setPlayerExists={setPlayerExists}
           setLanguage={setLanguage}
           setSelectedTabIndex={setSelectedTabIndex}
         />
