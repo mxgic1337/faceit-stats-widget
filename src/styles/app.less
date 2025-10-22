@@ -116,12 +116,6 @@ main {
   }
 }
 
-@media only screen and (max-width: 1240px) {
-  main {
-    width: 95%;
-  }
-}
-
 .separator {
   display: flex;
   align-items: center;
@@ -231,7 +225,17 @@ div.preview {
   }
 }
 
-@media only screen and (max-width: 820px) {
+@media only screen and (max-width: 1500px) {
+  main {
+    width: 95%;
+  }
+
+  header {
+    width: 95%;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
   main {
     box-sizing: border-box;
     width: 100%;
@@ -241,12 +245,8 @@ div.preview {
 
     section.preview {
       min-width: 100%;
-      max-width: 100%;
-      width: 100%;
-      margin-left: 0;
-      margin-bottom: 102px;
       box-sizing: border-box;
-      max-height: 231px;
+      margin-left: 0;
     }
 
     div.preview {
