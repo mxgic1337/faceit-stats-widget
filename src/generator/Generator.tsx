@@ -251,6 +251,17 @@ export const Generator = () => {
           restoreDefaults={restoreDefaults}
         />
         <header>
+          {import.meta.env.DEV && !import.meta.env.VITE_FACEIT_API_KEY && (
+            <InfoBox
+              content={
+                <p>
+                  Warning: <b>VITE_FACEIT_API_KEY</b> environment variable is
+                  not set.
+                </p>
+              }
+              style={'warn'}
+            />
+          )}
           {import.meta.env.VITE_IS_TESTING && (
             <InfoBox
               content={
