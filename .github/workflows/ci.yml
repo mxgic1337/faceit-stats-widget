@@ -1,8 +1,14 @@
 name: CI 
-on: ['pull_request']
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
+    name: 'Build'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,3 +29,35 @@ jobs:
         run: pnpm lint
       - name: Build
         run: pnpm run build
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+  deploy:
+    name: 'Deploy (Experimental)'
+    needs: build
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    environment:
+      name: Experimental
+      url: 'https://widget-git.mxgic1337.xyz/'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-exprerimental 
+      cancel-in-progress: true
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist 
+      - name: Deploy
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: '-rlgoDzvc -i --delete'
+          SOURCE: 'dist/'
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: ${{ secrets.REMOTE_TARGET_TESTING }}
+          EXCLUDE: '/dist/, /node_modules/'
