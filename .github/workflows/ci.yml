@@ -28,7 +28,11 @@ jobs:
       - name: Lint
         run: pnpm lint
       - name: Build
+        if: github.event_name == 'pull_request'
         run: pnpm run build
+      - name: Build (Experimental)
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        run: VITE_FACEIT_API_KEY=${{ secrets.VITE_FACEIT_API_KEY }} VITE_COMMIT=${{ github.sha }} VITE_IS_TESTING=true pnpm run build
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
