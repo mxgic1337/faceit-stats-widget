@@ -2,7 +2,8 @@
   
   ![Preview](.github/assets/preview.png)
   
-  ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/mxgic1337/faceit-stats-widget/build-deploy-experimental.yml?style=flat-square&logo=github&logoColor=%23fff) [![Latest release version](https://img.shields.io/github/v/release/mxgic1337/faceit-stats-widget?display_name=tag&style=flat-square&label=version&logo=github&logoColor=%23fff)](https://widget.mxgic1337.xyz) [![package.json version](https://img.shields.io/github/package-json/v/mxgic1337/faceit-stats-widget?style=flat-square&label=experimental&logo=nodedotjs&logoColor=%23fff)](https://widget-git.mxgic1337.xyz)
+  ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/mxgic1337/faceit-stats-widget/ci.yml?branch=main&style=flat-square&logo=github&logoColor=%2523fff
+) [![Latest release version](https://img.shields.io/github/v/release/mxgic1337/faceit-stats-widget?display_name=tag&style=flat-square&label=version&logo=github&logoColor=%23fff)](https://widget.mxgic1337.xyz) [![package.json version](https://img.shields.io/github/package-json/v/mxgic1337/faceit-stats-widget?style=flat-square&label=experimental&logo=nodedotjs&logoColor=%23fff)](https://widget-git.mxgic1337.xyz)
 
   <h1>FACEIT Stats Widget</h1>
 
