@@ -261,6 +261,13 @@ export const SETTINGS_DEFINITIONS = {
     max: 1,
     query: ['opacity'],
   },
+  blurLength: {
+    type: 'number',
+    defaultValue: 2,
+    min: 0,
+    max: 10,
+    query: ['banner_blur'],
+  },
   showBorder: {
     type: 'boolean',
     defaultValue: true,

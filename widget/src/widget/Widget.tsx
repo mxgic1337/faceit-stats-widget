@@ -455,6 +455,7 @@ export const Widget = ({
         <style>{`
                 .wrapper {
                     --banner-url: url("${preview ? previewBanner : banner}") !important;
+                    --blur-length: ${SETTINGS.get('blurLength')}px;
                     ${SETTINGS.get('adjustBackgroundOpacity') ? `--banner-opacity: ${SETTINGS.get('backgroundOpacity')} !important;` : ''}
                 }
             `}</style>
