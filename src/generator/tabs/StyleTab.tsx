@@ -164,6 +164,31 @@ export const StyleTab = ({
                 }
               />
             )}
+
+            {settings.get('useBannerAsBackground') && (
+              <>
+                <p>{tl('generator.theme.banner_blur')}</p>
+                <div className={'flex'} style={{ alignItems: 'center' }}>
+                  <input
+                    type={'range'}
+                    value={settings.get('blurLength')}
+                    min={0}
+                    max={10}
+                    step={1}
+                    disabled={!settings.get('useBannerAsBackground')}
+                    onChange={(event) => {
+                      settings.set(
+                        'blurLength',
+                        parseInt(event.currentTarget.value)
+                      );
+                    }}
+                  />
+                  <p style={{ width: '22px', textAlign: 'right' }}>
+                    {settings.get('blurLength')}
+                  </p>
+                </div>
+              </>
+            )}
           </>
         )}
       </div>
