@@ -275,7 +275,7 @@ export const Generator = () => {
               style={'info'}
             />
           )}
-          <div className={'tabs'}>
+          <nav>
             {tabs.map((tab, index) => {
               return (
                 <button
@@ -289,7 +289,7 @@ export const Generator = () => {
                 </button>
               );
             })}
-          </div>
+          </nav>
         </header>
         <main>
           <section className={'fixed-width'}>
