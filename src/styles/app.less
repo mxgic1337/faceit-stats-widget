@@ -27,8 +27,7 @@
 @padding-dialog: 20px;
 
 @radius-1: 6px;
-@radius-2: 8px;
-@radius-3: 12px;
+@radius-2: 12px;
 @radius-dialog: 20px;
 
 * {
@@ -49,7 +48,7 @@ button {
   border: 1px solid fade(@surface0, 0%);
   background: @base;
   padding: 6px 9px;
-  border-radius: @radius-3;
+  border-radius: @radius-2;
   outline: none;
   transition: 0.2s;
   width: 100%;
@@ -148,7 +147,7 @@ main {
 .settings {
   padding: 12px 16px;
   margin: 12px 0;
-  border-radius: @radius-3;
+  border-radius: @radius-2;
   background-color: @mantle;
 }
 
@@ -208,7 +207,7 @@ section.preview {
 
 div.preview {
   padding: 20px;
-  border-radius: @radius-3;
+  border-radius: @radius-2;
   background: var(--preview-background);
   background-repeat: no-repeat;
   background-position: center;
@@ -342,14 +341,14 @@ div.preview {
 
 nav {
   display: flex;
-  border-radius: @radius-3;
+  border-radius: @radius-2;
   padding: @gap-1;
   gap: @gap-1;
   background-color: @mantle;
 
   button {
     border: none !important;
-    border-radius: @radius-3;
+    border-radius: @radius-2;
     padding: 8px;
     margin: 0;
     background-color: @mantle;
@@ -369,7 +368,7 @@ nav {
   display: flex;
   align-items: center;
   padding: 6px 12px;
-  border-radius: @radius-3;
+  border-radius: @radius-2;
   background: fade(@color, 5%);
   margin: 6px 0;
 
@@ -511,7 +510,7 @@ dialog {
   padding: @gap-2;
   top: @gap-2;
   left: @gap-2;
-  border-radius: @radius-3;
+  border-radius: @radius-2;
   transition: 0.2s;
   transform-origin: top left;
   opacity: 1;
@@ -522,7 +521,7 @@ dialog {
 
   img {
     width: 100%;
-    border-radius: @radius-3;
+    border-radius: @radius-2;
     background-color: @mantle;
   }
 
