@@ -248,6 +248,8 @@ export const Widget = ({
         startDate = new Date(savedStartDate);
       }
     }
+
+    let newStartingElo = 0;
     const getStats = (firstTime?: boolean, expired?: boolean) => {
       getPlayerStats(
         playerId,
@@ -261,18 +263,23 @@ export const Widget = ({
 
         if (!player || !player.elo || !player.level) return;
 
-        if (firstTime && saveSession) {
+        if (saveSession) {
           const currentDate = new Date();
           currentDate.setTime(currentDate.getTime() + 1000 * 60 * 60 * 2);
           localStorage.setItem('fcw_session_end', currentDate.toString());
+        }
 
+        const isStartingEloNotSet = firstTime || newStartingElo === 0;
+        if (isStartingEloNotSet && saveSession) {
           /* Load saved session ELO */
           const startingElo = localStorage.getItem('fcw_session_starting-elo');
           if (startingElo && !expired) {
-            setStartingElo(Number(startingElo));
+            newStartingElo = Number(startingElo);
+            setStartingElo(newStartingElo);
             localStorage.setItem('fcw_session_starting-elo', startingElo);
           } else {
-            setStartingElo(player.elo);
+            newStartingElo = player.elo;
+            setStartingElo(newStartingElo);
             localStorage.setItem(
               'fcw_session_starting-elo',
               String(player.elo)
@@ -280,11 +287,7 @@ export const Widget = ({
           }
 
           expired = false;
-        } else if (!firstTime && saveSession) {
-          const currentDate = new Date();
-          currentDate.setTime(currentDate.getTime() + 1000 * 60 * 60 * 2);
-          localStorage.setItem('fcw_session_end', currentDate.toString());
-        } else if (firstTime) {
+        } else if (isStartingEloNotSet) {
           setStartingElo(player.elo);
         }
 
