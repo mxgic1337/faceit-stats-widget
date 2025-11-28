@@ -64,6 +64,7 @@
   "generator.theme.banner_as_background.no_banner": "Spieler {{0}} es gibt keine Profilbanner eingerichtet.",
   "generator.theme.banner_as_background.adjust_opacity": "Deckkraft des Hintergrunds anpassen",
   "generator.theme.banner_as_background.readability_warning": "Hohe Banner-Deckkraft kann dazu führen, dass der Text unleserlich wird.",
+  "generator.theme.banner_blur": "Banner-Unschärfe-Länge",
   "generator.generate.title": "Erzeugen",
   "generator.theme.adjust_opacity": "Opazität des Widget-Hintergrunds",
   "generator.theme.adjust_opacity.requirements": "Erfordert OBS Studio version 31.0.0 oder neuere.",
