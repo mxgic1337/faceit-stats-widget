@@ -83,22 +83,28 @@ export enum ShowRanking {
   ONLY_WHEN_CHALLENGER = 2,
 }
 
+export enum BackgroundType {
+  NONE = 'none',
+  AVATAR = 'avatar',
+}
+
 export const Widget = ({
   preview,
-  previewBanner,
+  previewBackground: previewBackground,
   previewUsername,
   previewElo,
   previewLevel,
   previewLanguage,
 }: {
   preview: boolean;
-  previewBanner?: string;
+  previewBackground?: string;
   previewUsername?: string;
   previewElo?: number;
   previewLevel?: number;
   previewLanguage?: Language;
 }) => {
   const [username, setUsername] = useState<string>();
+  const [avatar, setAvatar] = useState<string>();
   const [banner, setBanner] = useState<string>();
 
   const [playerLevel, setPlayerLevel] = useState(previewLevel || 1);
@@ -255,10 +261,11 @@ export const Widget = ({
         playerId,
         SETTINGS.get('averageStatsMatchCount'),
         startDate,
-        searchParams.get('only_official') === 'true'
+        SETTINGS.get('onlyOfficialMatchesCount')
       ).then((player) => {
         if (!player) return;
         setUsername(player.username);
+        setAvatar(player.avatar);
         setBanner(player.banner);
 
         if (!player || !player.elo || !player.level) return;
@@ -454,10 +461,11 @@ export const Widget = ({
                 }
             `}</style>
       )}
-      {SETTINGS.get('useBannerAsBackground') && (
+      {(SETTINGS.get('backgroundType') !== 'none' ||
+        SETTINGS.get('useBannerAsBackground')) && (
         <style>{`
                 .wrapper {
-                    --banner-url: url("${preview ? previewBanner : banner}") !important;
+                    --banner-url: url("${preview ? previewBackground : SETTINGS.get('backgroundType') !== 'none' ? avatar : banner}") !important;
                     --blur-length: ${SETTINGS.get('blurLength')}px;
                     ${SETTINGS.get('adjustBackgroundOpacity') ? `--banner-opacity: ${SETTINGS.get('backgroundOpacity')} !important;` : ''}
                 }
@@ -477,7 +485,7 @@ export const Widget = ({
         }
       >
         <div
-          className={`widget ${SETTINGS.get('useBannerAsBackground') ? 'banner' : ''}`}
+          className={`widget ${SETTINGS.get('backgroundType') !== 'none' || SETTINGS.get('useBannerAsBackground') ? 'banner' : ''}`}
         >
           <div className={'player-stats'}>
             <div className={'level'}>

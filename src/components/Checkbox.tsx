@@ -9,6 +9,8 @@ export const Checkbox = ({
   setting,
   state,
   setState,
+  onToggle: onToggle,
+  checked,
   experimental,
   helpImage,
   helpTitle,
@@ -17,6 +19,8 @@ export const Checkbox = ({
   setting?: SettingKey;
   state?: boolean;
   setState?: Dispatch<boolean>;
+  onToggle?: (val: boolean) => void;
+  checked?: boolean;
   experimental?: boolean;
   helpImage?: string;
   helpTitle?: string;
@@ -31,18 +35,23 @@ export const Checkbox = ({
   return (
     <div
       className={'checkbox'}
-      onClick={
-        state && setState
-          ? () => setState(!state)
-          : setting
-            ? () => {
-                settings.set(setting, !(settings.get(setting) as boolean));
-              }
-            : () => {}
-      }
+      onClick={() => {
+        if (state && setState) {
+          setState(!state);
+          return;
+        }
+        if (setting) {
+          settings.set(setting, !(settings.get(setting) as boolean));
+          return;
+        }
+        if (onToggle && checked !== undefined) {
+          onToggle(!checked);
+          return;
+        }
+      }}
     >
       <div
-        className={`check${state || (setting && settings.get(setting)) ? ' checked' : ''}`}
+        className={`check${state || (setting && settings.get(setting)) || checked ? ' checked' : ''}`}
       >
         <CheckIcon />
       </div>

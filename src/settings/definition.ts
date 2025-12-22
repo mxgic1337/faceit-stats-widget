@@ -68,9 +68,17 @@ export const SETTINGS_DEFINITIONS = {
   },
   useBannerAsBackground: {
     type: 'boolean',
-    defaultValue: true,
-    defaultWidgetValue: false,
+    defaultValue: false,
     query: ['banner'],
+    hidden: true,
+    disabled: true,
+  },
+  backgroundType: {
+    type: 'string',
+    defaultValue: 'avatar',
+    defaultWidgetValue: 'none',
+    query: ['background_type'],
+    options: ['none', 'avatar'],
   },
   adjustBackgroundOpacity: {
     type: 'boolean',
@@ -81,7 +89,7 @@ export const SETTINGS_DEFINITIONS = {
     defaultValue: 0.15,
     min: 0,
     max: 1,
-    query: ['banner_opacity'],
+    query: ['bg_opacity', 'banner_opacity'],
     requirements: [
       {
         setting: 'adjustBackgroundOpacity',
@@ -266,7 +274,7 @@ export const SETTINGS_DEFINITIONS = {
     defaultValue: 2,
     min: 0,
     max: 10,
-    query: ['banner_blur'],
+    query: ['bg_blur', 'banner_blur'],
   },
   showBorder: {
     type: 'boolean',

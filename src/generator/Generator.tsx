@@ -208,7 +208,7 @@ export const Generator = () => {
         <StyleTab
           key={'style'}
           username={username}
-          playerBanner={playerBanner}
+          playerAvatar={playerAvatar}
         />
       ),
     },
@@ -322,7 +322,7 @@ export const Generator = () => {
                     getSetting('customCSS') !== 'https://example.com')) && (
                   <Widget
                     preview={true}
-                    previewBanner={playerBanner}
+                    previewBackground={playerAvatar}
                     previewUsername={username}
                     previewElo={playerElo}
                     previewLevel={playerLevel}
