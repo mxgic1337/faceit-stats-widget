@@ -57,7 +57,6 @@ export const Generator = () => {
   const [playerElo, setPlayerElo] = useState<number>(100);
   const [playerLevel, setPlayerLevel] = useState<number>(1);
   const [playerAvatar, setPlayerAvatar] = useState<string | undefined>();
-  const [playerBanner, setPlayerBanner] = useState<string | undefined>();
   const [searchParams] = useSearchParams();
   const [language, setLanguage] = useState<Language>(
     languages.find((language) => language.id === searchParams.get('lang')) ||
@@ -105,7 +104,6 @@ export const Generator = () => {
         if (res && res.games.cs2) {
           setSetting('playerId', res.player_id);
           setPlayerAvatar(res.avatar);
-          setPlayerBanner(res.cover_image);
           setPlayerElo(res.games.cs2.faceit_elo);
           setPlayerLevel(res.games.cs2.skill_level);
           setPlayerExists(true);
