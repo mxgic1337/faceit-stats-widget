@@ -52,6 +52,7 @@ export type SettingDefinition = {
   requirements?: { setting: string; value: SettingValue }[];
   hidden?: boolean;
   options?: SettingValue[];
+  disabled?: boolean;
   defaultValue: SettingValue;
   defaultWidgetValue?: SettingValue;
 };
@@ -74,6 +75,10 @@ export function useSettings(
         settingsString ? JSON.parse(settingsString) : undefined;
       return (Object.entries(SETTINGS_DEFINITIONS) as [SettingKey, any][]) // eslint-disable-line @typescript-eslint/no-explicit-any
         .reduce((acc, [key, val]) => {
+          if ((SETTINGS_DEFINITIONS[key] as { disabled?: boolean }).disabled) {
+            return acc;
+          }
+
           acc[key] = val.defaultValue;
           if (
             useWidgetDefaults &&

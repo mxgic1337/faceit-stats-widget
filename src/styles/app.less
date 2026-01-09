@@ -379,15 +379,17 @@ nav {
   p {
     color: @text;
   }
+
+  gap: @gap-1;
 }
 
 .box {
   svg.icon {
     position: relative;
-    width: auto;
+    width: 1rem;
+    min-width: 1rem;
     height: 1rem;
-    aspect-ratio: 1/1;
-    margin-right: @gap-1;
+    min-height: 1rem;
   }
 
   &.info {

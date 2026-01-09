@@ -47,6 +47,7 @@ interface V4RankingResponse {
 interface FaceitPlayer {
   id: string;
   username: string;
+  avatar?: string;
   banner?: string;
   level?: number;
   elo?: number;
@@ -93,6 +94,7 @@ export function getPlayerStats(
       }
 
       const playerId: string = v4PlayersResponse.player_id;
+      const avatar: string = v4PlayersResponse.avatar;
       const username: string = v4PlayersResponse.nickname;
       const banner: string | undefined = v4PlayersResponse.cover_image;
       const level: number = v4PlayersResponse.games.cs2?.skill_level || 1;
@@ -189,6 +191,7 @@ export function getPlayerStats(
 
       resolve({
         id: playerId,
+        avatar,
         banner,
         username,
         level,
