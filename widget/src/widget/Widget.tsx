@@ -464,8 +464,8 @@ export const Widget = ({
                 .wrapper {
                     --background-image-url: url("${preview ? previewBackground : avatar}") !important;
                     --blur-length: ${SETTINGS.get('blurLength')}px;
-                    ${SETTINGS.get('adjustBackgroundOpacity') ? `--background-image-opacity: ${SETTINGS.get('backgroundImageOpacity')} !important;` : ''}
-                }
+                    --background-image-opacity: ${SETTINGS.get('backgroundImageOpacity')} !important;
+        }
             `}</style>
       )}
       {SETTINGS.get('widgetOpacity') !== 1 && (

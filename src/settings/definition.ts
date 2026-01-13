@@ -72,22 +72,12 @@ export const SETTINGS_DEFINITIONS = {
     query: ['background_type'],
     options: ['none', 'avatar'],
   },
-  adjustBackgroundOpacity: {
-    type: 'boolean',
-    defaultValue: false,
-  },
   backgroundImageOpacity: {
     type: 'number',
-    defaultValue: 0.15,
+    defaultValue: 0.1,
     min: 0,
     max: 1,
     query: ['bg_opacity'],
-    requirements: [
-      {
-        setting: 'adjustBackgroundOpacity',
-        value: true,
-      },
-    ],
   },
   refreshInterval: {
     type: 'number',

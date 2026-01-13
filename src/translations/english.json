@@ -68,7 +68,7 @@
   "generator.theme.background.type.none": "None",
   "generator.theme.background.type.avatar": "Avatar",
   "generator.theme.background.no_avatar": "Player {{0}} has no avatar set.",
-  "generator.theme.background.adjust_opacity": "Adjust background image opacity",
+  "generator.theme.background.adjust_opacity": "Background image opacity",
   "generator.theme.background.readability_warning": "A high background image opacity may make the text unreadable.",
   "generator.theme.background.blur": "Background image blur length",
   "generator.theme.adjust_opacity": "Widget background opacity",
