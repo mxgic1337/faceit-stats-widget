@@ -90,7 +90,7 @@ export enum BackgroundType {
 
 export const Widget = ({
   preview,
-  previewBackground: previewBackground,
+  previewBackground,
   previewUsername,
   previewElo,
   previewLevel,

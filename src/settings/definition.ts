@@ -81,7 +81,7 @@ export const SETTINGS_DEFINITIONS = {
     defaultValue: 0.15,
     min: 0,
     max: 1,
-    query: ['bg_opacity', 'banner_opacity'],
+    query: ['bg_opacity'],
     requirements: [
       {
         setting: 'adjustBackgroundOpacity',
@@ -266,7 +266,7 @@ export const SETTINGS_DEFINITIONS = {
     defaultValue: 2,
     min: 0,
     max: 10,
-    query: ['bg_blur', 'banner_blur'],
+    query: ['bg_blur'],
   },
   showBorder: {
     type: 'boolean',

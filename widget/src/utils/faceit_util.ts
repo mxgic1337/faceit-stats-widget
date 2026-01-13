@@ -13,7 +13,6 @@ export const OFFICIAL_COMPETITION_IDS = [
 interface V4PlayersResponse {
   player_id: string;
   avatar: string;
-  cover_image: string;
   nickname: string;
   games: {
     cs2?: {
@@ -48,7 +47,6 @@ interface FaceitPlayer {
   id: string;
   username: string;
   avatar?: string;
-  banner?: string;
   level?: number;
   elo?: number;
   wins: number;
@@ -96,7 +94,6 @@ export function getPlayerStats(
       const playerId: string = v4PlayersResponse.player_id;
       const avatar: string = v4PlayersResponse.avatar;
       const username: string = v4PlayersResponse.nickname;
-      const banner: string | undefined = v4PlayersResponse.cover_image;
       const level: number = v4PlayersResponse.games.cs2?.skill_level || 1;
       const elo: number = v4PlayersResponse.games.cs2?.faceit_elo || 100;
       let ranking: number | undefined = undefined;
@@ -192,7 +189,6 @@ export function getPlayerStats(
       resolve({
         id: playerId,
         avatar,
-        banner,
         username,
         level,
         elo,
