@@ -14,13 +14,14 @@ import helpWins from '../../assets/help/wins.png';
 import helpLosses from '../../assets/help/losses.png';
 import helpWinsText from '../../assets/help/wins_text.png';
 import helpLossesText from '../../assets/help/losses_text.png';
+import { BackgroundType } from '../../../widget/src/widget/Widget.tsx';
 
 export const StyleTab = ({
   username,
-  playerBanner,
+  playerAvatar,
 }: {
   username: string;
-  playerBanner?: string;
+  playerAvatar?: string;
 }) => {
   const customCSSInputRef = useRef<HTMLInputElement>(null);
   const tl = useContext(LanguageContext);
@@ -103,96 +104,6 @@ export const StyleTab = ({
           </div>
         )}
       </div>
-
-      <div className={'settings'}>
-        {/* Banner background settings */}
-
-        <Checkbox
-          text={tl('generator.theme.banner_as_background')}
-          setting={'useBannerAsBackground'}
-        />
-
-        {settings.get('useBannerAsBackground') && (
-          <>
-            <Checkbox
-              text={tl('generator.theme.banner_as_background.adjust_opacity')}
-              setting={'adjustBackgroundOpacity'}
-            />
-            {settings.get('adjustBackgroundOpacity') && (
-              <div className={'flex'} style={{ alignItems: 'center' }}>
-                <input
-                  type={'range'}
-                  value={settings.get('backgroundOpacity')}
-                  min={0.01}
-                  max={1}
-                  step={0.01}
-                  disabled={!settings.get('adjustBackgroundOpacity')}
-                  onChange={(event) => {
-                    settings.set(
-                      'backgroundOpacity',
-                      parseFloat(event.currentTarget.value)
-                    );
-                  }}
-                />
-                <p style={{ width: '50px', textAlign: 'right' }}>
-                  {Math.round(settings.get('backgroundOpacity') * 100)}%
-                </p>
-              </div>
-            )}
-            {settings.get('adjustBackgroundOpacity') &&
-              settings.get('backgroundOpacity') > 0.5 && (
-                <InfoBox
-                  style={'warn'}
-                  content={
-                    <p>
-                      {tl(
-                        'generator.theme.banner_as_background.readability_warning'
-                      )}
-                    </p>
-                  }
-                />
-              )}
-            {!playerBanner && (
-              <InfoBox
-                style={'info'}
-                content={
-                  <p>
-                    {tl('generator.theme.banner_as_background.no_banner', [
-                      username,
-                    ])}
-                  </p>
-                }
-              />
-            )}
-
-            {settings.get('useBannerAsBackground') && (
-              <>
-                <p>{tl('generator.theme.banner_blur')}</p>
-                <div className={'flex'} style={{ alignItems: 'center' }}>
-                  <input
-                    type={'range'}
-                    value={settings.get('blurLength')}
-                    min={0}
-                    max={10}
-                    step={1}
-                    disabled={!settings.get('useBannerAsBackground')}
-                    onChange={(event) => {
-                      settings.set(
-                        'blurLength',
-                        parseInt(event.currentTarget.value)
-                      );
-                    }}
-                  />
-                  <p style={{ width: '22px', textAlign: 'right' }}>
-                    {settings.get('blurLength')}
-                  </p>
-                </div>
-              </>
-            )}
-          </>
-        )}
-      </div>
-
       {/* Custom color scheme settings */}
 
       {settings.get('colorScheme') === 'custom' && (
@@ -251,6 +162,90 @@ export const StyleTab = ({
           </div>
         </div>
       )}
+
+      <div className={'settings'}>
+        {/* Background image settings */}
+
+        <p>{tl('generator.theme.background.type')}</p>
+        <select
+          onChange={(e) => {
+            settings.set('backgroundType', e.currentTarget.value);
+          }}
+          value={settings.get('backgroundType')}
+        >
+          {Object.values(BackgroundType).map((types) => {
+            return (
+              <option value={types}>
+                {tl(`generator.theme.background.type.${types}`)}
+              </option>
+            );
+          })}
+        </select>
+
+        {settings.get('backgroundType') !== BackgroundType.NONE && (
+          <>
+            {!playerAvatar && (
+              <InfoBox
+                style={'info'}
+                content={
+                  <p>
+                    {tl('generator.theme.background.no_avatar', [username])}
+                  </p>
+                }
+              />
+            )}
+            <p>{tl('generator.theme.background.adjust_opacity')}</p>
+            <div className={'flex'} style={{ alignItems: 'center' }}>
+              <input
+                type={'range'}
+                value={settings.get('backgroundImageOpacity')}
+                min={0.01}
+                max={1}
+                step={0.01}
+                onChange={(event) => {
+                  settings.set(
+                    'backgroundImageOpacity',
+                    parseFloat(event.currentTarget.value)
+                  );
+                }}
+              />
+              <p style={{ width: '50px', textAlign: 'right' }}>
+                {Math.round(settings.get('backgroundImageOpacity') * 100)}%
+              </p>
+            </div>
+            {settings.get('backgroundImageOpacity') > 0.5 && (
+              <InfoBox
+                style={'warn'}
+                content={
+                  <p>{tl('generator.theme.background.readability_warning')}</p>
+                }
+              />
+            )}
+            <p>{tl('generator.theme.background.blur')}</p>
+            <div className={'flex'} style={{ alignItems: 'center' }}>
+              <input
+                type={'range'}
+                value={settings.get('blurLength')}
+                min={0}
+                max={10}
+                step={1}
+                disabled={
+                  settings.get('backgroundType') === BackgroundType.NONE
+                }
+                onChange={(event) => {
+                  settings.set(
+                    'blurLength',
+                    parseInt(event.currentTarget.value)
+                  );
+                }}
+              />
+              <p style={{ width: '22px', textAlign: 'right' }}>
+                {settings.get('blurLength')}
+              </p>
+            </div>
+          </>
+        )}
+      </div>
 
       {/* Background opacity settings */}
       <div className={'settings'}>

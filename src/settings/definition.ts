@@ -66,28 +66,18 @@ export const SETTINGS_DEFINITIONS = {
     defaultWidgetValue: false,
     query: ['progress', 'eloBar'],
   },
-  useBannerAsBackground: {
-    type: 'boolean',
-    defaultValue: true,
-    defaultWidgetValue: false,
-    query: ['banner'],
+  backgroundType: {
+    type: 'string',
+    defaultValue: 'none',
+    query: ['background_type'],
+    options: ['none', 'avatar'],
   },
-  adjustBackgroundOpacity: {
-    type: 'boolean',
-    defaultValue: false,
-  },
-  backgroundOpacity: {
+  backgroundImageOpacity: {
     type: 'number',
-    defaultValue: 0.15,
+    defaultValue: 0.1,
     min: 0,
     max: 1,
-    query: ['banner_opacity'],
-    requirements: [
-      {
-        setting: 'adjustBackgroundOpacity',
-        value: true,
-      },
-    ],
+    query: ['bg_opacity'],
   },
   refreshInterval: {
     type: 'number',
@@ -266,7 +256,7 @@ export const SETTINGS_DEFINITIONS = {
     defaultValue: 2,
     min: 0,
     max: 10,
-    query: ['banner_blur'],
+    query: ['bg_blur'],
   },
   showBorder: {
     type: 'boolean',

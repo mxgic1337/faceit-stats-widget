@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 
 /* Color scheme mixin */
-#scheme(@text, @subtext, @text-shadow, @background, @border1, @border2, @borderRotation, @bg-opacity: 0.1) {
+#scheme(@text, @subtext, @text-shadow, @background, @border1, @border2, @borderRotation) {
   --text: @text;
   --subtext: @subtext;
   --text-shadow: @text-shadow;
@@ -10,8 +10,6 @@
   --border-1: @border1;
   --border-2: @border2;
   --border-rotation: @borderRotation;
-
-  --banner-opacity: @bg-opacity;
 }
 
 #scheme-match-results(@wins, @wins-text, @losses, @losses-text) {
@@ -65,21 +63,21 @@
 }
 
 .ctp-latte-scheme {
-  #scheme(#4c4f69, #6c6f85, #0000, #eff1f5, #acb0be, #acb0be, 0deg, 0.25);
+  #scheme(#4c4f69, #6c6f85, #0000, #eff1f5, #acb0be, #acb0be, 0deg);
   #scheme-match-results(#40a02b, #40a02b, #d20f39, #d20f39);
   //#scheme-levels(#eff1f5, #40a02b, #df8e1d, #fe640b, #d20f39, #d20f39, #df8e1d, #bcc0cc, #fe640b);
   #scheme-levels();
 }
 
 .ctp-frappe-scheme {
-  #scheme(#c6d0f5, #a5adce, #303446, #303446, #8caaee, #8caaee, 0deg, 0.15);
+  #scheme(#c6d0f5, #a5adce, #303446, #303446, #8caaee, #8caaee, 0deg);
   #scheme-match-results(#a6d189, #a6d189, #e78284, #e78284);
   //#scheme-levels(#c6d0f5, #a6d189, #e5c890, #ef9f76, #e78284, #e78284, #e5c890, #a5adce, #ef9f76);
   #scheme-levels();
 }
 
 .ctp-macchiato-scheme {
-  #scheme(#cad3f5, #a5adcb, #24273a, #24273a, #c6a0f6, #c6a0f6, 0deg, 0.15);
+  #scheme(#cad3f5, #a5adcb, #24273a, #24273a, #c6a0f6, #c6a0f6, 0deg);
   #scheme-match-results(#a6e3a1, #a6e3a1, #f38ba8, #f38ba8);
   //#scheme-levels(#cad3f5, #a6da95, #eed49f, #f5a97f, #ed8796, #ed8796, #eed49f, #a5adcb, #f5a97f);
   #scheme-levels();

@@ -50,7 +50,6 @@ export type SettingDefinition = {
   regex?: RegExp;
   query?: string[];
   requirements?: { setting: string; value: SettingValue }[];
-  hidden?: boolean;
   options?: SettingValue[];
   defaultValue: SettingValue;
   defaultWidgetValue?: SettingValue;

@@ -83,23 +83,28 @@ export enum ShowRanking {
   ONLY_WHEN_CHALLENGER = 2,
 }
 
+export enum BackgroundType {
+  NONE = 'none',
+  AVATAR = 'avatar',
+}
+
 export const Widget = ({
   preview,
-  previewBanner,
+  previewBackground,
   previewUsername,
   previewElo,
   previewLevel,
   previewLanguage,
 }: {
   preview: boolean;
-  previewBanner?: string;
+  previewBackground?: string;
   previewUsername?: string;
   previewElo?: number;
   previewLevel?: number;
   previewLanguage?: Language;
 }) => {
   const [username, setUsername] = useState<string>();
-  const [banner, setBanner] = useState<string>();
+  const [avatar, setAvatar] = useState<string>();
 
   const [playerLevel, setPlayerLevel] = useState(previewLevel || 1);
 
@@ -255,11 +260,11 @@ export const Widget = ({
         playerId,
         SETTINGS.get('averageStatsMatchCount'),
         startDate,
-        searchParams.get('only_official') === 'true'
+        SETTINGS.get('onlyOfficialMatchesCount')
       ).then((player) => {
         if (!player) return;
         setUsername(player.username);
-        setBanner(player.banner);
+        setAvatar(player.avatar);
 
         if (!player || !player.elo || !player.level) return;
 
@@ -454,13 +459,13 @@ export const Widget = ({
                 }
             `}</style>
       )}
-      {SETTINGS.get('useBannerAsBackground') && (
+      {SETTINGS.get('backgroundType') !== 'none' && (
         <style>{`
                 .wrapper {
-                    --banner-url: url("${preview ? previewBanner : banner}") !important;
+                    --background-image-url: url("${preview ? previewBackground : avatar}") !important;
                     --blur-length: ${SETTINGS.get('blurLength')}px;
-                    ${SETTINGS.get('adjustBackgroundOpacity') ? `--banner-opacity: ${SETTINGS.get('backgroundOpacity')} !important;` : ''}
-                }
+                    --background-image-opacity: ${SETTINGS.get('backgroundImageOpacity')} !important;
+        }
             `}</style>
       )}
       {SETTINGS.get('widgetOpacity') !== 1 && (
@@ -477,7 +482,7 @@ export const Widget = ({
         }
       >
         <div
-          className={`widget ${SETTINGS.get('useBannerAsBackground') ? 'banner' : ''}`}
+          className={`widget ${SETTINGS.get('backgroundType') !== 'none' ? 'background-image' : ''}`}
         >
           <div className={'player-stats'}>
             <div className={'level'}>
