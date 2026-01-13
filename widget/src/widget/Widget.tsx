@@ -105,7 +105,6 @@ export const Widget = ({
 }) => {
   const [username, setUsername] = useState<string>();
   const [avatar, setAvatar] = useState<string>();
-  const [banner, setBanner] = useState<string>();
 
   const [playerLevel, setPlayerLevel] = useState(previewLevel || 1);
 
@@ -266,7 +265,6 @@ export const Widget = ({
         if (!player) return;
         setUsername(player.username);
         setAvatar(player.avatar);
-        setBanner(player.banner);
 
         if (!player || !player.elo || !player.level) return;
 
@@ -461,13 +459,12 @@ export const Widget = ({
                 }
             `}</style>
       )}
-      {(SETTINGS.get('backgroundType') !== 'none' ||
-        SETTINGS.get('useBannerAsBackground')) && (
+      {SETTINGS.get('backgroundType') !== 'none' && (
         <style>{`
                 .wrapper {
-                    --banner-url: url("${preview ? previewBackground : SETTINGS.get('backgroundType') !== 'none' ? avatar : banner}") !important;
+                    --background-image-url: url("${preview ? previewBackground : avatar}") !important;
                     --blur-length: ${SETTINGS.get('blurLength')}px;
-                    ${SETTINGS.get('adjustBackgroundOpacity') ? `--banner-opacity: ${SETTINGS.get('backgroundOpacity')} !important;` : ''}
+                    ${SETTINGS.get('adjustBackgroundOpacity') ? `--background-image-opacity: ${SETTINGS.get('backgroundImageOpacity')} !important;` : ''}
                 }
             `}</style>
       )}
@@ -485,7 +482,7 @@ export const Widget = ({
         }
       >
         <div
-          className={`widget ${SETTINGS.get('backgroundType') !== 'none' || SETTINGS.get('useBannerAsBackground') ? 'banner' : ''}`}
+          className={`widget ${SETTINGS.get('backgroundType') !== 'none' ? 'background-image' : ''}`}
         >
           <div className={'player-stats'}>
             <div className={'level'}>

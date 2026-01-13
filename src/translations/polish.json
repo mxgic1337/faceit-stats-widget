@@ -16,7 +16,7 @@
   "generator.experimental": "Eksperymentalne",
   "generator.experimental.help": "Ta opcja jest eksperymentalna i może nie działać poprawnie.",
   "generator.deprecated": "Opcja \"{{0}}\" jest wycofywana i zostanie usunięta w wersji {{1}}.",
-  "generator.deprecated.widget_only": "Opcja \"{{0}}\" jest wycofywana i zostanie usunięta w wersji {{1}}. Ta opcja jest dalej dostępna w istniejących widżetach.",
+  "generator.deprecated.widget_only": "Opcja \"{{0}}\" jest wycofywana i zostanie usunięta w wersji {{1}}. Ta opcja jest dostępna tylko w istniejących widżetach.",
   "generator.footer.issues": "Zgłoś błąd",
   "generator.footer.not_affiliated": "Ten projekt nie jest powiązany z",
   "generator.save_current_configuration": "Zapisz aktualną konfigurację",

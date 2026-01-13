@@ -106,14 +106,7 @@ export const StyleTab = ({
       </div>
 
       <div className={'settings'}>
-        <InfoBox
-          content={tl('generator.deprecated.widget_only', [
-            tl('generator.theme.banner_as_background'),
-            '4.0.0',
-          ])}
-          style={'warn'}
-        />
-        {/* Banner background settings */}
+        {/* Background image settings */}
 
         <p>{tl('generator.theme.background.type')}</p>
         <select
@@ -133,42 +126,6 @@ export const StyleTab = ({
 
         {settings.get('backgroundType') !== BackgroundType.NONE && (
           <>
-            <Checkbox
-              text={tl('generator.theme.background.adjust_opacity')}
-              setting={'adjustBackgroundOpacity'}
-            />
-            {settings.get('adjustBackgroundOpacity') && (
-              <div className={'flex'} style={{ alignItems: 'center' }}>
-                <input
-                  type={'range'}
-                  value={settings.get('backgroundOpacity')}
-                  min={0.01}
-                  max={1}
-                  step={0.01}
-                  disabled={!settings.get('adjustBackgroundOpacity')}
-                  onChange={(event) => {
-                    settings.set(
-                      'backgroundOpacity',
-                      parseFloat(event.currentTarget.value)
-                    );
-                  }}
-                />
-                <p style={{ width: '50px', textAlign: 'right' }}>
-                  {Math.round(settings.get('backgroundOpacity') * 100)}%
-                </p>
-              </div>
-            )}
-            {settings.get('adjustBackgroundOpacity') &&
-              settings.get('backgroundOpacity') > 0.5 && (
-                <InfoBox
-                  style={'warn'}
-                  content={
-                    <p>
-                      {tl('generator.theme.background.readability_warning')}
-                    </p>
-                  }
-                />
-              )}
             {!playerAvatar && (
               <InfoBox
                 style={'info'}
@@ -179,6 +136,42 @@ export const StyleTab = ({
                 }
               />
             )}
+            <Checkbox
+              text={tl('generator.theme.background.adjust_opacity')}
+              setting={'adjustBackgroundOpacity'}
+            />
+            {settings.get('adjustBackgroundOpacity') && (
+              <div className={'flex'} style={{ alignItems: 'center' }}>
+                <input
+                  type={'range'}
+                  value={settings.get('backgroundImageOpacity')}
+                  min={0.01}
+                  max={1}
+                  step={0.01}
+                  disabled={!settings.get('adjustBackgroundOpacity')}
+                  onChange={(event) => {
+                    settings.set(
+                      'backgroundImageOpacity',
+                      parseFloat(event.currentTarget.value)
+                    );
+                  }}
+                />
+                <p style={{ width: '50px', textAlign: 'right' }}>
+                  {Math.round(settings.get('backgroundImageOpacity') * 100)}%
+                </p>
+              </div>
+            )}
+            {settings.get('adjustBackgroundOpacity') &&
+              settings.get('backgroundImageOpacity') > 0.5 && (
+                <InfoBox
+                  style={'warn'}
+                  content={
+                    <p>
+                      {tl('generator.theme.background.readability_warning')}
+                    </p>
+                  }
+                />
+              )}
             <p>{tl('generator.theme.background.blur')}</p>
             <div className={'flex'} style={{ alignItems: 'center' }}>
               <input

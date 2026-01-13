@@ -66,17 +66,9 @@ export const SETTINGS_DEFINITIONS = {
     defaultWidgetValue: false,
     query: ['progress', 'eloBar'],
   },
-  useBannerAsBackground: {
-    type: 'boolean',
-    defaultValue: false,
-    query: ['banner'],
-    hidden: true,
-    disabled: true,
-  },
   backgroundType: {
     type: 'string',
-    defaultValue: 'avatar',
-    defaultWidgetValue: 'none',
+    defaultValue: 'none',
     query: ['background_type'],
     options: ['none', 'avatar'],
   },
@@ -84,7 +76,7 @@ export const SETTINGS_DEFINITIONS = {
     type: 'boolean',
     defaultValue: false,
   },
-  backgroundOpacity: {
+  backgroundImageOpacity: {
     type: 'number',
     defaultValue: 0.15,
     min: 0,
