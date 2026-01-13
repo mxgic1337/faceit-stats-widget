@@ -50,7 +50,7 @@ export const Footer = () => {
           <a href={'https://github.com/mxgic1337'} target={'_blank'}>
             mxgic1337_
           </a>{' '}
-          2025
+          2024-2026
         </small>
         <small>
           {import.meta.env.VITE_COMMIT && (
