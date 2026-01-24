@@ -1,3 +1,4 @@
+/** Shows how much ELO is needed to rank up in form of a progress bar */
 export const ProgressBar = ({
   level,
   elo,

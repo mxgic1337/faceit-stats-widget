@@ -161,7 +161,7 @@ export const Widget = ({
     loadSettingsFromQuery();
   }, []);
 
-  /** Returns a path to a level icon */
+  /** Checks if the user is running on older versions of Chromium (<120) */
   const compatibilityMode = useMemo(() => {
     /* Check for older Chromium version */
     const userAgent = window.navigator.userAgent;
@@ -236,7 +236,7 @@ export const Widget = ({
 
         const isStartingEloNotSet = firstTime || newStartingElo === 0;
         if (isStartingEloNotSet && saveSession) {
-          /* Load saved session ELO */
+          /* Load saved session ELO if session hasn't expired. */
           const startingElo = localStorage.getItem('fcw_session_starting-elo');
           if (startingElo && !expired) {
             newStartingElo = Number(startingElo);

@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { Statistic } from '../components/Statistic.tsx';
 import { LanguageContext } from '../../../src/generator/Generator.tsx';
 
+/** Shows a number of matches won/lost */
 export const WinLossStats = ({
   wins,
   losses,

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { SettingsContext } from '../../../src/generator/Generator';
+import { SettingsContext } from '../../../src/generator/Generator.tsx';
 
 export const Styles = ({
   avatar,

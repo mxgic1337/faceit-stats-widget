@@ -37,6 +37,7 @@ const levelIcons = [
   <Challenger />,
 ];
 
+/** Shows player ELO, level, ranking, and username */
 export const PlayerStats = ({
   preview,
   username,

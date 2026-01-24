@@ -18,7 +18,6 @@
   "generator.experimental.help": "Esta opção é experimental e pode não funcionar corretamente.",
   "generator.footer.issues": "Reportar um problema",
   "generator.footer.not_affiliated": "Este projeto não é afiliado com",
-  "generator.save_current_configuration": "Salvar configuração atual",
   "generator.alert.player_not_found": "Jogador {{0}} não foi encontrado.",
   "generator.settings.title": "Configurações",
   "generator.settings.faceit_name": "Nome de usuário FACEIT",
