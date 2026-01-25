@@ -19,7 +19,6 @@
   "generator.deprecated.widget_only": "Opcja \"{{0}}\" jest wycofywana i zostanie usunięta w wersji {{1}}. Ta opcja jest dostępna tylko w istniejących widżetach.",
   "generator.footer.issues": "Zgłoś błąd",
   "generator.footer.not_affiliated": "Ten projekt nie jest powiązany z",
-  "generator.save_current_configuration": "Zapisz aktualną konfigurację",
   "generator.alert.player_not_found": "Nie znaleziono gracza {{0}}.",
   "generator.settings.title": "Ustawienia",
   "generator.settings.faceit_name": "Nazwa użytkownika FACEIT",
