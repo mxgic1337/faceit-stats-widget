@@ -19,6 +19,20 @@
     font-family: 'DM Sans', sans-serif;
   }
 
+  .flag {
+    height: 0.7rem;
+    margin-right: 0.2rem;
+  }
+
+  .ranking span {
+    display: flex;
+    align-items: center;
+
+    &:first-child {
+      margin-right: 0.4rem;
+    }
+  }
+
   .wrapper {
     position: relative;
     display: flex;
@@ -138,14 +152,15 @@
                 margin-right: 0rem;
               }
             }
-
-            .ranking {
-              margin-right: 0.2rem;
-            }
           }
 
           .username-hidden {
             font-size: 1.1em;
+            font-weight: bold;
+
+            .diff {
+              font-weight: normal;
+            }
 
             .ranking {
               font-weight: bold;
@@ -163,6 +178,7 @@
 
         .stats {
           display: flex;
+          gap: 6px;
         }
       }
 
@@ -202,6 +218,8 @@
     }
 
     .player-stats {
+      gap: 6px;
+
       .stat {
         display: flex;
         flex-direction: column;
@@ -213,7 +231,6 @@
         justify-content: center;
         font-size: calc(@size - 37px);
         border-radius: 12px;
-        margin-left: 6px;
 
         p {
           font-weight: bold;
@@ -233,6 +250,7 @@
 
     .average {
       display: flex;
+      gap: 8px;
 
       .stat {
         flex: 1;
@@ -246,7 +264,6 @@
           color: var(--subtext) !important;
           font-weight: normal;
           font-size: 0.7em;
-          margin-right: 8px;
         }
 
         &:last-child {
