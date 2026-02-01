@@ -6,6 +6,8 @@ import { LanguageContext, SettingsContext } from '../Generator.tsx';
 import { InfoBox } from '../../components/InfoBox.tsx';
 import { ShowRanking } from '../../../widget/src/widget/Widget.tsx';
 import { UserIcon } from '../../assets/icons/tabler/UserIcon.tsx';
+import { HelpIcon } from '../../assets/icons/tabler/HelpIcon.tsx';
+import { Tooltip } from '../../components/Tooltip.tsx';
 
 type Props = {
   playerExists: boolean | undefined;
@@ -146,18 +148,33 @@ export const MainTab = ({
             setting={'showStatistics'}
           />
           <div className={'setting'}>
-            <p>{tl('generator.settings.show_ranking')}</p>
+            <div className={'title'}>
+              {tl('generator.settings.show_ranking')}{' '}
+              <div className={'badge help'}>
+                <Tooltip
+                  content={
+                    <>
+                      <p> {tl('generator.settings.show_ranking.help.0')}</p>
+                      <br />
+                      <p>
+                        {' '}
+                        {tl('generator.settings.show_ranking.help.1')}{' '}
+                        <a href="https://flagpedia.net">flagpedia.net</a>
+                      </p>
+                    </>
+                  }
+                >
+                  <HelpIcon />
+                </Tooltip>
+              </div>
+            </div>
             <select
               value={settings.get('showRanking')}
               onChange={(e) =>
-                settings.set(
-                  'showRanking',
-                  parseInt(e.target.value) as ShowRanking
-                )
+                settings.set('showRanking', e.target.value as ShowRanking)
               }
             >
               {Object.entries(ShowRanking).map(([key, value]) => {
-                if (typeof value !== 'number') return;
                 return (
                   <option key={key} value={value}>
                     {tl(`ranking_state.${key}`)}{' '}

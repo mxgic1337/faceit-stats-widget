@@ -57,6 +57,7 @@ export const Generator = () => {
   const [playerElo, setPlayerElo] = useState<number>(100);
   const [playerLevel, setPlayerLevel] = useState<number>(1);
   const [playerAvatar, setPlayerAvatar] = useState<string | undefined>();
+  const [playerCountry, setPlayerCountry] = useState<string>('pl');
   const [searchParams] = useSearchParams();
   const [language, setLanguage] = useState<Language>(
     languages.find((language) => language.id === searchParams.get('lang')) ||
@@ -106,6 +107,7 @@ export const Generator = () => {
           setPlayerAvatar(res.avatar);
           setPlayerElo(res.games.cs2.faceit_elo);
           setPlayerLevel(res.games.cs2.skill_level);
+          setPlayerCountry(res.country);
           setPlayerExists(true);
           console.log(`Fetched ${res.nickname}'s profile`);
         } else {
@@ -324,6 +326,7 @@ export const Generator = () => {
                     previewUsername={username}
                     previewElo={playerElo}
                     previewLevel={playerLevel}
+                    previewCountry={playerCountry}
                     previewLanguage={language}
                   />
                 )}

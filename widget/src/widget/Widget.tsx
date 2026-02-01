@@ -53,9 +53,10 @@ const eloDistribution = [
 ];
 
 export enum ShowRanking {
-  DISABLED = 0,
-  SHOW = 1,
-  ONLY_WHEN_CHALLENGER = 2,
+  NONE = 'NONE',
+  REGION = 'REGION',
+  COUNTRY = 'COUNTRY',
+  BOTH = 'BOTH',
 }
 
 export enum BackgroundType {
@@ -67,6 +68,7 @@ export const Widget = ({
   preview,
   previewBackground,
   previewUsername,
+  previewCountry,
   previewElo,
   previewLevel,
   previewLanguage,
@@ -74,11 +76,13 @@ export const Widget = ({
   preview: boolean;
   previewBackground?: string;
   previewUsername?: string;
+  previewCountry?: string;
   previewElo?: number;
   previewLevel?: number;
   previewLanguage?: Language;
 }) => {
   const [username, setUsername] = useState<string>();
+  const [country, setCountry] = useState<string>();
   const [avatar, setAvatar] = useState<string>();
 
   const [playerLevel, setPlayerLevel] = useState(previewLevel || 1);
@@ -88,6 +92,7 @@ export const Widget = ({
   const [wins, setWins] = useState(0);
   const [losses, setLosses] = useState(0);
   const [ranking, setRanking] = useState(0);
+  const [countryRanking, setCountryRanking] = useState(0);
   const [kills, setKills] = useState(0);
   const [deaths, setDeaths] = useState(0);
   const [kdRatio, setKDRatio] = useState(0);
@@ -256,6 +261,8 @@ export const Widget = ({
           setStartingElo(player.elo);
         }
 
+        setCountry(player.country);
+
         setPlayerElo(player.elo);
         setPlayerLevel(player.level);
 
@@ -274,6 +281,7 @@ export const Widget = ({
         setLastMatchId(player.lastMatchId);
         if (firstTime || lastMatchId !== player.lastMatchId) {
           setRanking(player.ranking);
+          setCountryRanking(player.countryRanking);
         }
       });
     };
@@ -397,6 +405,8 @@ export const Widget = ({
                 elo={elo}
                 startingElo={startingElo}
                 ranking={ranking}
+                country={country || previewCountry}
+                countryRanking={countryRanking || 0}
               />
               <WinLossStats wins={wins} losses={losses} />
             </div>

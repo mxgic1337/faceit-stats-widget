@@ -19,6 +19,7 @@ import { Level10 } from '../components/levels/Level10.tsx';
 import { Challenger } from '../components/levels/Challenger.tsx';
 import { ArrowUpIcon } from '../../../src/assets/icons/tabler/ArrowUpIcon.tsx';
 import { ArrowDownIcon } from '../../../src/assets/icons/tabler/ArrowDownIcon.tsx';
+import { RankingIcon } from '../../../src/assets/icons/tabler/RankingIcon.tsx';
 
 const levelIcons = [
   <Level1 />,
@@ -45,6 +46,8 @@ export const PlayerStats = ({
   elo,
   startingElo,
   ranking,
+  country,
+  countryRanking,
 }: {
   preview?: boolean;
   username?: string;
@@ -52,6 +55,8 @@ export const PlayerStats = ({
   elo: number;
   startingElo: number;
   ranking: number;
+  country?: string;
+  countryRanking: number;
 }) => {
   const SETTINGS = useContext(SettingsContext);
   const tl = useContext(LanguageContext);
@@ -112,12 +117,6 @@ export const PlayerStats = ({
         <p
           className={`${SETTINGS.get('showUsername') ? '' : 'username-hidden'} ${elo === 0 ? 'skeleton' : ''}`}
         >
-          {(SETTINGS.get('showRanking') === ShowRanking.SHOW ||
-            (SETTINGS.get('showRanking') === ShowRanking.ONLY_WHEN_CHALLENGER &&
-              ranking <= 1000 &&
-              !preview)) && (
-            <span className={'ranking'}>#{ranking || 1337} </span>
-          )}
           {SETTINGS.get('showIcons') && <TimelineIcon />}{' '}
           {tl(
             `widget.elo${!SETTINGS.get('showEloSuffix') ? '_no_suffix' : ''}`,
@@ -125,6 +124,32 @@ export const PlayerStats = ({
           )}{' '}
           {SETTINGS.get('showEloDiff') && getEloDiff()}
         </p>
+        {SETTINGS.get('showRanking') !== ShowRanking.NONE && (
+          <p className={'ranking'}>
+            {SETTINGS.get('showRanking') !== ShowRanking.COUNTRY && (
+              <span
+                className={`region-ranking ${!preview && ranking === 0 ? 'skeleton' : ''}`}
+              >
+                <RankingIcon /> #{ranking || 1337}
+              </span>
+            )}
+            {SETTINGS.get('showRanking') !== ShowRanking.REGION && (
+              <span
+                className={`country-ranking ${!preview && countryRanking === 0 ? 'skeleton' : ''}`}
+              >
+                {country ? (
+                  <img
+                    className={'flag'}
+                    src={`https://flagcdn.com/${country}.svg`}
+                  />
+                ) : (
+                  <RankingIcon />
+                )}{' '}
+                #{preview ? '1337' : countryRanking}
+              </span>
+            )}
+          </p>
+        )}
       </div>
     </div>
   );
