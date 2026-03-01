@@ -287,16 +287,6 @@ export const Widget = ({
     };
     getStats(true, sessionExpired);
 
-    let refreshDelay = 30;
-    const refreshParam = searchParams.get('refresh');
-    if (refreshParam) {
-      refreshDelay = parseInt(refreshParam);
-    }
-
-    if (refreshDelay < 10) {
-      refreshDelay = 10;
-    }
-
     /* Set widget style and color scheme */
     document
       .getElementsByTagName('html')[0]
