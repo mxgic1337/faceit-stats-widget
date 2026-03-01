@@ -18,6 +18,7 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      gap: 8px;
 
       .player-stats {
         flex-direction: column;
@@ -71,7 +72,6 @@
 
         .elo {
           margin-right: 0;
-          margin-bottom: 6px;
 
           h2 {
             text-align: center;
@@ -99,12 +99,13 @@
     }
 
     .average {
-      margin-top: 6px;
       width: 80%;
+      gap: 2px;
 
       .stat {
         border-right: none;
         align-items: center;
+        padding: 0;
 
         p:first-child {
           margin-right: 0;
@@ -113,11 +114,11 @@
     }
 
     .progress-bar {
-      margin: 6px 0 0 0;
-      width: 75%;
+      width: 70%;
       border-radius: 5px;
       background: var(--background);
       filter: brightness(90%);
+      margin: 0 !important;
 
       .progress {
         border-radius: 5px;

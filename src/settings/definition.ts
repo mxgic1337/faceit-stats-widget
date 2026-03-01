@@ -29,8 +29,8 @@ export const SETTINGS_DEFINITIONS = {
   },
   showRanking: {
     type: 'ranking_state',
-    defaultValue: 2,
-    defaultWidgetValue: 0,
+    defaultValue: 'BOTH',
+    defaultWidgetValue: 'NONE',
     query: ['ranking'],
   },
   showEloDiff: {
@@ -46,7 +46,8 @@ export const SETTINGS_DEFINITIONS = {
   },
   showUsername: {
     type: 'boolean',
-    defaultValue: true,
+    defaultValue: false,
+    defaultWidgetValue: true,
     query: ['name'],
   },
   showEloSuffix: {
