@@ -45,6 +45,9 @@ export const PlayerStats = ({
   elo,
   startingElo,
   ranking,
+  region,
+  country,
+  countryRanking,
 }: {
   preview?: boolean;
   username?: string;
@@ -52,6 +55,9 @@ export const PlayerStats = ({
   elo: number;
   startingElo: number;
   ranking: number;
+  region?: string;
+  country?: string;
+  countryRanking: number;
 }) => {
   const SETTINGS = useContext(SettingsContext);
   const tl = useContext(LanguageContext);
@@ -105,19 +111,15 @@ export const PlayerStats = ({
 
       <div className={'elo'}>
         {SETTINGS.get('showUsername') && (
-          <h2 className={elo === 0 ? 'skeleton' : ''}>
+          <h2
+            className={`${elo === 0 ? 'skeleton' : ''} ${SETTINGS.get('showRanking') !== ShowRanking.NONE ? 'show-ranking' : ''} `}
+          >
             {username || 'Player'}{' '}
           </h2>
         )}
         <p
           className={`${SETTINGS.get('showUsername') ? '' : 'username-hidden'} ${elo === 0 ? 'skeleton' : ''}`}
         >
-          {(SETTINGS.get('showRanking') === ShowRanking.SHOW ||
-            (SETTINGS.get('showRanking') === ShowRanking.ONLY_WHEN_CHALLENGER &&
-              ranking <= 1000 &&
-              !preview)) && (
-            <span className={'ranking'}>#{ranking || 1337} </span>
-          )}
           {SETTINGS.get('showIcons') && <TimelineIcon />}{' '}
           {tl(
             `widget.elo${!SETTINGS.get('showEloSuffix') ? '_no_suffix' : ''}`,
@@ -125,6 +127,37 @@ export const PlayerStats = ({
           )}{' '}
           {SETTINGS.get('showEloDiff') && getEloDiff()}
         </p>
+        {SETTINGS.get('showRanking') !== ShowRanking.NONE && (
+          <p className={'ranking'}>
+            {SETTINGS.get('showRanking') !== ShowRanking.COUNTRY && (
+              <span
+                className={`region-ranking ${!preview && ranking === 0 ? 'skeleton' : ''}`}
+              >
+                <span className={'no-icon'}>
+                  {region?.toUpperCase() || '?'}
+                </span>
+                {`#${ranking || 1337}`}
+              </span>
+            )}
+            {SETTINGS.get('showRanking') !== ShowRanking.REGION && (
+              <span
+                className={`country-ranking ${!preview && countryRanking === 0 ? 'skeleton' : ''}`}
+              >
+                {!SETTINGS.get('showIcons') || !country ? (
+                  <span className={'no-icon'}>
+                    {country?.toUpperCase() || '?'}
+                  </span>
+                ) : (
+                  <img
+                    className={'flag'}
+                    src={`https://flagcdn.com/${country}.svg`}
+                  />
+                )}
+                #{preview ? '1337' : countryRanking}
+              </span>
+            )}
+          </p>
+        )}
       </div>
     </div>
   );

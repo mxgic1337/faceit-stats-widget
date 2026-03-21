@@ -151,14 +151,8 @@ export function useSettings(
       definition.query.forEach((query) => {
         const queryVal = searchParams.get(query);
         if (!queryVal) return;
-        if (
-          definition.type === 'number' ||
-          definition.type === 'ranking_state'
-        ) {
-          const number =
-            definition.type === 'ranking_state'
-              ? parseInt(queryVal)
-              : parseFloat(queryVal);
+        if (definition.type === 'number') {
+          const number = parseFloat(queryVal);
           if (!isNaN(number)) {
             if (!validateSetting(key, number)) return;
             newSettings[key] = number;

@@ -11,9 +11,10 @@ export const OFFICIAL_COMPETITION_IDS = [
 
 /** Info about player returned by API v4 */
 interface V4PlayersResponse {
-  player_id: string;
   avatar: string;
+  country: string;
   nickname: string;
+  player_id: string;
   games: {
     cs2?: {
       faceit_elo: number;
@@ -51,6 +52,9 @@ interface FaceitPlayer {
   elo?: number;
   wins: number;
   ranking: number;
+  region: string;
+  country?: string;
+  countryRanking: number;
   losses: number;
   avg: {
     kills: number;
@@ -67,6 +71,33 @@ const HEADERS = {
   'Content-Type': 'application/json',
   Authorization: `Bearer ${API_KEY}`,
 };
+
+async function getPlayerRankingPosition(
+  id: string,
+  region: string,
+  country?: string
+) {
+  const rankingResponse = await fetch(
+    `https://open.faceit.com/data/v4/rankings/games/cs2/regions/${region}/players/${id}${country ? `?country=${country}` : ''}`,
+    {
+      headers: HEADERS,
+    }
+  );
+
+  if (rankingResponse.ok) {
+    const v4RankingResponse =
+      (await rankingResponse.json()) as V4RankingResponse;
+    const rankingItem = v4RankingResponse.items.find(
+      (item) => item.player_id === id
+    );
+    return rankingItem ? rankingItem.position : undefined;
+  } else {
+    console.error(
+      `Failed to fetch ranking: ${rankingResponse.status} ${await rankingResponse.text()}`
+    );
+    return undefined;
+  }
+}
 
 export function getPlayerStats(
   id: string,
@@ -96,7 +127,17 @@ export function getPlayerStats(
       const username: string = v4PlayersResponse.nickname;
       const level: number = v4PlayersResponse.games.cs2?.skill_level || 1;
       const elo: number = v4PlayersResponse.games.cs2?.faceit_elo || 100;
-      let ranking: number | undefined = undefined;
+      const country: string = v4PlayersResponse.country;
+      const region: string = v4PlayersResponse.games.cs2.region;
+      const ranking: number | undefined = await getPlayerRankingPosition(
+        id,
+        region
+      );
+      const countryRanking: number | undefined = await getPlayerRankingPosition(
+        id,
+        region,
+        country
+      );
       let wins: number = 0;
       let losses: number = 0;
       let kills: number = 0;
@@ -166,26 +207,6 @@ export function getPlayerStats(
         );
       }
 
-      const rankingResponse = await fetch(
-        `https://open.faceit.com/data/v4/rankings/games/cs2/regions/${v4PlayersResponse.games.cs2?.region}/players/${v4PlayersResponse.player_id}`,
-        {
-          headers: HEADERS,
-        }
-      );
-
-      if (rankingResponse.ok) {
-        const v4RankingResponse =
-          (await rankingResponse.json()) as V4RankingResponse;
-        const rankingItem = v4RankingResponse.items.find(
-          (item) => item.player_id === v4PlayersResponse.player_id
-        );
-        ranking = rankingItem ? rankingItem.position : undefined;
-      } else {
-        console.error(
-          `Failed to fetch ranking: ${rankingResponse.status} ${await rankingResponse.text()}`
-        );
-      }
-
       resolve({
         id: playerId,
         avatar,
@@ -193,6 +214,9 @@ export function getPlayerStats(
         level,
         elo,
         ranking: ranking || 999999,
+        region,
+        country,
+        countryRanking: countryRanking || 999999,
         wins,
         losses,
         avg: {
