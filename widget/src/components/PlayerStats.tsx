@@ -134,7 +134,7 @@ export const PlayerStats = ({
               <span
                 className={`region-ranking ${!preview && ranking === 0 ? 'skeleton' : ''}`}
               >
-                <span className={'no-icon'}>{region?.toUpperCase()}</span>
+                <span className={'no-icon'}>{region?.toUpperCase() || '?'}</span>
                 {`#${ranking || 1337}`}
               </span>
             )}
@@ -142,21 +142,12 @@ export const PlayerStats = ({
               <span
                 className={`country-ranking ${!preview && countryRanking === 0 ? 'skeleton' : ''}`}
               >
-                {SETTINGS.get('showIcons') && (
-                  <>
-                    {country ? (
-                      <img
-                        className={'flag'}
-                        src={`https://flagcdn.com/${country}.svg`}
-                      />
-                    ) : (
-                      <RankingIcon />
-                    )}{' '}
-                  </>
-                )}
-                {!SETTINGS.get('showIcons') && (
-                  <span className={'no-icon'}>{country?.toUpperCase()}</span>
-                )}
+                {!SETTINGS.get('showIcons') || !country ?
+                  <span className={'no-icon'}>{country?.toUpperCase() || '?'}</span>
+                  : <img
+                    className={'flag'}
+                    src={`https://flagcdn.com/${country}.svg`}
+                  />}
                 #{preview ? '1337' : countryRanking}
               </span>
             )}
