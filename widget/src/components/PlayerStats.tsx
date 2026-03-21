@@ -134,11 +134,8 @@ export const PlayerStats = ({
               <span
                 className={`region-ranking ${!preview && ranking === 0 ? 'skeleton' : ''}`}
               >
-                {!SETTINGS.get('showIcons') && (
-                  <span className={'no-icon'}>{region?.toUpperCase()}</span>
-                )}
-                {SETTINGS.get('showIcons') && <RankingIcon />} #
-                {ranking || 1337}
+                <span className={'no-icon'}>{region?.toUpperCase()}</span>
+                {`#${ranking || 1337}`}
               </span>
             )}
             {SETTINGS.get('showRanking') !== ShowRanking.REGION && (
