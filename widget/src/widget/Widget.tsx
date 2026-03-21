@@ -68,6 +68,7 @@ export const Widget = ({
   preview,
   previewBackground,
   previewUsername,
+  previewRegion,
   previewCountry,
   previewElo,
   previewLevel,
@@ -76,6 +77,7 @@ export const Widget = ({
   preview: boolean;
   previewBackground?: string;
   previewUsername?: string;
+  previewRegion?: string;
   previewCountry?: string;
   previewElo?: number;
   previewLevel?: number;
@@ -83,6 +85,7 @@ export const Widget = ({
 }) => {
   const [username, setUsername] = useState<string>();
   const [country, setCountry] = useState<string>();
+  const [region, setRegion] = useState<string>();
   const [avatar, setAvatar] = useState<string>();
 
   const [playerLevel, setPlayerLevel] = useState(previewLevel || 1);
@@ -262,6 +265,7 @@ export const Widget = ({
         }
 
         setCountry(player.country);
+        setRegion(player.region);
 
         setPlayerElo(player.elo);
         setPlayerLevel(player.level);
@@ -395,6 +399,7 @@ export const Widget = ({
                 elo={elo}
                 startingElo={startingElo}
                 ranking={ranking}
+                region={region || previewRegion}
                 country={country || previewCountry}
                 countryRanking={countryRanking || 0}
               />

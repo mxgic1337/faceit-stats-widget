@@ -52,6 +52,7 @@ interface FaceitPlayer {
   elo?: number;
   wins: number;
   ranking: number;
+  region: string;
   country?: string;
   countryRanking: number;
   losses: number;
@@ -127,14 +128,15 @@ export function getPlayerStats(
       const level: number = v4PlayersResponse.games.cs2?.skill_level || 1;
       const elo: number = v4PlayersResponse.games.cs2?.faceit_elo || 100;
       const country: string = v4PlayersResponse.country;
+      const region: string = v4PlayersResponse.games.cs2.region;
       const ranking: number | undefined = await getPlayerRankingPosition(
         id,
-        v4PlayersResponse.games.cs2.region
+        region
       );
       const countryRanking: number | undefined = await getPlayerRankingPosition(
         id,
-        v4PlayersResponse.games.cs2.region,
-        v4PlayersResponse.country
+        region,
+        country
       );
       let wins: number = 0;
       let losses: number = 0;
@@ -212,6 +214,7 @@ export function getPlayerStats(
         level,
         elo,
         ranking: ranking || 999999,
+        region,
         country,
         countryRanking: countryRanking || 999999,
         wins,

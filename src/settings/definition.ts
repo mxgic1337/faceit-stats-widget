@@ -46,8 +46,7 @@ export const SETTINGS_DEFINITIONS = {
   },
   showUsername: {
     type: 'boolean',
-    defaultValue: false,
-    defaultWidgetValue: true,
+    defaultValue: true,
     query: ['name'],
   },
   showEloSuffix: {

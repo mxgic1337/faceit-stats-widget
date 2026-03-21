@@ -46,6 +46,7 @@ export const PlayerStats = ({
   elo,
   startingElo,
   ranking,
+  region,
   country,
   countryRanking,
 }: {
@@ -55,6 +56,7 @@ export const PlayerStats = ({
   elo: number;
   startingElo: number;
   ranking: number;
+  region?: string;
   country?: string;
   countryRanking: number;
 }) => {
@@ -110,7 +112,9 @@ export const PlayerStats = ({
 
       <div className={'elo'}>
         {SETTINGS.get('showUsername') && (
-          <h2 className={elo === 0 ? 'skeleton' : ''}>
+          <h2
+            className={`${elo === 0 ? 'skeleton' : ''} ${SETTINGS.get('showRanking') !== ShowRanking.NONE ? 'show-ranking' : ''} `}
+          >
             {username || 'Player'}{' '}
           </h2>
         )}
@@ -130,21 +134,32 @@ export const PlayerStats = ({
               <span
                 className={`region-ranking ${!preview && ranking === 0 ? 'skeleton' : ''}`}
               >
-                <RankingIcon /> #{ranking || 1337}
+                {!SETTINGS.get('showIcons') && (
+                  <span className={'no-icon'}>{region?.toUpperCase()}</span>
+                )}
+                {SETTINGS.get('showIcons') && <RankingIcon />} #
+                {ranking || 1337}
               </span>
             )}
             {SETTINGS.get('showRanking') !== ShowRanking.REGION && (
               <span
                 className={`country-ranking ${!preview && countryRanking === 0 ? 'skeleton' : ''}`}
               >
-                {country ? (
-                  <img
-                    className={'flag'}
-                    src={`https://flagcdn.com/${country}.svg`}
-                  />
-                ) : (
-                  <RankingIcon />
-                )}{' '}
+                {SETTINGS.get('showIcons') && (
+                  <>
+                    {country ? (
+                      <img
+                        className={'flag'}
+                        src={`https://flagcdn.com/${country}.svg`}
+                      />
+                    ) : (
+                      <RankingIcon />
+                    )}{' '}
+                  </>
+                )}
+                {!SETTINGS.get('showIcons') && (
+                  <span className={'no-icon'}>{country?.toUpperCase()}</span>
+                )}
                 #{preview ? '1337' : countryRanking}
               </span>
             )}

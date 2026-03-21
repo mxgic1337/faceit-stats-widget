@@ -24,12 +24,17 @@
     margin-right: 0.2rem;
   }
 
-  .ranking span {
+  .ranking > span {
     display: flex;
     align-items: center;
 
     &:first-child {
       margin-right: 0.4rem;
+    }
+
+    > .no-icon {
+      font-weight: bold;
+      margin-right: 0.2rem;
     }
   }
 
@@ -152,6 +157,10 @@
                 margin-right: 0rem;
               }
             }
+          }
+
+          h2.show-ranking {
+            font-size: 1.18rem;
           }
 
           .username-hidden {
