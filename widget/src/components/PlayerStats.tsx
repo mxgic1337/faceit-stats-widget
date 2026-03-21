@@ -19,7 +19,6 @@ import { Level10 } from '../components/levels/Level10.tsx';
 import { Challenger } from '../components/levels/Challenger.tsx';
 import { ArrowUpIcon } from '../../../src/assets/icons/tabler/ArrowUpIcon.tsx';
 import { ArrowDownIcon } from '../../../src/assets/icons/tabler/ArrowDownIcon.tsx';
-import { RankingIcon } from '../../../src/assets/icons/tabler/RankingIcon.tsx';
 
 const levelIcons = [
   <Level1 />,
@@ -134,7 +133,9 @@ export const PlayerStats = ({
               <span
                 className={`region-ranking ${!preview && ranking === 0 ? 'skeleton' : ''}`}
               >
-                <span className={'no-icon'}>{region?.toUpperCase() || '?'}</span>
+                <span className={'no-icon'}>
+                  {region?.toUpperCase() || '?'}
+                </span>
                 {`#${ranking || 1337}`}
               </span>
             )}
@@ -142,12 +143,16 @@ export const PlayerStats = ({
               <span
                 className={`country-ranking ${!preview && countryRanking === 0 ? 'skeleton' : ''}`}
               >
-                {!SETTINGS.get('showIcons') || !country ?
-                  <span className={'no-icon'}>{country?.toUpperCase() || '?'}</span>
-                  : <img
+                {!SETTINGS.get('showIcons') || !country ? (
+                  <span className={'no-icon'}>
+                    {country?.toUpperCase() || '?'}
+                  </span>
+                ) : (
+                  <img
                     className={'flag'}
                     src={`https://flagcdn.com/${country}.svg`}
-                  />}
+                  />
+                )}
                 #{preview ? '1337' : countryRanking}
               </span>
             )}
