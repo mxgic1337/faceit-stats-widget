@@ -160,6 +160,19 @@ export function useSettings(
         } else if (definition.type === 'boolean') {
           if (!validateSetting(key, queryVal === 'true')) return;
           newSettings[key] = queryVal === 'true';
+        } else if (definition.type === 'ranking_state') {
+          let val = queryVal;
+
+          /* Backwards compatibility */
+          if (['0', '2'].includes(val)) {
+            val = 'NONE';
+          }
+          if (['1'].includes(val)) {
+            val = ShowRanking.REGION;
+          }
+
+          if (!validateSetting(key, val)) return;
+          newSettings[key] = val;
         } else {
           if (!validateSetting(key, queryVal)) return;
           newSettings[key] = queryVal;
