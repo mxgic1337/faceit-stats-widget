@@ -127,11 +127,7 @@ export const Generator = () => {
   const jsonToQuery = useCallback(
     (params: {
       [key: string]:
-        | string
-        | (string | undefined)
-        | number
-        | boolean
-        | string[];
+        string | (string | undefined) | number | boolean | string[];
     }) => {
       return `?${Object.entries(params)
         .map((param) => {
@@ -145,11 +141,7 @@ export const Generator = () => {
   const generateWidgetURL = useCallback(() => {
     const params: {
       [key: string]:
-        | string
-        | (string | undefined)
-        | number
-        | boolean
-        | string[];
+        string | (string | undefined) | number | boolean | string[];
     } = {};
 
     Object.entries(SETTINGS_DEFINITIONS).forEach(
